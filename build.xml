@@ -1,0 +1,83 @@
+<project name="billiards" default="run" basedir=".">
+	<description>
+		A time travel-influenced game of pool.
+	</description>
+
+
+
+	<!-- Directories -->
+	<property name="src.dir"   location="src"  />
+	<property name="lib.dir"   location="lib"  />
+	<property name="build.dir" location="bin"  />
+	<property name="jar.dir"   location="dist" />
+
+	<!-- Classpath -->
+	<path id="classpathref">
+		<fileset dir="${lib.dir}" includes="*.jar" />
+	</path>
+
+	<!-- Properties -->
+	<property name="main-class" value="edu.ncsu.Billiards" />
+
+
+
+	<!-- Targets -->
+
+	<!-- Cleans out the build and jar directories -->
+	<target name="clean" description="deletes the build and jar dirs">
+		<delete dir="${build.dir}" />
+		<delete dir="${jar.dir}" />
+
+		<echo message="Clean successful." />
+	</target>
+
+
+
+	<!-- Compiles from src/ to bin/ -->
+	<target name="compile" description="compiles from src to build dirs">
+		<mkdir dir="${build.dir}" />
+		<javac srcdir="${src.dir}" destdir="${build.dir}"
+				classpathref="classpathref" includeantruntime="false" />
+
+		<!--
+		<javac srcdir="${src.dir}" destdir="${build.dir}">
+			<classpath>
+				<pathelement path="${lib.dir}/slick.jar" />
+				<pathelement path="${lib.dir}/lwjgl.jar" />
+				<pathelement path="${lib.dir}/ibxm.jar" />
+				<pathelement path="${lib.dir}/jogg-0.0.7.jar" />
+				<pathelement path="${lib.dir}/jorbis-0.0.15.jar" />
+			</classpath>
+		</javac>
+		-->
+
+		<echo message="Compile successful." />
+	</target>
+
+
+
+	<!-- Packages from /bin to a JAR in /dist -->
+	<target name="jar" depends="compile" description="packages build dir">
+		<mkdir dir="${jar.dir}" />
+
+		<jar destfile="${jar.dir}/${ant.project.name}.jar"
+					basedir="${build.dir}" >
+			<zipgroupfileset dir="${lib.dir}" includes="*.jar" />
+
+			<manifest>
+				<attribute name="Main-Class" value="${main-class}" />
+			</manifest>
+		</jar>
+
+		<echo message="Jar successful." />
+	</target>
+
+
+
+	<!-- Runs the program by running the JAR -->
+	<target name="run" depends="jar" description="runs from build dir">
+		<java jar="${jar.dir}/${ant.project.name}.jar" fork="true" >
+			<sysproperty key="java.library.path" value="lib"/> 
+		</java>
+	</target>
+</project>
