@@ -1,13 +1,24 @@
 package edu.ncsu;
 
+import edu.ncsu.PoolBall;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import org.newdawn.slick.geom.Circle;
+
 public class Billiards extends BasicGame {
+	private static final int WINDOW_WIDTH  = 640;
+	private static final int WINDOW_HEIGHT = 480;
+
+	private Image tableBackground;
+	private PoolBall poolBall;
+
 	public Billiards() {
 		super("Billiards");
 	}
@@ -15,7 +26,7 @@ public class Billiards extends BasicGame {
 	public static void main(String[] args) {
 		try {
 			AppGameContainer app = new AppGameContainer(new Billiards());
-			app.setDisplayMode(640, 480, false);
+			app.setDisplayMode(WINDOW_WIDTH, WINDOW_HEIGHT, false);
 			app.start();
 		} catch (SlickException ex) {
 			ex.printStackTrace();
@@ -24,7 +35,8 @@ public class Billiards extends BasicGame {
 
 	@Override
 	public void init(GameContainer container) throws SlickException {
-
+		tableBackground = new Image("res/pool.jpg");
+		poolBall = new PoolBall(100, 100, 11);
 	}
 
 	@Override
@@ -34,7 +46,12 @@ public class Billiards extends BasicGame {
 
 	@Override
 	public void render(GameContainer container, Graphics g) throws SlickException {
-		Image table = new Image("res/pool.jpg");
-		table.draw(0, 0);
+		// draw pool table
+		tableBackground.draw(0, 0);
+
+		g.setAntiAlias(true);
+		g.setColor(Color.white);
+		g.draw(poolBall);
+		g.fill(poolBall);
 	}
 }
