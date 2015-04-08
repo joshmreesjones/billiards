@@ -18,16 +18,20 @@ import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Vector2f;
 
 public class Billiards extends BasicGame {
+	// title of game
 	private static final String GAME_TITLE = "Billiards";
 
+	// width and height of game window
 	private static final int WINDOW_WIDTH  = 800;
 	private static final int WINDOW_HEIGHT = 440;
 
 	// used to determine what to render on the screen
 	private static final int SETUP_STATE = 0;
 	private static final int  GAME_STATE = 1;
+	// our current game state
 	private int currentState;
 
+	// pool table background
 	private Image tableBackground;
 
 	// in-game time (used for ball timing)
@@ -42,10 +46,18 @@ public class Billiards extends BasicGame {
 	// pockets on the table
 	private ArrayList<Pocket> pockets;
 
+	// a velocity line attached to a ball (only one at a time)
+	private VelocityLine ballVelocityLine;
+
+	// velocity lines attached to pockets
+	private ArrayList<VelocityLine> pocketVelocityLines;
+
+	// whether the mouse is being dragged or not
+	boolean dragging;
+
 	public Billiards() {
 		super(GAME_TITLE);
 	}
-
 
 	@Override
 	public void init(GameContainer container) throws SlickException {
@@ -55,8 +67,14 @@ public class Billiards extends BasicGame {
 		currentBalls = new ArrayList<PoolBall>();
 		futureBalls = new ArrayList<PoolBall>();
 		pockets = new ArrayList<Pocket>();
+		
+		pocketVelocityLines = new ArrayList<VelocityLine>();
 
-		currentState = SETUP_STATE;
+		// start in setup
+		currentState = GAME_STATE;
+
+		// when we start we are not dragging
+		dragging = false;
 
 		currentBalls.add(new PoolBall(300, 200, 11));
 	}
@@ -110,13 +128,31 @@ public class Billiards extends BasicGame {
 
 	@Override
 	public void render(GameContainer container, Graphics g) throws SlickException {
+		// background
 		tableBackground.draw(0, 0);
 
+		// pool balls
 		for (PoolBall ball : currentBalls) {
 			ball.draw(g);
 		}
-		// draw balls
-		// draw buttons
+
+		// buttons
+		// TODO draw buttons
+
+		if (currentState == SETUP_STATE) {
+			// draw pocket velocity lines
+			// draw pocket link lines
+			// draw pocket colors
+			// draw time change selection
+		} else if (currentState == GAME_STATE) {
+			// ball velocity lines
+			if (ballVelocityLine != null) {
+				ballVelocityLine.draw(g);
+			}
+		}
+
+
+
 		/*
 		// draw pool table
 		tableBackground.draw(0, 0);
@@ -135,6 +171,34 @@ public class Billiards extends BasicGame {
 			g.drawLine(startX, startY, endX, endY);
 		}
 		*/
+	}
+
+	@Override
+	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
+		dragging = true;
+		// check for (oldx, oldy) to be on a ball or a pocket
+		// if it is on a ball, add to ballVelocityLines
+		// if it is on a pocket
+			// if (newx, newy) is on another pocket, add to pocketLinkLines
+			// if (newx, newy) is not on another pocket, add to pocketVelocityLines
+		System.out.println(oldx + " " + oldy + " " + newx + " " + newy);
+
+		ballVelocityLine = new VelocityLine(
+						(float) oldx,
+						(float) oldy,
+						(float) newx,
+						(float) newy);
+	}
+
+	@Override
+	public void mouseReleased(int button, int x, int y) {
+		if (dragging) {
+			System.out.println("Released from drag.");
+		} else {
+			System.out.println("Released from click.");
+		}
+
+		dragging = false;
 	}
 
 	public static void main(String[] args) {
