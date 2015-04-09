@@ -12,7 +12,7 @@ public class PoolBall extends Circle {
 	public PoolBall(float centerPointX, float centerPointY, float radius) {
 		super(centerPointX, centerPointY, radius);
 
-		this.velocity = new Vector2f(.3f, 0);
+		this.velocity = new Vector2f(.25f, 0);
 	}
 
 	public Vector2f getVelocity() {

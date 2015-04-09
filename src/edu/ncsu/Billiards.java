@@ -109,49 +109,29 @@ public class Billiards extends BasicGame {
 
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
-		/*
-		Input input = container.getInput();
+		for (PoolBall ball : currentBalls) {
+			// update position of poolBall based on its velocity
+			Vector2f velocity = ball.getVelocity();
 
-		if (input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
-			int mouseX = input.getMouseX();
-			int mouseY = input.getMouseY();
+			// calculate changes in x and y directions
+			float deltaX = velocity.getX() * delta;
+			float deltaY = velocity.getY() * delta;
+			
+			// set new position
+			ball.setX(ball.getX() + deltaX);
+			ball.setY(ball.getY() + deltaY);
 
-			if (!isMouseDragging) {
-				dragStart = new Vector2f((float) mouseX, (float) mouseY);
-				dragEnd   = new Vector2f((float) mouseX, (float) mouseY);
-
-				isMouseDragging = true;
+			// decrease velocity
+			if (velocity.length() < .002f) {
+				velocity.set(0, 0);
 			} else {
-				dragEnd.set((float) mouseX, (float) mouseY);
+				velocity.scale(.99f);
 			}
-		} else {
-			if (isMouseDragging) {
-				isMouseDragging = false;
-			}
+
+			ball.setVelocity(velocity);
 		}
-
-		// update position of poolBall based on its velocity
-		Vector2f velocity = poolBall.getVelocity();
-
-		// calculate changes in x and y directions
-		float deltaX = velocity.getX() * delta;
-		float deltaY = velocity.getY() * delta;
-		
-		// set new position
-		poolBall.setX(poolBall.getX() + deltaX);
-		poolBall.setY(poolBall.getY() + deltaY);
-
-		// decrease velocity
-		if (velocity.length() < .003f) {
-			velocity.set(0, 0);
-		} else {
-			velocity.scale(.99f);
-		}
-
-		poolBall.setVelocity(velocity);
 
 		time++;
-		*/
 	}
 
 	@Override
@@ -180,9 +160,6 @@ public class Billiards extends BasicGame {
 		}
 
 		/*
-		// draw pool table
-		tableBackground.draw(0, 0);
-
 		g.setAntiAlias(true);
 		g.setColor(Color.white);
 		g.draw(poolBall);
@@ -197,6 +174,13 @@ public class Billiards extends BasicGame {
 			g.drawLine(startX, startY, endX, endY);
 		}
 		*/
+	}
+
+	@Override
+	public void mouseClicked(int button, int x, int y, int clickCount) {
+		System.out.println("Mouse clicked.");
+
+		// TODO handle buttons
 	}
 
 	@Override
@@ -254,6 +238,9 @@ public class Billiards extends BasicGame {
 		} else {
 			System.out.println("Released from click.");
 		}
+
+		// if we released the mouse from a velocity line,
+		// update that ball's velocity
 
 		// remove ball velocity line
 		ballVelocityLine = null;
