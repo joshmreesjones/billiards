@@ -22,6 +22,7 @@ public class Billiards extends BasicGame {
 	/*
 		GAME CONSTANTS
 	*/
+
 	// title of game
 	private static final String GAME_TITLE = "Billiards";
 
@@ -32,6 +33,9 @@ public class Billiards extends BasicGame {
 	// used to determine what to render on the screen
 	private static final int SETUP_STATE = 0;
 	private static final int  GAME_STATE = 1;
+
+	// scales velocity
+	private static final float VELOCITY_SCALE_FACTOR = 0.0025f;
 
 
 
@@ -73,6 +77,8 @@ public class Billiards extends BasicGame {
 	// used in detecting mouse intersections
 	private Circle mouseLocation;
 
+	private PoolBall activeBall;
+
 
 
 	// in-game time (used for ball timing)
@@ -110,6 +116,8 @@ public class Billiards extends BasicGame {
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
 		for (PoolBall ball : currentBalls) {
+			// TODO decelerate faster at slower velocities
+
 			// update position of poolBall based on its velocity
 			Vector2f velocity = ball.getVelocity();
 
@@ -204,6 +212,10 @@ public class Billiards extends BasicGame {
 		for (PoolBall ball : currentBalls) {
 			// if the mouse started on this ball
 			if (ball.intersects(mouseDragStart)) {
+				// we need activeBall when we release the drag
+				// to set the velocity of that ball
+				activeBall = ball;
+
 				if (ballVelocityLine == null) {
 					ballVelocityLine = new VelocityLine(
 									mouseDragStart.getX(),
@@ -223,7 +235,7 @@ public class Billiards extends BasicGame {
 
 		// check for (startx, starty) to be on a ball or a pocket
 		// if it is on a ball, add to ballVelocityLines
-		// if it is on a poclet
+		// if it is on a pocket
 			// if (newx, newy) is on another pocket, add to pocketLinkLines
 			// if (newx, newy) is not on another pocket, add to pocketVelocityLines
 
@@ -241,6 +253,15 @@ public class Billiards extends BasicGame {
 
 		// if we released the mouse from a velocity line,
 		// update that ball's velocity
+		if (activeBall != null) {
+			// this velocity is incorrectly calculated
+			float vectorX = mouseLocation.getCenterX() - mouseDragStart.getCenterX();
+			float vectorY = mouseLocation.getCenterY() - mouseDragStart.getCenterY();
+
+			activeBall.setVelocity(VELOCITY_SCALE_FACTOR * vectorX,
+								   VELOCITY_SCALE_FACTOR * vectorY);
+			activeBall = null;
+		}
 
 		// remove ball velocity line
 		ballVelocityLine = null;

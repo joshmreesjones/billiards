@@ -12,11 +12,15 @@ public class PoolBall extends Circle {
 	public PoolBall(float centerPointX, float centerPointY, float radius) {
 		super(centerPointX, centerPointY, radius);
 
-		this.velocity = new Vector2f(.25f, 0);
+		this.velocity = new Vector2f(0, 0);
 	}
 
 	public Vector2f getVelocity() {
 		return velocity;
+	}
+
+	public void setVelocity(float x, float y) {
+		velocity.set(x, y);
 	}
 
 	public void setVelocity(Vector2f velocity) {
