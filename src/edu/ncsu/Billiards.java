@@ -17,6 +17,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 public class Billiards extends BasicGame {
@@ -34,6 +35,9 @@ public class Billiards extends BasicGame {
 	// used to determine what to render on the screen
 	private static final int SETUP_STATE = 0;
 	private static final int  GAME_STATE = 1;
+
+	// standard radius of pool ball
+	private static final float POOL_BALL_RADIUS = 11;
 
 
 
@@ -62,7 +66,7 @@ public class Billiards extends BasicGame {
 
 
 	/*
-		HITBOXES
+		COLLISION UTILITIES
 	*/
 
 	// bounding cushions of the pool table
@@ -72,6 +76,11 @@ public class Billiards extends BasicGame {
 	private Rectangle bottomLeftCushion;
 	private Rectangle bottomRightCushion;
 	private Rectangle leftCushion;
+
+	private Rectangle[] cushions;
+
+	// circle used in intersections to test for ball collisions
+	private Circle collisionCircle;
 
 
 
@@ -111,11 +120,15 @@ public class Billiards extends BasicGame {
 		tableBackground = new Image("res/pool-wide.png");
 		tick = 0;
 
+
+
 		currentBalls = new ArrayList<PoolBall>();
 		futureBalls = new ArrayList<PoolBall>();
 		pockets = new ArrayList<Pocket>();
 		
 		pocketVelocityLines = new ArrayList<VelocityLine>();
+
+
 
 		topLeftCushion     = new Rectangle(150, 71, 236, 29);
 		topRightCushion    = new Rectangle(415, 71, 236, 29);
@@ -124,19 +137,49 @@ public class Billiards extends BasicGame {
 		bottomRightCushion = new Rectangle(415, 341, 236, 29);
 		leftCushion        = new Rectangle(101, 121, 29, 200);
 
+		cushions = new Rectangle[6];
+
+		cushions[0] = topLeftCushion;
+		cushions[1] = topRightCushion;
+		cushions[2] = rightCushion;
+		cushions[3] = bottomLeftCushion;
+		cushions[4] = bottomRightCushion;
+		cushions[5] = leftCushion;
+
+
+
+		collisionCircle = new Circle(-100, -100, POOL_BALL_RADIUS);
+
 		// start in setup
 		currentState = GAME_STATE;
 
 		// when we start we are not dragging
 		dragging = false;
 
-		currentBalls.add(new PoolBall(300, 200, 11));
+		currentBalls.add(new PoolBall(300, 200, POOL_BALL_RADIUS));
 	}
 
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
 		for (PoolBall ball : currentBalls) {
-			ball.updatePosition(delta);
+			// if ball.nextPosition intersects with any walls
+				// call ball.handleCushionCollision(cushion, delta)
+			// else if ball.nextPosition intersects with any balls.nextPosition
+				// call ball.handleBallCollision(other ball, delta)
+			// else
+				// call ball.updatePosition(delta)
+
+			float[] nextPosition = ball.nextPosition(delta);
+			collisionCircle.setCenterX(nextPosition[0]);
+			collisionCircle.setCenterY(nextPosition[1]);
+
+			if (false) {
+
+			} else if (false) {
+
+			} else {
+				ball.updatePosition(delta);
+			}
 		}
 
 		tick++;
@@ -149,12 +192,9 @@ public class Billiards extends BasicGame {
 
 		g.setColor(Color.black);
 
-		g.draw(topLeftCushion);
-		g.draw(topRightCushion);
-		g.draw(rightCushion);
-		g.draw(bottomLeftCushion);
-		g.draw(bottomRightCushion);
-		g.draw(leftCushion);
+		for (int i = 0; i < cushions.length; i++) {
+			g.draw(cushions[i]);
+		}
 
 		// hit boxes
 		// TODO draw hit boxes
@@ -178,6 +218,16 @@ public class Billiards extends BasicGame {
 				ballVelocityLine.draw(g);
 			}
 		}
+	}
+
+	public Rectangle intersectsCushion(Shape object) {
+		for (int i = 0; i < cushions.length; i++) {
+			if (object.intersects(cushions[i])) {
+				return cushions[i];
+			}
+		}
+
+		return null;
 	}
 
 	@Override

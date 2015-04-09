@@ -4,6 +4,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 public class PoolBall extends Circle {
@@ -79,5 +80,11 @@ public class PoolBall extends Circle {
 		} else {
 			velocity.scale(.99f);
 		}
+	}
+
+	public void handleCushionCollision(Rectangle cushion, int delta) {
+		// check for intersection with wall (not corner)
+		
+		// otherwise it's an intersection with a corner
 	}
 }
