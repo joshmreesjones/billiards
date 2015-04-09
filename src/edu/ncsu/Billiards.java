@@ -16,6 +16,7 @@ import org.newdawn.slick.SlickException;
 
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Point;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 public class Billiards extends BasicGame {
@@ -63,6 +64,19 @@ public class Billiards extends BasicGame {
 
 
 
+	/*
+		HITBOXES
+	*/
+
+	// bounding cushions of the pool table
+	private Rectangle topLeftCushion;
+	private Rectangle topRightCushion;
+	private Rectangle rightCushion;
+	private Rectangle bottomLeftCushion;
+	private Rectangle bottomRightCushion;
+	private Rectangle leftCushion;
+
+
 
 	/*
 		MOUSE INPUT TRACKING
@@ -77,12 +91,14 @@ public class Billiards extends BasicGame {
 	// used in detecting mouse intersections
 	private Circle mouseLocation;
 
+	// the ball, if any, that was at the start of the
+	// current mouse drag
 	private PoolBall activeBall;
 
 
 
 	// in-game time (used for ball timing)
-	private float time;
+	private float tick;
 
 	// our current game state
 	private int currentState;
@@ -96,13 +112,20 @@ public class Billiards extends BasicGame {
 	@Override
 	public void init(GameContainer container) throws SlickException {
 		tableBackground = new Image("res/pool-wide.png");
-		time = 0;
+		tick = 0;
 
 		currentBalls = new ArrayList<PoolBall>();
 		futureBalls = new ArrayList<PoolBall>();
 		pockets = new ArrayList<Pocket>();
 		
 		pocketVelocityLines = new ArrayList<VelocityLine>();
+
+		topLeftCushion     = new Rectangle(150, 71, 236, 29);
+		topRightCushion    = new Rectangle(415, 71, 236, 29);
+		rightCushion       = new Rectangle(671, 121, 29, 200);
+		bottomLeftCushion  = new Rectangle(150, 341, 236, 29);
+		bottomRightCushion = new Rectangle(415, 341, 236, 29);
+		leftCushion        = new Rectangle(101, 121, 29, 200);
 
 		// start in setup
 		currentState = GAME_STATE;
@@ -116,36 +139,28 @@ public class Billiards extends BasicGame {
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
 		for (PoolBall ball : currentBalls) {
-			// TODO decelerate faster at slower velocities
-
-			// update position of poolBall based on its velocity
-			Vector2f velocity = ball.getVelocity();
-
-			// calculate changes in x and y directions
-			float deltaX = velocity.getX() * delta;
-			float deltaY = velocity.getY() * delta;
-			
-			// set new position
-			ball.setX(ball.getX() + deltaX);
-			ball.setY(ball.getY() + deltaY);
-
-			// decrease velocity
-			if (velocity.length() < .002f) {
-				velocity.set(0, 0);
-			} else {
-				velocity.scale(.99f);
-			}
-
-			ball.setVelocity(velocity);
+			ball.updateVelocity(delta);
 		}
 
-		time++;
+		tick++;
 	}
 
 	@Override
 	public void render(GameContainer container, Graphics g) throws SlickException {
 		// background
 		tableBackground.draw(0, 0);
+
+		g.setColor(Color.black);
+
+		g.draw(topLeftCushion);
+		g.draw(topRightCushion);
+		g.draw(rightCushion);
+		g.draw(bottomLeftCushion);
+		g.draw(bottomRightCushion);
+		g.draw(leftCushion);
+
+		// hit boxes
+		// TODO draw hit boxes
 
 		// pool balls
 		for (PoolBall ball : currentBalls) {
@@ -187,6 +202,8 @@ public class Billiards extends BasicGame {
 	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount) {
 		System.out.println("Mouse clicked.");
+
+		System.out.println(x + " " + y);
 
 		// TODO handle buttons
 	}

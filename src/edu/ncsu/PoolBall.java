@@ -45,4 +45,24 @@ public class PoolBall extends Circle {
 		g.setColor(color);
 		g.setAntiAlias(isAntiAlias);
 	}
+
+	public void updateVelocity(int delta) {
+		// TODO decelerate faster at slower velocities,
+		// especially around v = .02
+
+		// calculate changes in x and y directions
+		float deltaX = velocity.getX() * delta;
+		float deltaY = velocity.getY() * delta;
+		
+		// set new position
+		setX(getX() + deltaX);
+		setY(getY() + deltaY);
+
+		// decrease velocity
+		if (velocity.length() < .002f) {
+			velocity.set(0, 0);
+		} else {
+			velocity.scale(.99f);
+		}
+	}
 }
