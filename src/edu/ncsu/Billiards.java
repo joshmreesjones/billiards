@@ -201,8 +201,10 @@ public class Billiards extends BasicGame {
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
+		// diagnostic message
 		System.out.println("Mouse pressed.");
 
+		// initialize mouse tracking
 		mouseDragStart = new Circle((float) x, (float) y, 0.5f);
 		mouseLocation  = new Circle((float) x, (float) y, 0.5f);
 	}
@@ -211,24 +213,29 @@ public class Billiards extends BasicGame {
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
 		System.out.println("Dragging.");
 
+		// update mouse location
 		mouseLocation.setLocation((float) newx, (float) newy);
 
-		// detect what the drag started on
-		// check for intersection with balls
-
+		// check for intersection with balls on the table
 		for (PoolBall ball : currentBalls) {
-			// true if the mouse started on this ball
-			ball.intersects(mouseDragStart);
+			// if the mouse started on this ball
+			if (ball.intersects(mouseDragStart)) {
+				if (ballVelocityLine == null) {
+					ballVelocityLine = new VelocityLine(
+									mouseDragStart.getX(),
+									mouseDragStart.getY(),
+									mouseLocation.getX(),
+									mouseLocation.getY());
+				} else {
+					ballVelocityLine.set(
+									mouseDragStart.getCenter(),
+									mouseLocation.getCenter());
+				}
+			}
 		}
 
 		// check for intersection with pockets
 		// TODO
-
-		ballVelocityLine = new VelocityLine(
-						mouseDragStart.getX(),
-						mouseDragStart.getY(),
-						 mouseLocation.getX(),
-						 mouseLocation.getY());
 
 		// check for (startx, starty) to be on a ball or a pocket
 		// if it is on a ball, add to ballVelocityLines
@@ -247,6 +254,9 @@ public class Billiards extends BasicGame {
 		} else {
 			System.out.println("Released from click.");
 		}
+
+		// remove ball velocity line
+		ballVelocityLine = null;
 
 		// update mouse tracking shapes
 		mouseDragStart = null;
