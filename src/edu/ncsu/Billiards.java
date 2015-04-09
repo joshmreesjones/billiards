@@ -76,7 +76,7 @@ public class Billiards extends BasicGame {
 	private Rectangle bottomLeftCushion;
 	private Rectangle bottomRightCushion;
 	private Rectangle leftCushion;
-
+	// array of the above cushions
 	private Rectangle[] cushions;
 
 	// circle used in intersections to test for ball collisions
@@ -142,8 +142,8 @@ public class Billiards extends BasicGame {
 		cushions[0] = topLeftCushion;
 		cushions[1] = topRightCushion;
 		cushions[2] = rightCushion;
-		cushions[3] = bottomLeftCushion;
-		cushions[4] = bottomRightCushion;
+		cushions[3] = bottomRightCushion;
+		cushions[4] = bottomLeftCushion;
 		cushions[5] = leftCushion;
 
 
@@ -162,21 +162,22 @@ public class Billiards extends BasicGame {
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
 		for (PoolBall ball : currentBalls) {
-			// if ball.nextPosition intersects with any walls
-				// call ball.handleCushionCollision(cushion, delta)
-			// else if ball.nextPosition intersects with any balls.nextPosition
-				// call ball.handleBallCollision(other ball, delta)
-			// else
-				// call ball.updatePosition(delta)
-
+			// calculate next position of this ball
 			float[] nextPosition = ball.nextPosition(delta);
-			collisionCircle.setCenterX(nextPosition[0]);
-			collisionCircle.setCenterY(nextPosition[1]);
+			float nextX = nextPosition[0];
+			float nextY = nextPosition[1];
+			collisionCircle.setX(nextX);
+			collisionCircle.setY(nextY);
 
-			if (false) {
+			// check for intersection between next position and wall
+			Rectangle cushionIntersection = intersectCushions(collisionCircle);
 
+			if (cushionIntersection != null) {
+				// wall intersections
+				ball.handleCushionCollision(cushionIntersection, nextX, nextY, delta);
 			} else if (false) {
-
+				// intersection with other ball
+				// call ball.handleBallIntersection(other ball, delta)
 			} else {
 				ball.updatePosition(delta);
 			}
@@ -220,7 +221,7 @@ public class Billiards extends BasicGame {
 		}
 	}
 
-	public Rectangle intersectsCushion(Shape object) {
+	public Rectangle intersectCushions(Shape object) {
 		for (int i = 0; i < cushions.length; i++) {
 			if (object.intersects(cushions[i])) {
 				return cushions[i];

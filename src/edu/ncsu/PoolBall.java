@@ -82,9 +82,55 @@ public class PoolBall extends Circle {
 		}
 	}
 
-	public void handleCushionCollision(Rectangle cushion, int delta) {
-		// check for intersection with wall (not corner)
+	public void handleCushionCollision(Rectangle cushion, float nextX, float nextY, int delta) {
+		float radius = getRadius();
+
+		float centerX = getCenterX();
+		float centerY = getCenterY();
+
+		float cushionMinX = cushion.getMinX();
+		float cushionMinY = cushion.getMinY();
+		float cushionMaxX = cushion.getMaxX();
+		float cushionMaxY = cushion.getMaxY();
+
+		boolean leftCrossed = false;
+		boolean rightCrossed = false;
+		boolean topCrossed = false;
+		boolean bottomCrossed = false;
+
+		/*
+		if (centerX + radius <  cushionMinX &&
+			  nextX + radius >= cushionMinX) {
+			// left boundary was crossed
+			System.out.println("Left crossed.");
+			leftCrossed = true;
+		}
+
+		if (centerX - radius >  cushionMaxX &&
+			  nextX - radius <= cushionMaxX) {
+			// right boundary was crossed
+			System.out.println("Right crossed.");
+			rightCrossed = true;
+		}
+
+		if (centerY + radius <  cushionMinY &&
+			  nextY + radius >= cushionMinY) {
+			// top boundary was crossLefted
+			System.out.println("Top crossed.");
+			topCrossed = true;
+		}
+
+		if (centerY - radius >  cushionMaxY &&
+			  nextY - radius <= cushionMaxY) {
+			// bottom boundary was crossed
+			System.out.println("Bottom crossed.");
+			bottomCrossed = true;
+		}
+		*/
 		
+
+
 		// otherwise it's an intersection with a corner
+		updatePosition(delta);
 	}
 }
