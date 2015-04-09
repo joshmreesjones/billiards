@@ -44,7 +44,7 @@ The `lib/` directory was hand-assembled. Instructions to come later.
 Screenshots
 ===========
 
-Coming soon &#8482;! <!-- this character is the Trademark symbol (TM) -->
+Coming soon&#8482;!
 
 
 
