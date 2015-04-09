@@ -6,7 +6,7 @@ Billiards is a time travel-themed game of pool in which pockets act as portals t
 
 
 What it uses
-============
+------------
 - Slick2D
 - LWJGL
 - Ant (for building)
@@ -14,8 +14,7 @@ What it uses
 
 
 Running Billiards
-=================
-
+-----------------
 To compile:
 
     ~$ ant compile
@@ -35,15 +34,13 @@ or just:
 
 
 Note about `lib/` directory
-===========================
-
+---------------------------
 The `lib/` directory was hand-assembled. Instructions to come later.
 
 
 
 Screenshots
-===========
-
+-----------
 Coming soon&#8482;!
 
 
