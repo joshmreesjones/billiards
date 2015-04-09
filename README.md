@@ -38,3 +38,18 @@ Note about `lib/` directory
 ===========================
 
 The `lib/` directory was hand-assembled. Instructions to come later.
+
+
+
+Screenshots
+===========
+
+Coming soon &#8482;! <!-- this character is the Trademark symbol (TM) -->
+
+
+
+To do list (besides core functionality)
+=======================================
+- variable acceleration (greater deceleration with lower velocity)
+- better velocity lines
+- better ball rolling animation
