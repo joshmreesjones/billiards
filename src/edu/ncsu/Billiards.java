@@ -35,9 +35,6 @@ public class Billiards extends BasicGame {
 	private static final int SETUP_STATE = 0;
 	private static final int  GAME_STATE = 1;
 
-	// scales velocity
-	private static final float VELOCITY_SCALE_FACTOR = 0.0025f;
-
 
 
 	/*
@@ -139,7 +136,7 @@ public class Billiards extends BasicGame {
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
 		for (PoolBall ball : currentBalls) {
-			ball.updateVelocity(delta);
+			ball.updatePosition(delta);
 		}
 
 		tick++;
@@ -181,28 +178,10 @@ public class Billiards extends BasicGame {
 				ballVelocityLine.draw(g);
 			}
 		}
-
-		/*
-		g.setAntiAlias(true);
-		g.setColor(Color.white);
-		g.draw(poolBall);
-		g.fill(poolBall);
-
-		if (isMouseDragging) {
-			float startX = dragStart.getX();
-			float startY = dragStart.getY();
-			float endX = dragEnd.getX();
-			float endY = dragEnd.getY();
-
-			g.drawLine(startX, startY, endX, endY);
-		}
-		*/
 	}
 
 	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount) {
-		System.out.println("Mouse clicked.");
-
 		System.out.println(x + " " + y);
 
 		// TODO handle buttons
@@ -210,9 +189,6 @@ public class Billiards extends BasicGame {
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		// diagnostic message
-		System.out.println("Mouse pressed.");
-
 		// initialize mouse tracking
 		mouseDragStart = new Circle((float) x, (float) y, 0.5f);
 		mouseLocation  = new Circle((float) x, (float) y, 0.5f);
@@ -220,8 +196,6 @@ public class Billiards extends BasicGame {
 
 	@Override
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-		System.out.println("Dragging.");
-
 		// update mouse location
 		mouseLocation.setLocation((float) newx, (float) newy);
 
@@ -275,8 +249,7 @@ public class Billiards extends BasicGame {
 			float vectorX = mouseLocation.getCenterX() - mouseDragStart.getCenterX();
 			float vectorY = mouseLocation.getCenterY() - mouseDragStart.getCenterY();
 
-			activeBall.setVelocity(VELOCITY_SCALE_FACTOR * vectorX,
-								   VELOCITY_SCALE_FACTOR * vectorY);
+			activeBall.setVelocity(vectorX, vectorY);
 			activeBall = null;
 		}
 

@@ -7,6 +7,13 @@ import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Vector2f;
 
 public class PoolBall extends Circle {
+	// scales velocity appropriately from screen dimensions
+	private static final float VELOCITY_SCALE_FACTOR = 0.0025f;
+
+	// minimum moving velocity - below this will be set to 0
+	private static final float ZERO_VELOCITY_CUTOFF = .002f;
+
+	// the velocity of this ball
 	private Vector2f velocity;
 
 	public PoolBall(float centerPointX, float centerPointY, float radius) {
@@ -16,15 +23,12 @@ public class PoolBall extends Circle {
 	}
 
 	public Vector2f getVelocity() {
-		return velocity;
+		return velocity.scale(1 / VELOCITY_SCALE_FACTOR);
 	}
 
 	public void setVelocity(float x, float y) {
-		velocity.set(x, y);
-	}
-
-	public void setVelocity(Vector2f velocity) {
-		this.velocity = velocity;
+		velocity.set(VELOCITY_SCALE_FACTOR * x,
+					 VELOCITY_SCALE_FACTOR * y);
 	}
 
 	public void draw(Graphics g) {
@@ -46,20 +50,31 @@ public class PoolBall extends Circle {
 		g.setAntiAlias(isAntiAlias);
 	}
 
-	public void updateVelocity(int delta) {
-		// TODO decelerate faster at slower velocities,
-		// especially around v = .02
+	public float[] nextPosition(int delta) {
+		float[] result = new float[2];
 
 		// calculate changes in x and y directions
 		float deltaX = velocity.getX() * delta;
 		float deltaY = velocity.getY() * delta;
-		
+
+		result[0] = getX() + deltaX;
+		result[1] = getY() + deltaY;
+
+		return result;
+	}
+
+	public void updatePosition(int delta) {
+		float[] position = nextPosition(delta);
+
 		// set new position
-		setX(getX() + deltaX);
-		setY(getY() + deltaY);
+		setX(position[0]);
+		setY(position[1]);
+
+		// TODO decelerate faster at slower velocities,
+		// especially around v = .02
 
 		// decrease velocity
-		if (velocity.length() < .002f) {
+		if (velocity.length() < ZERO_VELOCITY_CUTOFF) {
 			velocity.set(0, 0);
 		} else {
 			velocity.scale(.99f);

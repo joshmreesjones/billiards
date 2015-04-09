@@ -50,3 +50,4 @@ To do list (besides core functionality)
 - variable acceleration (greater deceleration with lower velocity)
 - better velocity lines
 - better ball rolling animation
+- remove FPS meter (even though it's white against white)
