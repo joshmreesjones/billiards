@@ -15,9 +15,13 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.geom.Vector2f;
 
 public class Billiards extends BasicGame {
+	/*
+		GAME CONSTANTS
+	*/
 	// title of game
 	private static final String GAME_TITLE = "Billiards";
 
@@ -28,14 +32,15 @@ public class Billiards extends BasicGame {
 	// used to determine what to render on the screen
 	private static final int SETUP_STATE = 0;
 	private static final int  GAME_STATE = 1;
-	// our current game state
-	private int currentState;
+
+
+
+	/*
+		RENDERED OBJECTS
+	*/
 
 	// pool table background
 	private Image tableBackground;
-
-	// in-game time (used for ball timing)
-	private float time;
 
 	// balls currently on the table
 	private ArrayList<PoolBall> currentBalls;
@@ -52,8 +57,31 @@ public class Billiards extends BasicGame {
 	// velocity lines attached to pockets
 	private ArrayList<VelocityLine> pocketVelocityLines;
 
+
+
+
+	/*
+		MOUSE INPUT TRACKING
+	*/
+
 	// whether the mouse is being dragged or not
 	boolean dragging;
+
+	// location of the start of a mouse drag
+	private Circle mouseDragStart;
+
+	// used in detecting mouse intersections
+	private Circle mouseLocation;
+
+
+
+	// in-game time (used for ball timing)
+	private float time;
+
+	// our current game state
+	private int currentState;
+
+
 
 	public Billiards() {
 		super(GAME_TITLE);
@@ -151,8 +179,6 @@ public class Billiards extends BasicGame {
 			}
 		}
 
-
-
 		/*
 		// draw pool table
 		tableBackground.draw(0, 0);
@@ -174,20 +200,44 @@ public class Billiards extends BasicGame {
 	}
 
 	@Override
+	public void mousePressed(int button, int x, int y) {
+		System.out.println("Mouse pressed.");
+
+		mouseDragStart = new Circle((float) x, (float) y, 0.5f);
+		mouseLocation  = new Circle((float) x, (float) y, 0.5f);
+	}
+
+	@Override
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-		dragging = true;
-		// check for (oldx, oldy) to be on a ball or a pocket
-		// if it is on a ball, add to ballVelocityLines
-		// if it is on a pocket
-			// if (newx, newy) is on another pocket, add to pocketLinkLines
-			// if (newx, newy) is not on another pocket, add to pocketVelocityLines
-		System.out.println(oldx + " " + oldy + " " + newx + " " + newy);
+		System.out.println("Dragging.");
+
+		mouseLocation.setLocation((float) newx, (float) newy);
+
+		// detect what the drag started on
+		// check for intersection with balls
+
+		for (PoolBall ball : currentBalls) {
+			// true if the mouse started on this ball
+			ball.intersects(mouseDragStart);
+		}
+
+		// check for intersection with pockets
+		// TODO
 
 		ballVelocityLine = new VelocityLine(
-						(float) oldx,
-						(float) oldy,
-						(float) newx,
-						(float) newy);
+						mouseDragStart.getX(),
+						mouseDragStart.getY(),
+						 mouseLocation.getX(),
+						 mouseLocation.getY());
+
+		// check for (startx, starty) to be on a ball or a pocket
+		// if it is on a ball, add to ballVelocityLines
+		// if it is on a poclet
+			// if (newx, newy) is on another pocket, add to pocketLinkLines
+			// if (newx, newy) is not on another pocket, add to pocketVelocityLines
+
+		// update dragging flag
+		dragging = true;
 	}
 
 	@Override
@@ -198,6 +248,11 @@ public class Billiards extends BasicGame {
 			System.out.println("Released from click.");
 		}
 
+		// update mouse tracking shapes
+		mouseDragStart = null;
+		mouseLocation  = null;
+
+		// update dragging flag
 		dragging = false;
 	}
 
