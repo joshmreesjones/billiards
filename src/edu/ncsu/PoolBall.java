@@ -85,6 +85,104 @@ public class PoolBall extends Circle {
 	public void handleCushionCollision(Rectangle cushion, float nextX, float nextY, int delta) {
 		float radius = getRadius();
 
+		float startCenterX = getCenterX();
+		float startCenterY = getCenterY();
+		
+		float nextCenterX = nextX + radius;
+		float nextCenterY = nextY + radius;
+
+		float L = cushion.getMinX();
+		float T = cushion.getMinY();
+		float R = cushion.getMaxX();
+		float B = cushion.getMaxY();
+
+		float dx = nextX - getX();
+		float dy = nextY - getY();
+		float invdx = (dx == 0.0f ? 0.0f : 1.0f / dx);
+		float invdy = (dy == 0.0f ? 0.0f : 1.0f / dy);
+		float cornerX = Float.MAX_VALUE;
+		float cornerY = Float.MAX_VALUE;
+
+		float intersectionCenterX = Float.MAX_VALUE;
+		float intersectionCenterY = Float.MAX_VALUE;
+
+		if (startCenterX - radius < L && nextCenterX + radius > L) {
+			float ltime = ((L - radius) - startCenterX) * invdx;
+
+			if (ltime >= 0.0f && ltime <= 1.0f) {
+				float ly = dy * ltime + startCenterY;
+
+				if (ly >= T && ly <= B) {
+					intersectionCenterX = dx * ltime + startCenterX;
+					intersectionCenterY = ly;
+					//return new Intersection( dx * ltime + start.x, ly, ltime, -1, 0, L, ly );
+				}
+			}
+
+			cornerX = L;
+		}
+		
+		if (startCenterX + radius > R && nextCenterX - radius < R ) {
+			float rtime = (startCenterX - (R + radius)) * -invdx;
+
+			if (rtime >= 0.0f && rtime <= 1.0f) {
+				float ry = dy * rtime + startCenterY;
+
+				if (ry >= T && ry <= B) {
+					intersectionCenterX = dx * rtime + startCenterX;
+					intersectionCenterY = ry;
+					//return new Intersection( dx * rtime + start.x, ry, rtime, 1, 0, R, ry );
+				}
+			}
+
+			cornerX = R;
+		}
+		
+		if (startCenterY - radius < T && nextCenterY + radius > T) {
+			float ttime = ((T - radius) - startCenterY) * invdy;
+
+			if (ttime >= 0.0f && ttime <= 1.0f) {
+				float tx = dx * ttime + startCenterX;
+
+				if (tx >= L && tx <= R) {
+					intersectionCenterX = tx;
+					intersectionCenterY = dy * ttime + startCenterY;
+					//return new Intersection( tx, dy * ttime + start.y, ttime, 0, -1, tx, T );
+				}
+			}
+
+			cornerY = T;
+		}
+
+		if (startCenterY + radius > B && nextCenterY - radius < B) {
+			float btime = (startCenterY - (B + radius)) * -invdy;
+
+			if (btime >= 0.0f && btime <= 1.0f) {
+				float bx = dx * btime + startCenterX;
+
+				if (bx >= L && bx <= R) {
+					intersectionCenterX = bx;
+					intersectionCenterY = dy * btime + startCenterY;
+					//return new Intersection( bx, dy * btime + start.y, btime, 0, 1, bx, B );
+				}
+			}
+
+			cornerY = B;
+		}
+
+		if (cornerX != Float.MAX_VALUE && cornerY == Float.MAX_VALUE) {
+			cornerY = (dy > 0.0f ? B : T);
+		}
+
+		if (cornerY != Float.MAX_VALUE && cornerX == Float.MAX_VALUE) {
+			cornerX = (dx > 0.0f ? R : L);
+		}
+		
+		// TODO unfinished
+
+		/*
+		float radius = getRadius();
+
 		float centerX = getCenterX();
 		float centerY = getCenterY();
 
@@ -98,7 +196,6 @@ public class PoolBall extends Circle {
 		boolean topCrossed = false;
 		boolean bottomCrossed = false;
 
-		/*
 		if (centerX + radius <  cushionMinX &&
 			  nextX + radius >= cushionMinX) {
 			// left boundary was crossed
