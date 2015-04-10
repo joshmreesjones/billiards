@@ -83,6 +83,8 @@ public class PoolBall extends Circle {
 	}
 
 	public void handleCushionCollision(Rectangle cushion, float nextX, float nextY, int delta) {
+		updatePosition(delta);
+		/*
 		float radius = getRadius();
 
 		float startCenterX = getCenterX();
@@ -177,6 +179,7 @@ public class PoolBall extends Circle {
 		if (cornerY != Float.MAX_VALUE && cornerX == Float.MAX_VALUE) {
 			cornerX = (dx > 0.0f ? R : L);
 		}
+		*/
 		
 		// TODO unfinished
 
@@ -228,6 +231,5 @@ public class PoolBall extends Circle {
 
 
 		// otherwise it's an intersection with a corner
-		updatePosition(delta);
 	}
 }
