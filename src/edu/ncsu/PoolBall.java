@@ -14,6 +14,9 @@ public class PoolBall extends Circle {
 	// minimum moving velocity - below this will be set to 0
 	private static final float ZERO_VELOCITY_CUTOFF = .002f;
 
+	// acceleration of the PoolBall
+	private static final float ACCELERATION = -0.01f;
+
 	// the velocity of this ball
 	private Vector2f velocity;
 
@@ -78,7 +81,7 @@ public class PoolBall extends Circle {
 		if (velocity.length() < ZERO_VELOCITY_CUTOFF) {
 			velocity.set(0, 0);
 		} else {
-			velocity.scale(.99f);
+			velocity.scale(1 + ACCELERATION);
 		}
 	}
 
@@ -112,7 +115,7 @@ public class PoolBall extends Circle {
 		float velocityY = velocity.getY();
 
 		if (startMaxY < cushionMinY && nextMaxY >= cushionMinY) {
-			// find out  when it hits the top
+			// find out when it hits the top
 			float topTime = delta * (cushionMinY - startMaxY) / deltaY;
 
 			// y coordinate of PoolBall when it hits top wall
@@ -123,7 +126,7 @@ public class PoolBall extends Circle {
 			float finalY = intersectionY + (velocityY * (delta - topTime));
 
 			// set position
-			setCenterX(startCenterX + velocityX * delta);
+			setCenterX(startCenterX + (velocityX * delta));
 			setCenterY(finalY);
 
 			// set velocity
@@ -137,189 +140,67 @@ public class PoolBall extends Circle {
 			// find out when it hits the bottom
 			float bottomTime = delta * (startMinY - cushionMaxY) / deltaY;
 
-			// x coordinate of PoolBall when it hits bottom wall
+			// y coordinate of PoolBall when it hits bottom wall
+			float intersectionY = startCenterY - (velocityY * bottomTime);
+
+			velocityY = -velocityY;
+
+			float finalY = intersectionY + (velocityY * (delta - bottomTime));
+
+			// set position
+			setCenterX(startCenterX + (velocityX * delta));
+			setCenterY(finalY);
+
+			// set velocity
+			velocity.set(velocityX, velocityY);
+
+			return;
 		}
 
 		// does the circle pass through the left side of the rectangle?
 		if (startMaxX < cushionMinX && nextMaxX >= cushionMinX) {
-			System.out.println("Hit left wall.");
 			// find out when it hits the left
+			float leftTime = delta * (cushionMinX - startMaxX) / deltaX;
+
+			// x coordinate of PoolBall when it hits left wall
+			float intersectionX = startCenterX + (velocityX * leftTime);
+
+			velocityX = -velocityX;
+
+			float finalX = intersectionX + (velocityX * (delta - leftTime));
+
+			// set position
+			setCenterX(finalX);
+			setCenterY(startCenterY + (velocityY * delta));
+
+			// set velocity
+			velocity.set(velocityX, velocityY);
+
+			return;
 		}
 
 		// does the circle pass through the right side of the rectangle?
 		if (startMinX > cushionMaxX && nextMinX <= cushionMaxX) {
-			System.out.println("Hit right wall.");
 			// find out when it hits the right
+			float rightTime = delta * (startMinX - cushionMaxX) / deltaX;
+
+			// y coordinate of PoolBall when it hits bottom wall
+			float intersectionX = startCenterX - (velocityX * rightTime);
+
+			velocityX = -velocityX;
+
+			float finalX = intersectionX + (velocityX * (delta - rightTime));
+
+			// set position
+			setCenterX(finalX);
+			setCenterY(startCenterY + (velocityY * delta));
+
+			// set velocity
+			velocity.set(velocityX, velocityY);
+
+			return;
 		}
 
 		// Otherwise, we are about to hit a corner
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		updatePosition(delta);
-		/*
-		float radius = getRadius();
-
-		float startCenterX = getCenterX();
-		float startCenterY = getCenterY();
-		
-		float nextCenterX = nextX + radius;
-		float nextCenterY = nextY + radius;
-
-		float L = cushion.getMinX();
-		float T = cushion.getMinY();
-		float R = cushion.getMaxX();
-		float B = cushion.getMaxY();
-
-		float dx = nextX - getX();
-		float dy = nextY - getY();
-		float invdx = (dx == 0.0f ? 0.0f : 1.0f / dx);
-		float invdy = (dy == 0.0f ? 0.0f : 1.0f / dy);
-		float cornerX = Float.MAX_VALUE;
-		float cornerY = Float.MAX_VALUE;
-
-		float intersectionCenterX = Float.MAX_VALUE;
-		float intersectionCenterY = Float.MAX_VALUE;
-
-		if (startCenterX - radius < L && nextCenterX + radius > L) {
-			float ltime = ((L - radius) - startCenterX) * invdx;
-
-			if (ltime >= 0.0f && ltime <= 1.0f) {
-				float ly = dy * ltime + startCenterY;
-
-				if (ly >= T && ly <= B) {
-					intersectionCenterX = dx * ltime + startCenterX;
-					intersectionCenterY = ly;
-					//return new Intersection( dx * ltime + start.x, ly, ltime, -1, 0, L, ly );
-				}
-			}
-
-			cornerX = L;
-		}
-		
-		if (startCenterX + radius > R && nextCenterX - radius < R ) {
-			float rtime = (startCenterX - (R + radius)) * -invdx;
-
-			if (rtime >= 0.0f && rtime <= 1.0f) {
-				float ry = dy * rtime + startCenterY;
-
-				if (ry >= T && ry <= B) {
-					intersectionCenterX = dx * rtime + startCenterX;
-					intersectionCenterY = ry;
-					//return new Intersection( dx * rtime + start.x, ry, rtime, 1, 0, R, ry );
-				}
-			}
-
-			cornerX = R;
-		}
-		
-		if (startCenterY - radius < T && nextCenterY + radius > T) {
-			float ttime = ((T - radius) - startCenterY) * invdy;
-
-			if (ttime >= 0.0f && ttime <= 1.0f) {
-				float tx = dx * ttime + startCenterX;
-
-				if (tx >= L && tx <= R) {
-					intersectionCenterX = tx;
-					intersectionCenterY = dy * ttime + startCenterY;
-					//return new Intersection( tx, dy * ttime + start.y, ttime, 0, -1, tx, T );
-				}
-			}
-
-			cornerY = T;
-		}
-
-		if (startCenterY + radius > B && nextCenterY - radius < B) {
-			float btime = (startCenterY - (B + radius)) * -invdy;
-
-			if (btime >= 0.0f && btime <= 1.0f) {
-				float bx = dx * btime + startCenterX;
-
-				if (bx >= L && bx <= R) {
-					intersectionCenterX = bx;
-					intersectionCenterY = dy * btime + startCenterY;
-					//return new Intersection( bx, dy * btime + start.y, btime, 0, 1, bx, B );
-				}
-			}
-
-			cornerY = B;
-		}
-
-		if (cornerX != Float.MAX_VALUE && cornerY == Float.MAX_VALUE) {
-			cornerY = (dy > 0.0f ? B : T);
-		}
-
-		if (cornerY != Float.MAX_VALUE && cornerX == Float.MAX_VALUE) {
-			cornerX = (dx > 0.0f ? R : L);
-		}
-		*/
-		
-		// TODO unfinished
-
-		/*
-		float radius = getRadius();
-
-		float centerX = getCenterX();
-		float centerY = getCenterY();
-
-		float cushionMinX = cushion.getMinX();
-		float cushionMinY = cushion.getMinY();
-		float cushionMaxX = cushion.getMaxX();
-		float cushionMaxY = cushion.getMaxY();
-
-		boolean leftCrossed = false;
-		boolean rightCrossed = false;
-		boolean topCrossed = false;
-		boolean bottomCrossed = false;
-
-		if (centerX + radius <  cushionMinX &&
-			  nextX + radius >= cushionMinX) {
-			// left boundary was crossed
-			System.out.println("Left crossed.");
-			leftCrossed = true;
-		}
-
-		if (centerX - radius >  cushionMaxX &&
-			  nextX - radius <= cushionMaxX) {
-			// right boundary was crossed
-			System.out.println("Right crossed.");
-			rightCrossed = true;
-		}
-
-		if (centerY + radius <  cushionMinY &&
-			  nextY + radius >= cushionMinY) {
-			// top boundary was crossLefted
-			System.out.println("Top crossed.");
-			topCrossed = true;
-		}
-
-		if (centerY - radius >  cushionMaxY &&
-			  nextY - radius <= cushionMaxY) {
-			// bottom boundary was crossed
-			System.out.println("Bottom crossed.");
-			bottomCrossed = true;
-		}
-		*/
-		
-
-
-		// otherwise it's an intersection with a corner
 	}
 }
