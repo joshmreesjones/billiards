@@ -83,6 +83,96 @@ public class PoolBall extends Circle {
 	}
 
 	public void handleCushionCollision(Rectangle cushion, float nextX, float nextY, int delta) {
+		float radius = getRadius();
+
+		float startCenterX = getCenterX();
+		float startCenterY = getCenterY();
+		float nextCenterX = nextX + radius;
+		float nextCenterY = nextY + radius;
+
+		float startMinX = startCenterX - radius;
+		float startMinY = startCenterY - radius;
+		float startMaxX = startCenterX + radius;
+		float startMaxY = startCenterY + radius;
+
+		float nextMinX = nextCenterX - radius;
+		float nextMinY = nextCenterY - radius;
+		float nextMaxX = nextCenterX + radius;
+		float nextMaxY = nextCenterY + radius;
+
+		float cushionMinX = cushion.getMinX();
+		float cushionMinY = cushion.getMinY();
+		float cushionMaxX = cushion.getMaxX();
+		float cushionMaxY = cushion.getMaxY();
+
+		float deltaX = Math.abs(nextCenterX - startCenterX);
+		float deltaY = Math.abs(nextCenterY - startCenterY);
+
+		float velocityX = velocity.getX();
+		float velocityY = velocity.getY();
+
+		if (startMaxY < cushionMinY && nextMaxY >= cushionMinY) {
+			// find out  when it hits the top
+			float topTime = delta * (cushionMinY - startMaxY) / deltaY;
+
+			// y coordinate of PoolBall when it hits top wall
+			float intersectionY = startCenterY + (velocityY * topTime);
+
+			velocityY = -velocityY;
+
+			float finalY = intersectionY + (velocityY * (delta - topTime));
+
+			// set position
+			setCenterX(startCenterX + velocityX * delta);
+			setCenterY(finalY);
+
+			// set velocity
+			velocity.set(velocityX, velocityY);
+
+			return;
+		}
+
+		// does the circle pass through the bottom of the rectangle?
+		if (startMinY >  cushionMaxY && nextMinY <= cushionMaxY) {
+			// find out when it hits the bottom
+			float bottomTime = delta * (startMinY - cushionMaxY) / deltaY;
+
+			// x coordinate of PoolBall when it hits bottom wall
+		}
+
+		// does the circle pass through the left side of the rectangle?
+		if (startMaxX < cushionMinX && nextMaxX >= cushionMinX) {
+			System.out.println("Hit left wall.");
+			// find out when it hits the left
+		}
+
+		// does the circle pass through the right side of the rectangle?
+		if (startMinX > cushionMaxX && nextMinX <= cushionMaxX) {
+			System.out.println("Hit right wall.");
+			// find out when it hits the right
+		}
+
+		// Otherwise, we are about to hit a corner
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		updatePosition(delta);
 		/*
 		float radius = getRadius();
