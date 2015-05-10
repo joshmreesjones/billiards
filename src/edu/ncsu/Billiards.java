@@ -4,10 +4,12 @@ import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.World;
 
 import org.dyn4j.geometry.Circle;
+import org.dyn4j.geometry.Rectangle;
 import org.dyn4j.geometry.Vector2;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -48,7 +50,9 @@ public class Billiards extends BasicGame {
 		tableBackground = new Image("res/pool-wide.png");
 
 		world = new World();
-		ball = new PoolBall(0, 0, 50);
+		ball = new PoolBall(0, 0, 10);
+
+		ball.setLinearVelocity(new Vector2(10, 10));
 
 		world.addBody(ball);
 	}
@@ -56,7 +60,8 @@ public class Billiards extends BasicGame {
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
 		tableBackground = new Image("res/pool-wide.png");
-		world.update((int) delta / 1000);
+
+		world.updatev((double) delta);
 	}
 
 	@Override

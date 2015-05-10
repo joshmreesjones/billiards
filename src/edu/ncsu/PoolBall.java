@@ -1,12 +1,16 @@
 package edu.ncsu;
 
 import org.dyn4j.dynamics.Body;
+import org.dyn4j.dynamics.BodyFixture;
 
 import org.dyn4j.geometry.Circle;
 import org.dyn4j.geometry.Vector2;
 
 public class PoolBall extends Body {
 	public PoolBall(float x, float y, float radius) {
+		BodyFixture circle = new BodyFixture(new Circle(radius));
+		circle.setDensity(1);
+		circle.createMass();
 		this.addFixture(new Circle(radius));
 
 		this.setMass();
