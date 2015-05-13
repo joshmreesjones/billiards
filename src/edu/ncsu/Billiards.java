@@ -29,6 +29,7 @@ public class Billiards extends BasicGame {
 
 	private World world;
 	private PoolBall ball;
+	private PoolBall ball2;
 
 
 
@@ -50,11 +51,16 @@ public class Billiards extends BasicGame {
 		tableBackground = new Image("res/pool-wide.png");
 
 		world = new World();
-		ball = new PoolBall(0, 0, 10);
+		ball = new PoolBall(200, 290, 10);
+		ball2 = new PoolBall(300, 300, 10);
 
-		ball.setLinearVelocity(new Vector2(10, 10));
+		ball.setLinearVelocity(1000, 300);
+		ball2.setLinearVelocity(-1000, 300);
 
 		world.addBody(ball);
+		world.addBody(ball2);
+
+		world.setGravity(new Vector2(0, 0));
 	}
 
 	@Override

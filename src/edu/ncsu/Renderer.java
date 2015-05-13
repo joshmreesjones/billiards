@@ -9,6 +9,12 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 public class Renderer {
+	public static void render(GameObject object, Graphics g) {
+		if (object instanceof PoolBall) {
+			render((PoolBall) object, g);
+		}
+	}
+
 	public static void render(PoolBall ball, Graphics g) {
 		Color tempColor = g.getColor();
 
