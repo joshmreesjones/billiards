@@ -1,13 +1,14 @@
 Billiards
 =========
 
-Billiards is a time travel-themed game of pool in which pockets act as portals to each other through time and space. For example, pocket one could lead to pocket two one second earlier. Billiards is written with Slick2D.
+Billiards is a time travel-themed game of pool in which pockets act as portals to each other through time and space. For example, pocket one could lead to pocket two one second earlier. Billiards is written with Slick2D (depends on LWJGL) and dyn4j.
 
 
 
 What it uses
 ------------
 - Slick2D
+- dyn4j
 - LWJGL
 - Ant (for building)
 
@@ -42,12 +43,3 @@ The `lib/` directory was hand-assembled. Instructions to come later.
 Screenshots
 -----------
 Coming soon&#8482;!
-
-
-
-To do list (besides core functionality)
----------------------------------------
-- variable acceleration (greater deceleration with lower velocity)
-- better velocity lines
-- better ball rolling animation
-- remove FPS meter (even though it's white against white)
