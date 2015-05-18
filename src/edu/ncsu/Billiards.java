@@ -28,8 +28,9 @@ public class Billiards extends BasicGame {
 	private static final int WINDOW_HEIGHT = 440;
 
 	private World world;
-	private PoolBall ball;
-	private PoolBall ball2;
+	private GameObject ball;
+	private GameObject ball2;
+	private GameObject cushion;
 
 
 
@@ -51,14 +52,16 @@ public class Billiards extends BasicGame {
 		tableBackground = new Image("res/pool-wide.png");
 
 		world = new World();
-		ball = new PoolBall(200, 290, 10);
-		ball2 = new PoolBall(300, 300, 10);
+		ball = new PoolBall(300, 200, Color.red);
+		ball2 = new PoolBall(300, 400, Color.blue);
+		cushion = new Bumper(100, 400, 300, 10);
 
-		ball.setLinearVelocity(1000, 300);
-		ball2.setLinearVelocity(-1000, 300);
+		ball.setLinearVelocity(0, 1);
+		ball2.setLinearVelocity(0, -1);
 
 		world.addBody(ball);
 		world.addBody(ball2);
+		world.addBody(cushion);
 
 		world.setGravity(new Vector2(0, 0));
 	}
@@ -74,13 +77,9 @@ public class Billiards extends BasicGame {
 	public void render(GameContainer container, Graphics g) throws SlickException {
 		g.drawImage(tableBackground, 0, 0);
 
-		for (int i = 0; i < world.getBodyCount(); i++) {
-			Body body = world.getBody(i);
-
-			if (body instanceof PoolBall) {
-				Renderer.render((PoolBall) body, g);
-			}
-		}
+		Renderer.render(ball, g);
+		Renderer.render(ball2, g);
+		Renderer.render(cushion, g);
 	}
 
 	public static void main(String[] args) {
