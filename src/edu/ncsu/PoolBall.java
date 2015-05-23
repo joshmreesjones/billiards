@@ -10,16 +10,32 @@ import org.newdawn.slick.Color;
 
 public class PoolBall extends GameObject {
 	private Color color;
+	// 2.25 in diameter = .028575 m radius
+	private static float RADIUS = .028575f;
+
+	// 1700 kg
+	private static float MASS = 1700;
+
+	// rad/s/s to m/s/s
+	// [5, 10, 15] * 2*pi*r
+	private static float ACCELERATION1 = -0.8977101007632834f;
+	private static float ACCELERATION2 = -1.7954202015265668f;
+	private static float ACCELERATION3 = -2.6931303022898500f;
+
 
 	public PoolBall(float x, float y, Color color) {
+		RADIUS = .03f;
 		this.color = color;
 
-		// 2.25 in diameter = .028575 m radius
-		Circle ballShape = new Circle(0.028575);
+		Circle ballShape = new Circle(RADIUS);
 		BodyFixture ball = new BodyFixture(ballShape);
 
-		ball.setDensity(1);
+		double area = Math.PI * RADIUS * RADIUS;
+		double density = (double) MASS / area;
+
 		ball.createMass();
+		ball.setDensity(density);
+		ball.setRestitution(0.9);
 
 		this.addFixture(ball);
 		this.translate(x, y);

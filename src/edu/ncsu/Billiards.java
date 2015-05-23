@@ -23,14 +23,13 @@ public class Billiards extends BasicGame {
 	// title of game
 	private static final String GAME_TITLE = "Billiards";
 
-	// width and height of game window
+	// width and height of game window in pixels
 	private static final int WINDOW_WIDTH  = 800;
 	private static final int WINDOW_HEIGHT = 440;
 
 	private World world;
-	private GameObject ball;
+	private GameObject ball1;
 	private GameObject ball2;
-	private GameObject cushion;
 
 
 
@@ -52,16 +51,14 @@ public class Billiards extends BasicGame {
 		tableBackground = new Image("res/pool-wide.png");
 
 		world = new World();
-		ball = new PoolBall(300, 200, Color.red);
-		ball2 = new PoolBall(300, 400, Color.blue);
-		cushion = new Bumper(100, 400, 300, 10);
+		ball1 = new PoolBall(0.8f, 0.6f, Color.red);
+		ball2 = new PoolBall(1.5f, 0.8f, Color.blue);
 
-		ball.setLinearVelocity(0, 1);
-		ball2.setLinearVelocity(0, -1);
+		ball1.setLinearVelocity(.5, .3);
+		ball2.setLinearVelocity(-.65, -.1);
 
-		world.addBody(ball);
+		world.addBody(ball1);
 		world.addBody(ball2);
-		world.addBody(cushion);
 
 		world.setGravity(new Vector2(0, 0));
 	}
@@ -70,16 +67,15 @@ public class Billiards extends BasicGame {
 	public void update(GameContainer container, int delta) throws SlickException {
 		tableBackground = new Image("res/pool-wide.png");
 
-		world.updatev((double) delta);
+		world.update((double) delta / 1000);
 	}
 
 	@Override
 	public void render(GameContainer container, Graphics g) throws SlickException {
 		g.drawImage(tableBackground, 0, 0);
 
-		Renderer.render(ball, g);
+		Renderer.render(ball1, g);
 		Renderer.render(ball2, g);
-		Renderer.render(cushion, g);
 	}
 
 	public static void main(String[] args) {

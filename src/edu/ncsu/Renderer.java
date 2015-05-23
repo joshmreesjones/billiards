@@ -23,10 +23,13 @@ public class Renderer {
 
 		g.setColor(ball.getColor());
 
-		float x = (float) ball.getWorldCenter().x;
-		float y = (float) ball.getWorldCenter().y;
-		float width  = ball.getRadius() * SCALE;
-		float height = ball.getRadius() * SCALE;
+		float radius = ball.getRadius() * SCALE;
+		float width  = radius * 2;
+		float height = radius * 2;
+		float xCenter = (float) ball.getWorldCenter().x * SCALE;
+		float yCenter = (float) ball.getWorldCenter().y * SCALE;
+		float x = xCenter - radius;
+		float y = yCenter - radius;
 
 		g.fillOval(x, y, width, height);
 
@@ -41,10 +44,10 @@ public class Renderer {
 		//  100, 400, 300, 10
 		// -150,  -5, 300, 10
 
-		float x = cushion.getX();
-		float y = cushion.getY();
-		float width = cushion.getWidth();
-		float height = cushion.getHeight();
+		float x = cushion.getX() * SCALE;
+		float y = cushion.getY() * SCALE;
+		float width = cushion.getWidth() * SCALE;
+		float height = cushion.getHeight() * SCALE;
 
 		g.fillRect(x, y, width, height);
 		System.out.println(x + " " + y + " " + width + " " + height);
