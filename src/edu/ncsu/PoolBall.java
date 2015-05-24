@@ -39,7 +39,7 @@ public class PoolBall extends Body {
 
 		this.addFixture(ball);
 		this.translate(x, y);
-		this.setLinearDamping(0.0003);
+		this.setLinearDamping(.7);
 
 		// configure mass once everything mass depends on
 		// has been configured

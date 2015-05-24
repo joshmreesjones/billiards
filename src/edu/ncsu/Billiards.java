@@ -1,5 +1,7 @@
 package edu.ncsu;
 
+import java.util.ArrayList;
+
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.World;
 
@@ -16,67 +18,133 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 public class Billiards extends BasicGame {
-	/*
-		GAME CONSTANTS
-	*/
-
-	// title of game
+	// window title
 	private static final String GAME_TITLE = "Billiards";
 
-	// width and height of game window in pixels
+	// dimensions in pixels
 	private static final int WINDOW_WIDTH  = 800;
 	private static final int WINDOW_HEIGHT = 440;
 
+	// physics engine world
 	private World world;
-	private PoolBall ball1;
-	private PoolBall ball2;
 
+	// physical game objects
+	private ArrayList<PoolBall> currentBalls;
+	private ArrayList<PoolBall> futureBalls;
+	private ArrayList<Pocket> pockets;
+	private ArrayList<Cushion> cushions;
 
-
-	/*
-		RENDERED OBJECTS
-	*/
-
-	// pool table background
+	// rendered objects
 	private Image tableBackground;
+	private VelocityLine ballVelocityLine;
+	private ArrayList<VelocityLine> pocketVelocityLines;
+
+	// input handling
+	private InputHandler inputHandler;
+
+
 
 
 
 	public Billiards() {
 		super(GAME_TITLE);
+
+		world = new World();
+
+		currentBalls = new ArrayList<PoolBall>();
+		futureBalls = new ArrayList<PoolBall>();
+		pockets = new ArrayList<Pocket>();
+		cushions = new ArrayList<Cushion>();
+
+		ballVelocityLine = new VelocityLine();
+		pocketVelocityLines = new ArrayList<VelocityLine>();
+
+		inputHandler = new InputHandler();
 	}
+
+
+
+
 
 	@Override
 	public void init(GameContainer container) throws SlickException {
 		tableBackground = new Image("res/pool-wide.png");
 
-		world = new World();
-		ball1 = new PoolBall(0.8f, 0.6f, Color.red);
-		ball2 = new PoolBall(1.5f, 0.8f, Color.blue);
-
-		ball1.setLinearVelocity(.5, .3);
-		ball2.setLinearVelocity(-.65, -.1);
-
-		world.addBody(ball1);
-		world.addBody(ball2);
-
+		// create and configure world
 		world.setGravity(new Vector2(0, 0));
+		world.getSettings().setSleepAngularVelocity(Double.MAX_VALUE);
+
+
+		// create game objects
+
+		// add game objects to world
+
+		// create rendered objects
+
+		// create input handler
 	}
 
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
-		tableBackground = new Image("res/pool-wide.png");
-
 		world.update((double) delta / 1000);
 	}
 
 	@Override
 	public void render(GameContainer container, Graphics g) throws SlickException {
+		// background image
 		g.drawImage(tableBackground, 0, 0);
 
-		Renderer.render(ball1, g);
-		Renderer.render(ball2, g);
+		// pockets
+		for (Pocket pocket : pockets) {
+			Renderer.render(pocket, g);
+		}
+
+		// cushions
+		for (Cushion cushion : cushions) {
+			Renderer.render(cushion, g);
+		}
+
+		// current balls
+		for (PoolBall ball : currentBalls) {
+			Renderer.render(ball, g);
+		}
+
+		// ball velocity line
+		Renderer.render(ballVelocityLine, g);
+
+		// pocket velocity lines
+		for (VelocityLine line : pocketVelocityLines) {
+			Renderer.render(line, g);
+		}
 	}
+
+
+
+
+
+	public void mouseClicked(int button, int x, int y, int clickCount) {
+		inputHandler.mouseClicked(button, x, y, clickCount);
+	}
+
+	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
+		inputHandler.mouseDragged(oldx, oldy, newx, newy);
+	}
+
+	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+		inputHandler.mouseMoved(oldx, oldy, newx, newy);
+	}
+
+	public void mousePressed(int button, int x, int y) {
+		inputHandler.mousePressed(button, x, y);
+	}
+
+	public void mouseReleased(int button, int x, int y) {
+		inputHandler.mouseReleased(button, x, y);
+	}
+
+
+
+
 
 	public static void main(String[] args) {
 		try {
