@@ -28,8 +28,8 @@ public class Billiards extends BasicGame {
 	private static final int WINDOW_HEIGHT = 440;
 
 	private World world;
-	private GameObject ball1;
-	private GameObject ball2;
+	private PoolBall ball1;
+	private PoolBall ball2;
 
 
 

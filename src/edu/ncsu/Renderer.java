@@ -10,14 +10,6 @@ public class Renderer {
 	// 300 pixels per meter
 	private static final float SCALE = 300;
 
-	public static void render(GameObject object, Graphics g) {
-		if (object instanceof PoolBall) {
-			render((PoolBall) object, g);
-		} else if (object instanceof Bumper) {
-			render((Bumper) object, g);
-		}
-	}
-
 	public static void render(PoolBall ball, Graphics g) {
 		Color tempColor = g.getColor();
 

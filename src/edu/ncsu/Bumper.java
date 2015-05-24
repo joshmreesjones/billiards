@@ -1,9 +1,11 @@
 package edu.ncsu;
 
+import org.dyn4j.dynamics.Body;
+
 import org.dyn4j.geometry.Mass;
 import org.dyn4j.geometry.Rectangle;
 
-public class Bumper extends GameObject {
+public class Bumper extends Body {
 	public Bumper(float x, float y, float width, float height) {
 		Rectangle rect = new Rectangle(width, height);
 

@@ -8,7 +8,7 @@ import org.dyn4j.geometry.Vector2;
 
 import org.newdawn.slick.Color;
 
-public class PoolBall extends GameObject {
+public class PoolBall extends Body {
 	private Color color;
 	// 2.25 in diameter = .028575 m radius
 	private static float RADIUS = .028575f;
