@@ -56,6 +56,14 @@ public class Renderer {
 	}
 
 	public static void render(VelocityLine line, Graphics g) {
+		int[] start = line.getStart();
+		int[] end = line.getEnd();
 
+		float x1 = (float) start[0];
+		float y1 = (float) start[1];
+		float x2 = (float) end[0];
+		float y2 = (float) end[1];
+
+		g.drawLine(x1, y1, x2, y2);
 	}
 }

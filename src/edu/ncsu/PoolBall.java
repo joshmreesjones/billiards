@@ -22,22 +22,21 @@ public class PoolBall extends Body {
 	private static float ACCELERATION2 = -1.7954202015265668f;
 	private static float ACCELERATION3 = -2.6931303022898500f;
 
-
 	public PoolBall(float x, float y, Color color) {
 		RADIUS = .03f;
 		this.color = color;
 
 		Circle ballShape = new Circle(RADIUS);
-		BodyFixture ball = new BodyFixture(ballShape);
+		BodyFixture ballFixture = new BodyFixture(ballShape);
 
 		double area = Math.PI * RADIUS * RADIUS;
 		double density = (double) MASS / area;
 
-		ball.createMass();
-		ball.setDensity(density);
-		ball.setRestitution(0.9);
+		ballFixture.createMass();
+		ballFixture.setDensity(density);
+		ballFixture.setRestitution(0.9);
 
-		this.addFixture(ball);
+		this.addFixture(ballFixture);
 		this.translate(x, y);
 		this.setLinearDamping(.7);
 

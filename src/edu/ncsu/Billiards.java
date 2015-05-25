@@ -59,7 +59,7 @@ public class Billiards extends BasicGame {
 		ballVelocityLine = new VelocityLine();
 		pocketVelocityLines = new ArrayList<VelocityLine>();
 
-		inputHandler = new InputHandler();
+		inputHandler = new InputHandler(ballVelocityLine);
 	}
 
 
@@ -74,8 +74,8 @@ public class Billiards extends BasicGame {
 		world.setGravity(new Vector2(0, 0));
 		world.getSettings().setSleepAngularVelocity(Double.MAX_VALUE);
 
-
 		// create game objects
+		currentBalls.add(new PoolBall(1, 1, Color.red));
 
 		// add game objects to world
 
@@ -122,6 +122,7 @@ public class Billiards extends BasicGame {
 
 
 
+	// make InputHandler an inner class (but commit first)
 	public void mouseClicked(int button, int x, int y, int clickCount) {
 		inputHandler.mouseClicked(button, x, y, clickCount);
 	}
