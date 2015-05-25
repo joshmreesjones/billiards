@@ -1,26 +1,27 @@
 package edu.ncsu;
 
 public class VelocityLine {
-	private int startX;
-	private int startY;
-	private int endX;
-	private int endY;
+	// using physics units
+	private double startX;
+	private double startY;
+	private double endX;
+	private double endY;
 
-	public void setStart(int startX, int startY) {
+	public void setStart(double startX, double startY) {
 		this.startX = startX;
 		this.startY = startY;
 	}
 
-	public void setEnd(int endX, int endY) {
+	public void setEnd(double endX, double endY) {
 		this.endX = endX;
 		this.endY = endY;
 	}
 
-	public int[] getStart() {
-		return new int[]{startX, startY};
+	public double[] getStart() {
+		return new double[]{startX, startY};
 	}
 
-	public int[] getEnd() {
-		return new int[]{endX, endY};
+	public double[] getEnd() {
+		return new double[]{endX, endY};
 	}
 }

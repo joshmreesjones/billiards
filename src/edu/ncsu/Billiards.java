@@ -75,11 +75,12 @@ public class Billiards extends BasicGame {
 		world.getSettings().setSleepAngularVelocity(Double.MAX_VALUE);
 
 		// create game objects
-		PoolBall newBall = new PoolBall(1, 1, Color.red);
-		newBall.setLinearVelocity(100, 100);
-		currentBalls.add(newBall);
+		currentBalls.add(new PoolBall(1, 1, Color.red));
 
 		// add game objects to world
+		for (PoolBall ball : currentBalls) {
+			world.add(ball);
+		}
 
 		// create rendered objects
 
@@ -167,40 +168,44 @@ public class Billiards extends BasicGame {
 	}
 
 	private class InputHandler {
-		private int startX;
-		private int startY;
-		private int endX;
-		private int endY;
+		boolean draggingFromBall = false;
 
 		public void mouseClicked(int button, double x, double y, int clickCount) {
 		}
 
-		public void mouseDragged(double oldx, double oldy, double newx, double newy) {
+		public void mouseDragged(double oldx, double oldy,
+								 double newx, double newy) {
+			if (draggingFromBall) {
+				Billiards.this.ballVelocityLine.setEnd(newx, newy);
+			}
 		}
 
 		public void mouseMoved(double oldx, double oldy, double newx, double newy) {
 		}
 
 		public void mousePressed(int button, double x, double y) {
-			// check if it was on a current, asleep ball
+			// check if mouse press is on current, asleep ball
 			Vector2 point = new Vector2(x, y);
 
 			for (PoolBall ball : Billiards.this.currentBalls) {
-
-				System.out.println(ball.getAngularVelocity());
-				System.out.println(ball.getLinearVelocity());
-				System.out.println(ball.isAsleep());
-				System.out.println();
-
 				if (ball.contains(point) && ball.isAsleep()) {
-					System.out.println("clicked on asleep ball");
+					double startX = ball.getWorldCenter().x;
+					double startY = ball.getWorldCenter().y;
+
+					Billiards.this.ballVelocityLine.setStart(startX, startY);
+					Billiards.this.ballVelocityLine.setEnd(startX, startY);
+
+					draggingFromBall = true;
 				}
 			}
-
-			// if yes, set startX
 		}
 
 		public void mouseReleased(int button, double x, double y) {
+			Billiards.this.ballVelocityLine.setStart(0, 0);
+			Billiards.this.ballVelocityLine.setEnd(0, 0);
+
+			draggingFromBall = false;
+
 			// send the ball on its way (if it was on a ball)
 		}
 	}

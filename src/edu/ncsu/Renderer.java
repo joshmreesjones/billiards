@@ -56,13 +56,13 @@ public class Renderer {
 	}
 
 	public static void render(VelocityLine line, Graphics g) {
-		int[] start = line.getStart();
-		int[] end = line.getEnd();
+		double[] start = line.getStart();
+		double[] end   = line.getEnd();
 
-		float x1 = (float) start[0];
-		float y1 = (float) start[1];
-		float x2 = (float) end[0];
-		float y2 = (float) end[1];
+		float x1 = (float) start[0] * SCALE;
+		float y1 = (float) start[1] * SCALE;
+		float x2 = (float)   end[0] * SCALE;
+		float y2 = (float)   end[1] * SCALE;
 
 		g.drawLine(x1, y1, x2, y2);
 	}
