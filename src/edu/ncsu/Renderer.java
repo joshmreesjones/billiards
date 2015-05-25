@@ -8,7 +8,7 @@ import org.newdawn.slick.Graphics;
 
 public class Renderer {
 	// 300 pixels per meter
-	private static final float SCALE = 300;
+	public static final float SCALE = 300;
 
 	public static void render(Cushion cushion, Graphics g) {
 		Color tempColor = g.getColor();

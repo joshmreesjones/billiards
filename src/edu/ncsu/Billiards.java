@@ -59,7 +59,7 @@ public class Billiards extends BasicGame {
 		ballVelocityLine = new VelocityLine();
 		pocketVelocityLines = new ArrayList<VelocityLine>();
 
-		inputHandler = new InputHandler(ballVelocityLine);
+		inputHandler = new InputHandler();
 	}
 
 
@@ -75,7 +75,9 @@ public class Billiards extends BasicGame {
 		world.getSettings().setSleepAngularVelocity(Double.MAX_VALUE);
 
 		// create game objects
-		currentBalls.add(new PoolBall(1, 1, Color.red));
+		PoolBall newBall = new PoolBall(1, 1, Color.red);
+		newBall.setLinearVelocity(100, 100);
+		currentBalls.add(newBall);
 
 		// add game objects to world
 
@@ -110,7 +112,14 @@ public class Billiards extends BasicGame {
 		}
 
 		// ball velocity line
-		Renderer.render(ballVelocityLine, g);
+		if (ballVelocityLine.getStart()[0] == 0 &&
+			ballVelocityLine.getStart()[1] == 0 &&
+			ballVelocityLine.getEnd()[0]   == 0 &&
+			ballVelocityLine.getEnd()[1]   == 0) {
+			// don't render the line if it's (0, 0) to (0, 0)
+		} else {
+			Renderer.render(ballVelocityLine, g);
+		}
 
 		// pocket velocity lines
 		for (VelocityLine line : pocketVelocityLines) {
@@ -122,25 +131,78 @@ public class Billiards extends BasicGame {
 
 
 
-	// make InputHandler an inner class (but commit first)
 	public void mouseClicked(int button, int x, int y, int clickCount) {
-		inputHandler.mouseClicked(button, x, y, clickCount);
+		inputHandler.mouseClicked(button,
+					(double) x / Renderer.SCALE,
+					(double) y / Renderer.SCALE,
+					clickCount);
 	}
 
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-		inputHandler.mouseDragged(oldx, oldy, newx, newy);
+		inputHandler.mouseDragged(
+					(double) oldx / Renderer.SCALE,
+					(double) oldy / Renderer.SCALE,
+					(double) newx / Renderer.SCALE,
+					(double) newy / Renderer.SCALE);
 	}
 
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-		inputHandler.mouseMoved(oldx, oldy, newx, newy);
+		inputHandler.mouseMoved(
+					(double) oldx / Renderer.SCALE,
+					(double) oldy / Renderer.SCALE,
+					(double) newx / Renderer.SCALE,
+					(double) newy / Renderer.SCALE);
 	}
 
 	public void mousePressed(int button, int x, int y) {
-		inputHandler.mousePressed(button, x, y);
+		inputHandler.mousePressed(button,
+					(double) x / Renderer.SCALE,
+					(double) y / Renderer.SCALE);
 	}
 
 	public void mouseReleased(int button, int x, int y) {
-		inputHandler.mouseReleased(button, x, y);
+		inputHandler.mouseReleased(button,
+					(double) x / Renderer.SCALE,
+					(double) y / Renderer.SCALE);
+	}
+
+	private class InputHandler {
+		private int startX;
+		private int startY;
+		private int endX;
+		private int endY;
+
+		public void mouseClicked(int button, double x, double y, int clickCount) {
+		}
+
+		public void mouseDragged(double oldx, double oldy, double newx, double newy) {
+		}
+
+		public void mouseMoved(double oldx, double oldy, double newx, double newy) {
+		}
+
+		public void mousePressed(int button, double x, double y) {
+			// check if it was on a current, asleep ball
+			Vector2 point = new Vector2(x, y);
+
+			for (PoolBall ball : Billiards.this.currentBalls) {
+
+				System.out.println(ball.getAngularVelocity());
+				System.out.println(ball.getLinearVelocity());
+				System.out.println(ball.isAsleep());
+				System.out.println();
+
+				if (ball.contains(point) && ball.isAsleep()) {
+					System.out.println("clicked on asleep ball");
+				}
+			}
+
+			// if yes, set startX
+		}
+
+		public void mouseReleased(int button, double x, double y) {
+			// send the ball on its way (if it was on a ball)
+		}
 	}
 
 

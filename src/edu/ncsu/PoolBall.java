@@ -10,7 +10,7 @@ import org.newdawn.slick.Color;
 
 public class PoolBall extends Body {
 	private Color color;
-	// 2.25 in diameter = .028575 m radius
+	// 2.25 inch diameter = .028575 meter radius
 	private static float RADIUS = .028575f;
 
 	// 1700 kg
@@ -23,7 +23,6 @@ public class PoolBall extends Body {
 	private static float ACCELERATION3 = -2.6931303022898500f;
 
 	public PoolBall(float x, float y, Color color) {
-		RADIUS = .03f;
 		this.color = color;
 
 		Circle ballShape = new Circle(RADIUS);
