@@ -73,9 +73,15 @@ public class Billiards extends BasicGame {
 		// create and configure world
 		world.setGravity(new Vector2(0, 0));
 		world.getSettings().setSleepAngularVelocity(Double.MAX_VALUE);
+		world.getSettings().setRestitutionVelocity(0);
 
 		// create game objects
-		currentBalls.add(new PoolBall(1, 1, Color.red));
+		PoolBall ball1 = new PoolBall(1f, 1f, Color.red);
+		PoolBall ball2 = new PoolBall(1.5f, 1f, Color.blue);
+		ball1.setLinearVelocity(.5f, 0);
+		ball2.setLinearVelocity(-.5f, 0);
+		currentBalls.add(ball1);
+		currentBalls.add(ball2);
 
 		// add game objects to world
 		for (PoolBall ball : currentBalls) {
@@ -167,46 +173,77 @@ public class Billiards extends BasicGame {
 					(double) y / Renderer.SCALE);
 	}
 
-	private class InputHandler {
-		boolean draggingFromBall = false;
 
-		public void mouseClicked(int button, double x, double y, int clickCount) {
-		}
+
+
+
+	private class InputHandler {
+		Billiards outside = Billiards.this;
+
+		boolean draggingFromBall = false;
+		PoolBall currentDraggingBall = null;
 
 		public void mouseDragged(double oldx, double oldy,
 								 double newx, double newy) {
 			if (draggingFromBall) {
-				Billiards.this.ballVelocityLine.setEnd(newx, newy);
+				outside.ballVelocityLine.setEnd(newx, newy);
 			}
 		}
 
-		public void mouseMoved(double oldx, double oldy, double newx, double newy) {
-		}
-
 		public void mousePressed(int button, double x, double y) {
-			// check if mouse press is on current, asleep ball
 			Vector2 point = new Vector2(x, y);
 
-			for (PoolBall ball : Billiards.this.currentBalls) {
-				if (ball.contains(point) && ball.isAsleep()) {
+			// all balls should be asleep before we can start another.
+			for (PoolBall ball : outside.currentBalls) {
+				if (!ball.isAsleep()) {
+					return;
+				}
+			}
+
+			// check if mouse press is on current, asleep ball
+			for (PoolBall ball : outside.currentBalls) {
+				if (ball.contains(point)) {
 					double startX = ball.getWorldCenter().x;
 					double startY = ball.getWorldCenter().y;
 
-					Billiards.this.ballVelocityLine.setStart(startX, startY);
-					Billiards.this.ballVelocityLine.setEnd(startX, startY);
+					outside.ballVelocityLine.setStart(startX, startY);
+					outside.ballVelocityLine.setEnd(startX, startY);
 
 					draggingFromBall = true;
+					currentDraggingBall = ball;
 				}
 			}
 		}
 
 		public void mouseReleased(int button, double x, double y) {
-			Billiards.this.ballVelocityLine.setStart(0, 0);
-			Billiards.this.ballVelocityLine.setEnd(0, 0);
+			// send the ball on its way (if it was on a ball)
+			if (draggingFromBall) {
+				double[] dragStart = outside.ballVelocityLine.getStart();
+				double[] dragEnd = outside.ballVelocityLine.getEnd();
+
+				//System.out.println();
+				//System.out.println(dragEnd[0] - dragStart[0]);
+				//System.out.println(dragEnd[1] - dragStart[1]);
+				
+				Vector2 force = new Vector2(
+					(dragEnd[0] - dragStart[0]) * 50,
+					(dragEnd[1] - dragStart[1]) * 50
+				);
+
+				currentDraggingBall.applyForce(force);
+			}
+
+			outside.ballVelocityLine.setStart(0, 0);
+			outside.ballVelocityLine.setEnd(0, 0);
 
 			draggingFromBall = false;
+			currentDraggingBall = null;
+		}
 
-			// send the ball on its way (if it was on a ball)
+		public void mouseClicked(int button, double x, double y, int clickCount) {
+		}
+
+		public void mouseMoved(double oldx, double oldy, double newx, double newy) {
 		}
 	}
 

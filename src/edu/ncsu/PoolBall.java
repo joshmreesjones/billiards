@@ -4,17 +4,20 @@ import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 
 import org.dyn4j.geometry.Circle;
+import org.dyn4j.geometry.Mass;
 import org.dyn4j.geometry.Vector2;
 
 import org.newdawn.slick.Color;
 
 public class PoolBall extends Body {
 	private Color color;
-	// 2.25 inch diameter = .028575 meter radius
-	private static float RADIUS = .028575f;
 
-	// 1700 kg
-	private static float MASS = 1700;
+	// 2.25 inch diameter = .028575 meter radius
+	private static float RADIUS = .028575f; // meters
+	private static float MASS = .17f; // kilograms
+	private static float DENSITY = 217.97925f; // kg/m^3
+	private static float FRICTION = .08f;
+	private static float RESTITUTION = .9f;
 
 	// rad/s/s to m/s/s
 	// [5, 10, 15] * 2*pi*r
@@ -28,20 +31,18 @@ public class PoolBall extends Body {
 		Circle ballShape = new Circle(RADIUS);
 		BodyFixture ballFixture = new BodyFixture(ballShape);
 
-		double area = Math.PI * RADIUS * RADIUS;
-		double density = (double) MASS / area;
-
+		ballFixture.setDensity(DENSITY);
+		ballFixture.setFriction(FRICTION);
+		ballFixture.setRestitution(RESTITUTION);
 		ballFixture.createMass();
-		ballFixture.setDensity(density);
-		ballFixture.setRestitution(0.9);
 
 		this.addFixture(ballFixture);
 		this.translate(x, y);
-		this.setLinearDamping(.7);
+		this.setLinearDamping(.995);
 
 		// configure mass once everything mass depends on
 		// has been configured
-		this.setMass();
+		this.setMass(Mass.Type.NORMAL);
 	}
 
 	public Circle getCircle() {

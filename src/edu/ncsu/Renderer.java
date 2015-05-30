@@ -24,7 +24,6 @@ public class Renderer {
 		float height = cushion.getHeight() * SCALE;
 
 		g.fillRect(x, y, width, height);
-		System.out.println(x + " " + y + " " + width + " " + height);
 
 		g.setColor(tempColor);
 	}
