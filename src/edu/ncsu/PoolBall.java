@@ -17,7 +17,7 @@ public class PoolBall extends Body {
 	private static float MASS = .17f; // kilograms
 	private static float DENSITY = 217.97925f; // kg/m^3
 	private static float FRICTION = .08f;
-	private static float RESTITUTION = .9f;
+	private static float RESTITUTION = .95f;
 
 	// rad/s/s to m/s/s
 	// [5, 10, 15] * 2*pi*r
@@ -38,7 +38,7 @@ public class PoolBall extends Body {
 
 		this.addFixture(ballFixture);
 		this.translate(x, y);
-		this.setLinearDamping(.995);
+		this.setLinearDamping(.999999);
 
 		// configure mass once everything mass depends on
 		// has been configured

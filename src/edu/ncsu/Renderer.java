@@ -13,17 +13,21 @@ public class Renderer {
 	public static void render(Cushion cushion, Graphics g) {
 		Color tempColor = g.getColor();
 
-		g.setColor(Color.red);
+		g.setColor(Color.orange);
 
-		//  100, 400, 300, 10
-		// -150,  -5, 300, 10
-
+		// x and y are the top left corner of the rectangle
 		float x = cushion.getX() * SCALE;
 		float y = cushion.getY() * SCALE;
 		float width = cushion.getWidth() * SCALE;
 		float height = cushion.getHeight() * SCALE;
 
 		g.fillRect(x, y, width, height);
+
+		//System.out.println();
+		//System.out.println(x);
+		//System.out.println(y);
+		//System.out.println(width);
+		//System.out.println(height);
 
 		g.setColor(tempColor);
 	}

@@ -10,7 +10,10 @@ public class Cushion extends Body {
 		Rectangle rect = new Rectangle(width, height);
 
 		this.addFixture(rect);
-		this.translate(x, y);
+		this.translate(
+			x + (width  / 2),
+			y + (height / 2)
+		);
 
 		this.setMass(Mass.Type.INFINITE);
 	}
@@ -20,11 +23,11 @@ public class Cushion extends Body {
 	}
 
 	public float getX() {
-		return (float) getRectangle().getCenter().x - (getWidth() / 2);
+		return (float) this.getWorldCenter().x - (getWidth() / 2);
 	}
 
 	public float getY() {
-		return (float) getRectangle().getCenter().y - (getHeight() / 2);
+		return (float) this.getWorldCenter().y - (getHeight() / 2);
 	}
 
 	public float getWidth() {

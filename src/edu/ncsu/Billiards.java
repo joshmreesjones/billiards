@@ -31,13 +31,13 @@ public class Billiards extends BasicGame {
 	// physical game objects
 	private ArrayList<PoolBall> currentBalls;
 	private ArrayList<PoolBall> futureBalls;
-	private ArrayList<Pocket> pockets;
+	//private ArrayList<Pocket> pockets;
 	private ArrayList<Cushion> cushions;
 
 	// rendered objects
 	private Image tableBackground;
 	private VelocityLine ballVelocityLine;
-	private ArrayList<VelocityLine> pocketVelocityLines;
+	//private ArrayList<VelocityLine> pocketVelocityLines;
 
 	// input handling
 	private InputHandler inputHandler;
@@ -53,11 +53,11 @@ public class Billiards extends BasicGame {
 
 		currentBalls = new ArrayList<PoolBall>();
 		futureBalls = new ArrayList<PoolBall>();
-		pockets = new ArrayList<Pocket>();
+		//pockets = new ArrayList<Pocket>();
 		cushions = new ArrayList<Cushion>();
 
 		ballVelocityLine = new VelocityLine();
-		pocketVelocityLines = new ArrayList<VelocityLine>();
+		//pocketVelocityLines = new ArrayList<VelocityLine>();
 
 		inputHandler = new InputHandler();
 	}
@@ -75,22 +75,42 @@ public class Billiards extends BasicGame {
 		world.getSettings().setSleepAngularVelocity(Double.MAX_VALUE);
 		world.getSettings().setRestitutionVelocity(0);
 
+		// create rendered objects
+
 		// create game objects
-		PoolBall ball1 = new PoolBall(1f, 1f, Color.red);
+		PoolBall ball1 = new PoolBall(.9f, 1f, Color.red);
 		PoolBall ball2 = new PoolBall(1.5f, 1f, Color.blue);
 		ball1.setLinearVelocity(.5f, 0);
 		ball2.setLinearVelocity(-.5f, 0);
 		currentBalls.add(ball1);
 		currentBalls.add(ball2);
 
+		Cushion topLeft     = new Cushion( .5f  ,  .235f, .785f, .1f  );
+		Cushion topRight    = new Cushion(1.385f,  .235f, .785f, .1f  );
+		Cushion left        = new Cushion( .335f,  .4f  , .1f  , .666f);
+		Cushion right       = new Cushion(2.235f,  .4f  , .1f  , .666f);
+		Cushion bottomLeft  = new Cushion( .5f  , 1.135f, .785f, .1f  );
+		Cushion bottomRight = new Cushion(1.385f, 1.135f, .785f, .1f  );
+
+		cushions.add(topLeft);
+		cushions.add(topRight);
+		cushions.add(left);
+		cushions.add(right);
+		cushions.add(bottomLeft);
+		cushions.add(bottomRight);
+
 		// add game objects to world
 		for (PoolBall ball : currentBalls) {
 			world.add(ball);
 		}
 
-		// create rendered objects
+		for (Cushion cushion : cushions) {
+			world.add(cushion);
+		}
 
-		// create input handler
+		//for (Pocket pocket : pockets) {
+			//world.add(pocket);
+		//}
 	}
 
 	@Override
@@ -104,9 +124,9 @@ public class Billiards extends BasicGame {
 		g.drawImage(tableBackground, 0, 0);
 
 		// pockets
-		for (Pocket pocket : pockets) {
-			Renderer.render(pocket, g);
-		}
+		//for (Pocket pocket : pockets) {
+		//	Renderer.render(pocket, g);
+		//}
 
 		// cushions
 		for (Cushion cushion : cushions) {
@@ -129,9 +149,9 @@ public class Billiards extends BasicGame {
 		}
 
 		// pocket velocity lines
-		for (VelocityLine line : pocketVelocityLines) {
-			Renderer.render(line, g);
-		}
+		//for (VelocityLine line : pocketVelocityLines) {
+		//	Renderer.render(line, g);
+		//}
 	}
 
 
@@ -143,6 +163,7 @@ public class Billiards extends BasicGame {
 					(double) x / Renderer.SCALE,
 					(double) y / Renderer.SCALE,
 					clickCount);
+		System.out.println(x + " " + y);
 	}
 
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
@@ -193,7 +214,7 @@ public class Billiards extends BasicGame {
 		public void mousePressed(int button, double x, double y) {
 			Vector2 point = new Vector2(x, y);
 
-			// all balls should be asleep before we can start another.
+			// all balls should be asleep before we can start another
 			for (PoolBall ball : outside.currentBalls) {
 				if (!ball.isAsleep()) {
 					return;
