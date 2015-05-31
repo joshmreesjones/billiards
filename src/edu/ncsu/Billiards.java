@@ -31,7 +31,7 @@ public class Billiards extends BasicGame {
 	// physical game objects
 	private ArrayList<PoolBall> currentBalls;
 	private ArrayList<PoolBall> futureBalls;
-	//private ArrayList<Pocket> pockets;
+	private ArrayList<Pocket> pockets;
 	private ArrayList<Cushion> cushions;
 
 	// rendered objects
@@ -53,7 +53,7 @@ public class Billiards extends BasicGame {
 
 		currentBalls = new ArrayList<PoolBall>();
 		futureBalls = new ArrayList<PoolBall>();
-		//pockets = new ArrayList<Pocket>();
+		pockets = new ArrayList<Pocket>();
 		cushions = new ArrayList<Cushion>();
 
 		ballVelocityLine = new VelocityLine();
@@ -76,6 +76,8 @@ public class Billiards extends BasicGame {
 		world.getSettings().setRestitutionVelocity(0);
 
 		// create rendered objects
+		Pocket testPocket = new Pocket(1, 1);
+		pockets.add(testPocket);
 
 		// create game objects
 		PoolBall ball1 = new PoolBall(.9f, 1f, Color.red);
@@ -108,9 +110,9 @@ public class Billiards extends BasicGame {
 			world.add(cushion);
 		}
 
-		//for (Pocket pocket : pockets) {
-			//world.add(pocket);
-		//}
+		for (Pocket pocket : pockets) {
+			world.add(pocket);
+		}
 	}
 
 	@Override
@@ -124,9 +126,9 @@ public class Billiards extends BasicGame {
 		g.drawImage(tableBackground, 0, 0);
 
 		// pockets
-		//for (Pocket pocket : pockets) {
-		//	Renderer.render(pocket, g);
-		//}
+		for (Pocket pocket : pockets) {
+			Renderer.render(pocket, g);
+		}
 
 		// cushions
 		for (Cushion cushion : cushions) {
@@ -247,8 +249,8 @@ public class Billiards extends BasicGame {
 				//System.out.println(dragEnd[1] - dragStart[1]);
 				
 				Vector2 force = new Vector2(
-					(dragEnd[0] - dragStart[0]) * 50,
-					(dragEnd[1] - dragStart[1]) * 50
+					(dragEnd[0] - dragStart[0]) * 300,
+					(dragEnd[1] - dragStart[1]) * 300
 				);
 
 				currentDraggingBall.applyForce(force);

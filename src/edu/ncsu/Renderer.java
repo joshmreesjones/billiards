@@ -23,17 +23,25 @@ public class Renderer {
 
 		g.fillRect(x, y, width, height);
 
-		//System.out.println();
-		//System.out.println(x);
-		//System.out.println(y);
-		//System.out.println(width);
-		//System.out.println(height);
-
 		g.setColor(tempColor);
 	}
 
 	public static void render(Pocket pocket, Graphics g) {
+		Color tempColor = g.getColor();
 
+		g.setColor(Color.black);
+
+		float radius = pocket.getRadius() * SCALE;
+		float width = radius * 2;
+		float height = radius * 2;
+		float centerX = (float) pocket.getWorldCenter().x * SCALE;
+		float centerY = (float) pocket.getWorldCenter().y * SCALE;
+		float x = centerX - radius;
+		float y = centerY - radius;
+
+		g.fillOval(x, y, width, height);
+
+		g.setColor(tempColor);
 	}
 
 	public static void render(PoolBall ball, Graphics g) {
@@ -48,10 +56,10 @@ public class Renderer {
 		float radius = ball.getRadius() * SCALE;
 		float width  = radius * 2;
 		float height = radius * 2;
-		float xCenter = (float) ball.getWorldCenter().x * SCALE;
-		float yCenter = (float) ball.getWorldCenter().y * SCALE;
-		float x = xCenter - radius;
-		float y = yCenter - radius;
+		float centerX = (float) ball.getWorldCenter().x * SCALE;
+		float centerY = (float) ball.getWorldCenter().y * SCALE;
+		float x = centerX - radius;
+		float y = centerY - radius;
 
 		g.fillOval(x, y, width, height);
 

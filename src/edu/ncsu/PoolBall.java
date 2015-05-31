@@ -13,7 +13,8 @@ public class PoolBall extends Body {
 	private Color color;
 
 	// 2.25 inch diameter = .028575 meter radius
-	private static float RADIUS = .028575f; // meters
+	private static float RADIUS = .05715f;
+	//private static float RADIUS = .028575f; // meters
 	private static float MASS = .17f; // kilograms
 	private static float DENSITY = 217.97925f; // kg/m^3
 	private static float FRICTION = .08f;
@@ -45,7 +46,7 @@ public class PoolBall extends Body {
 		this.setMass(Mass.Type.NORMAL);
 	}
 
-	public Circle getCircle() {
+	private Circle getCircle() {
 		return (Circle) this.getFixture(0).getShape();
 	}
 
