@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.World;
 
+import org.dyn4j.dynamics.contact.ContactAdapter;
+import org.dyn4j.dynamics.contact.ContactListener;
+import org.dyn4j.dynamics.contact.ContactPoint;
+
 import org.dyn4j.geometry.Circle;
 import org.dyn4j.geometry.Rectangle;
 import org.dyn4j.geometry.Vector2;
@@ -25,8 +29,10 @@ public class Billiards extends BasicGame {
 	private static final int WINDOW_WIDTH  = 800;
 	private static final int WINDOW_HEIGHT = 440;
 
-	// physics engine world
-	private World world;
+	// physics engine game world
+	private World gameWorld;
+	// physics engine prediction world
+	private World predictionWorld;
 
 	// physical game objects
 	private ArrayList<PoolBall> currentBalls;
@@ -49,7 +55,7 @@ public class Billiards extends BasicGame {
 	public Billiards() {
 		super(GAME_TITLE);
 
-		world = new World();
+		gameWorld = new World();
 
 		currentBalls = new ArrayList<PoolBall>();
 		futureBalls = new ArrayList<PoolBall>();
@@ -70,20 +76,22 @@ public class Billiards extends BasicGame {
 	public void init(GameContainer container) throws SlickException {
 		tableBackground = new Image("res/pool-wide.png");
 
-		// create and configure world
-		world.setGravity(new Vector2(0, 0));
-		world.getSettings().setSleepAngularVelocity(Double.MAX_VALUE);
-		world.getSettings().setRestitutionVelocity(0);
+		// create and configure game world
+		gameWorld.setGravity(new Vector2(0, 0));
+		gameWorld.getSettings().setSleepAngularVelocity(Double.MAX_VALUE);
+		gameWorld.getSettings().setRestitutionVelocity(0);
+
+		gameWorld.addListener(new GameContactHandler());
 
 		// create rendered objects
 		Pocket testPocket = new Pocket(1, 1);
 		pockets.add(testPocket);
 
 		// create game objects
-		PoolBall ball1 = new PoolBall(.9f, 1f, Color.red);
+		PoolBall ball1 = new PoolBall(.9f, .6f, Color.red);
 		PoolBall ball2 = new PoolBall(1.5f, 1f, Color.blue);
-		ball1.setLinearVelocity(.5f, 0);
-		ball2.setLinearVelocity(-.5f, 0);
+		//ball1.setLinearVelocity(.5f, 0);
+		//ball2.setLinearVelocity(-.5f, 0);
 		currentBalls.add(ball1);
 		currentBalls.add(ball2);
 
@@ -101,23 +109,23 @@ public class Billiards extends BasicGame {
 		cushions.add(bottomLeft);
 		cushions.add(bottomRight);
 
-		// add game objects to world
+		// add game objects to game world
 		for (PoolBall ball : currentBalls) {
-			world.add(ball);
+			gameWorld.add(ball);
 		}
 
 		for (Cushion cushion : cushions) {
-			world.add(cushion);
+			gameWorld.add(cushion);
 		}
 
 		for (Pocket pocket : pockets) {
-			world.add(pocket);
+			gameWorld.add(pocket);
 		}
 	}
 
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
-		world.update((double) delta / 1000);
+		gameWorld.update((double) delta / 1000);
 	}
 
 	@Override
@@ -165,7 +173,6 @@ public class Billiards extends BasicGame {
 					(double) x / Renderer.SCALE,
 					(double) y / Renderer.SCALE,
 					clickCount);
-		System.out.println(x + " " + y);
 	}
 
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
@@ -249,8 +256,8 @@ public class Billiards extends BasicGame {
 				//System.out.println(dragEnd[1] - dragStart[1]);
 				
 				Vector2 force = new Vector2(
-					(dragEnd[0] - dragStart[0]) * 300,
-					(dragEnd[1] - dragStart[1]) * 300
+					(dragEnd[0] - dragStart[0]) * 200,
+					(dragEnd[1] - dragStart[1]) * 200
 				);
 
 				currentDraggingBall.applyForce(force);
@@ -267,6 +274,26 @@ public class Billiards extends BasicGame {
 		}
 
 		public void mouseMoved(double oldx, double oldy, double newx, double newy) {
+		}
+	}
+
+
+
+
+
+	private class GameContactHandler extends ContactAdapter
+								 implements ContactListener {
+		public void sensed(ContactPoint point) {
+			Body body1 = point.getBody1();
+			Body body2 = point.getBody2();
+
+			if (!body1.getFixture(0).isSensor()) {
+				// body1 is the pool ball
+				Billiards.this.currentBalls.remove(body1);
+			} else if (!body2.getFixture(0).isSensor()) {
+				// body2 is a pool ball
+				Billiards.this.currentBalls.remove(body2);
+			}
 		}
 	}
 

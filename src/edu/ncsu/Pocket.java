@@ -7,7 +7,8 @@ import org.dyn4j.geometry.Circle;
 
 public class Pocket extends Body {
 	// 4.25 inches = 0.10795 meters
-	private float RADIUS = 0.10795f;
+	//private float RADIUS = 0.10795f;
+	private float RADIUS = .05f;
 
 	public Pocket(float x, float y) {
 		Circle circleShape = new Circle(RADIUS);
