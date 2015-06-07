@@ -1,4 +1,4 @@
-package edu.ncsu;
+package edu.ncsu.billiards.gameobjects;
 
 public class VelocityLine {
 	// using physics units

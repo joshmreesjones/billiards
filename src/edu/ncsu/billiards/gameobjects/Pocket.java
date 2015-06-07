@@ -1,4 +1,4 @@
-package edu.ncsu;
+package edu.ncsu.billiards.gameobjects;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;

@@ -1,4 +1,11 @@
-package edu.ncsu;
+package edu.ncsu.billiards;
+
+import edu.ncsu.billiards.gameobjects.Cushion;
+import edu.ncsu.billiards.gameobjects.Pocket;
+import edu.ncsu.billiards.gameobjects.PoolBall;
+import edu.ncsu.billiards.gameobjects.VelocityLine;
+
+import edu.ncsu.billiards.world.BilliardsWorld;
 
 import java.util.ArrayList;
 
