@@ -29,8 +29,10 @@ public class Billiards extends BasicGame {
 	private static final int WINDOW_WIDTH  = 800;
 	private static final int WINDOW_HEIGHT = 440;
 
-	// physics engine game world
+	// user-facing world
 	private BilliardsWorld gameWorld;
+	// world used to predict future collisions
+	private BilliardsWorld predictionWorld;
 
 	// rendered objects
 	private Image tableBackground;
@@ -48,6 +50,7 @@ public class Billiards extends BasicGame {
 		super(GAME_TITLE);
 
 		gameWorld = new BilliardsWorld();
+		predictionWorld = new BilliardsWorld();
 
 		ballVelocityLine = new VelocityLine();
 		//pocketVelocityLines = new ArrayList<VelocityLine>();
@@ -64,10 +67,7 @@ public class Billiards extends BasicGame {
 		tableBackground = new Image("res/pool-wide.png");
 
 		gameWorld.addListener(new GameContactHandler());
-
-		// create rendered objects
-		Pocket testPocket = new Pocket(1, 1);
-		gameWorld.addPocket(testPocket);
+		predictionWorld.addListener(new PredictionContactHandler());
 
 		// create game objects
 		PoolBall ball1 = new PoolBall(.9f, .6f, Color.red);
@@ -88,10 +88,18 @@ public class Billiards extends BasicGame {
 		gameWorld.addCushion(right);
 		gameWorld.addCushion(bottomLeft);
 		gameWorld.addCushion(bottomRight);
+
+		Pocket testPocket = new Pocket(1, 1);
+		gameWorld.addPocket(testPocket);
 	}
 
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
+		// TODO
+		// check if we need to add in a futureBall
+		// if we do, remove it from gameWorld.futureBalls
+		//            and add it to gameWorld.currentBalls
+		// reset predictionWorld to current gameWorld state
 		gameWorld.update((double) delta / 1000);
 	}
 
@@ -212,6 +220,8 @@ public class Billiards extends BasicGame {
 
 		public void mouseReleased(int button, double x, double y) {
 			// send the ball on its way (if it was on a ball)
+			// TODO
+			// simulate predictionWorld
 			if (draggingFromBall) {
 				double[] dragStart = Billiards.this.ballVelocityLine.getStart();
 				double[] dragEnd = Billiards.this.ballVelocityLine.getEnd();
@@ -252,11 +262,29 @@ public class Billiards extends BasicGame {
 			Body body2 = point.getBody2();
 
 			if (!body1.getFixture(0).isSensor()) {
-				// body1 is the pool ball
+				// body1 is a pool ball
 				Billiards.this.gameWorld.getBalls().remove(body1);
 			} else if (!body2.getFixture(0).isSensor()) {
 				// body2 is a pool ball
 				Billiards.this.gameWorld.getBalls().remove(body2);
+			}
+		}
+	}
+
+	private class PredictionContactHandler extends ContactAdapter
+										implements ContactListener {
+		public void sensed(ContactPoint point) {
+			// TODO
+			// get the time of contact
+			// add the ball to gameWorld.futureBalls with contact time
+			// remove the ball from predictionWorld.currentBalls
+			Body body1 = point.getBody1();
+			Body body2 = point.getBody2();
+
+			if (!body1.getFixture(0).isSensor()) {
+				// body1 is a pool ball
+			} else if (!body2.getFixture(0).isSensor()) {
+				// body2 is a pool ball
 			}
 		}
 	}
