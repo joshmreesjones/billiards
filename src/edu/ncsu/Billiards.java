@@ -30,15 +30,7 @@ public class Billiards extends BasicGame {
 	private static final int WINDOW_HEIGHT = 440;
 
 	// physics engine game world
-	private World gameWorld;
-	// physics engine prediction world
-	private World predictionWorld;
-
-	// physical game objects
-	private ArrayList<PoolBall> currentBalls;
-	private ArrayList<PoolBall> futureBalls;
-	private ArrayList<Pocket> pockets;
-	private ArrayList<Cushion> cushions;
+	private BilliardsWorld gameWorld;
 
 	// rendered objects
 	private Image tableBackground;
@@ -55,12 +47,7 @@ public class Billiards extends BasicGame {
 	public Billiards() {
 		super(GAME_TITLE);
 
-		gameWorld = new World();
-
-		currentBalls = new ArrayList<PoolBall>();
-		futureBalls = new ArrayList<PoolBall>();
-		pockets = new ArrayList<Pocket>();
-		cushions = new ArrayList<Cushion>();
+		gameWorld = new BilliardsWorld();
 
 		ballVelocityLine = new VelocityLine();
 		//pocketVelocityLines = new ArrayList<VelocityLine>();
@@ -76,24 +63,17 @@ public class Billiards extends BasicGame {
 	public void init(GameContainer container) throws SlickException {
 		tableBackground = new Image("res/pool-wide.png");
 
-		// create and configure game world
-		gameWorld.setGravity(new Vector2(0, 0));
-		gameWorld.getSettings().setSleepAngularVelocity(Double.MAX_VALUE);
-		gameWorld.getSettings().setRestitutionVelocity(0);
-
 		gameWorld.addListener(new GameContactHandler());
 
 		// create rendered objects
 		Pocket testPocket = new Pocket(1, 1);
-		pockets.add(testPocket);
+		gameWorld.addPocket(testPocket);
 
 		// create game objects
 		PoolBall ball1 = new PoolBall(.9f, .6f, Color.red);
 		PoolBall ball2 = new PoolBall(1.5f, 1f, Color.blue);
-		//ball1.setLinearVelocity(.5f, 0);
-		//ball2.setLinearVelocity(-.5f, 0);
-		currentBalls.add(ball1);
-		currentBalls.add(ball2);
+		gameWorld.addBall(ball1);
+		gameWorld.addBall(ball2);
 
 		Cushion topLeft     = new Cushion( .5f  ,  .235f, .785f, .1f  );
 		Cushion topRight    = new Cushion(1.385f,  .235f, .785f, .1f  );
@@ -102,25 +82,12 @@ public class Billiards extends BasicGame {
 		Cushion bottomLeft  = new Cushion( .5f  , 1.135f, .785f, .1f  );
 		Cushion bottomRight = new Cushion(1.385f, 1.135f, .785f, .1f  );
 
-		cushions.add(topLeft);
-		cushions.add(topRight);
-		cushions.add(left);
-		cushions.add(right);
-		cushions.add(bottomLeft);
-		cushions.add(bottomRight);
-
-		// add game objects to game world
-		for (PoolBall ball : currentBalls) {
-			gameWorld.add(ball);
-		}
-
-		for (Cushion cushion : cushions) {
-			gameWorld.add(cushion);
-		}
-
-		for (Pocket pocket : pockets) {
-			gameWorld.add(pocket);
-		}
+		gameWorld.addCushion(topLeft);
+		gameWorld.addCushion(topRight);
+		gameWorld.addCushion(left);
+		gameWorld.addCushion(right);
+		gameWorld.addCushion(bottomLeft);
+		gameWorld.addCushion(bottomRight);
 	}
 
 	@Override
@@ -134,17 +101,17 @@ public class Billiards extends BasicGame {
 		g.drawImage(tableBackground, 0, 0);
 
 		// pockets
-		for (Pocket pocket : pockets) {
+		for (Pocket pocket : gameWorld.getPockets()) {
 			Renderer.render(pocket, g);
 		}
 
 		// cushions
-		for (Cushion cushion : cushions) {
+		for (Cushion cushion : gameWorld.getCushions()) {
 			Renderer.render(cushion, g);
 		}
 
 		// current balls
-		for (PoolBall ball : currentBalls) {
+		for (PoolBall ball : gameWorld.getBalls()) {
 			Renderer.render(ball, g);
 		}
 
@@ -208,15 +175,13 @@ public class Billiards extends BasicGame {
 
 
 	private class InputHandler {
-		Billiards outside = Billiards.this;
-
 		boolean draggingFromBall = false;
 		PoolBall currentDraggingBall = null;
 
 		public void mouseDragged(double oldx, double oldy,
 								 double newx, double newy) {
 			if (draggingFromBall) {
-				outside.ballVelocityLine.setEnd(newx, newy);
+				Billiards.this.ballVelocityLine.setEnd(newx, newy);
 			}
 		}
 
@@ -224,20 +189,20 @@ public class Billiards extends BasicGame {
 			Vector2 point = new Vector2(x, y);
 
 			// all balls should be asleep before we can start another
-			for (PoolBall ball : outside.currentBalls) {
+			for (PoolBall ball : Billiards.this.gameWorld.getBalls()) {
 				if (!ball.isAsleep()) {
 					return;
 				}
 			}
 
 			// check if mouse press is on current, asleep ball
-			for (PoolBall ball : outside.currentBalls) {
+			for (PoolBall ball : Billiards.this.gameWorld.getBalls()) {
 				if (ball.contains(point)) {
 					double startX = ball.getWorldCenter().x;
 					double startY = ball.getWorldCenter().y;
 
-					outside.ballVelocityLine.setStart(startX, startY);
-					outside.ballVelocityLine.setEnd(startX, startY);
+					Billiards.this.ballVelocityLine.setStart(startX, startY);
+					Billiards.this.ballVelocityLine.setEnd(startX, startY);
 
 					draggingFromBall = true;
 					currentDraggingBall = ball;
@@ -248,13 +213,9 @@ public class Billiards extends BasicGame {
 		public void mouseReleased(int button, double x, double y) {
 			// send the ball on its way (if it was on a ball)
 			if (draggingFromBall) {
-				double[] dragStart = outside.ballVelocityLine.getStart();
-				double[] dragEnd = outside.ballVelocityLine.getEnd();
+				double[] dragStart = Billiards.this.ballVelocityLine.getStart();
+				double[] dragEnd = Billiards.this.ballVelocityLine.getEnd();
 
-				//System.out.println();
-				//System.out.println(dragEnd[0] - dragStart[0]);
-				//System.out.println(dragEnd[1] - dragStart[1]);
-				
 				Vector2 force = new Vector2(
 					(dragEnd[0] - dragStart[0]) * 200,
 					(dragEnd[1] - dragStart[1]) * 200
@@ -263,17 +224,20 @@ public class Billiards extends BasicGame {
 				currentDraggingBall.applyForce(force);
 			}
 
-			outside.ballVelocityLine.setStart(0, 0);
-			outside.ballVelocityLine.setEnd(0, 0);
+			Billiards.this.ballVelocityLine.setStart(0, 0);
+			Billiards.this.ballVelocityLine.setEnd(0, 0);
 
 			draggingFromBall = false;
 			currentDraggingBall = null;
 		}
 
+
 		public void mouseClicked(int button, double x, double y, int clickCount) {
+
 		}
 
 		public void mouseMoved(double oldx, double oldy, double newx, double newy) {
+
 		}
 	}
 
@@ -289,10 +253,10 @@ public class Billiards extends BasicGame {
 
 			if (!body1.getFixture(0).isSensor()) {
 				// body1 is the pool ball
-				Billiards.this.currentBalls.remove(body1);
+				Billiards.this.gameWorld.getBalls().remove(body1);
 			} else if (!body2.getFixture(0).isSensor()) {
 				// body2 is a pool ball
-				Billiards.this.currentBalls.remove(body2);
+				Billiards.this.gameWorld.getBalls().remove(body2);
 			}
 		}
 	}
