@@ -5,7 +5,8 @@ import edu.ncsu.billiards.gameobjects.Pocket;
 import edu.ncsu.billiards.gameobjects.PoolBall;
 import edu.ncsu.billiards.gameobjects.VelocityLine;
 
-import edu.ncsu.billiards.world.BilliardsWorld;
+import edu.ncsu.billiards.world.GameWorld;
+import edu.ncsu.billiards.world.PredictionWorld;
 
 import java.util.ArrayList;
 
@@ -37,9 +38,9 @@ public class Billiards extends BasicGame {
 	private static final int WINDOW_HEIGHT = 440;
 
 	// user-facing world
-	private BilliardsWorld gameWorld;
+	private GameWorld gameWorld;
 	// world used to predict future collisions
-	private BilliardsWorld predictionWorld;
+	private PredictionWorld predictionWorld;
 
 	// rendered objects
 	private Image tableBackground;
@@ -56,8 +57,8 @@ public class Billiards extends BasicGame {
 	public Billiards() {
 		super(GAME_TITLE);
 
-		gameWorld = new BilliardsWorld();
-		predictionWorld = new BilliardsWorld();
+		gameWorld = new GameWorld();
+		predictionWorld = new PredictionWorld();
 
 		ballVelocityLine = new VelocityLine();
 		//pocketVelocityLines = new ArrayList<VelocityLine>();
@@ -73,14 +74,11 @@ public class Billiards extends BasicGame {
 	public void init(GameContainer container) throws SlickException {
 		tableBackground = new Image("res/pool-wide.png");
 
-		gameWorld.addListener(new GameContactHandler());
-		predictionWorld.addListener(new PredictionContactHandler());
-
 		// create game objects
 		PoolBall ball1 = new PoolBall(.9f, .6f, Color.red);
 		PoolBall ball2 = new PoolBall(1.5f, 1f, Color.blue);
-		gameWorld.addBall(ball1);
-		gameWorld.addBall(ball2);
+		gameWorld.addCurrentBall(ball1);
+		gameWorld.addCurrentBall(ball2);
 
 		Cushion topLeft     = new Cushion( .5f  ,  .235f, .785f, .1f  );
 		Cushion topRight    = new Cushion(1.385f,  .235f, .785f, .1f  );
@@ -126,7 +124,7 @@ public class Billiards extends BasicGame {
 		}
 
 		// current balls
-		for (PoolBall ball : gameWorld.getBalls()) {
+		for (PoolBall ball : gameWorld.getCurrentBalls()) {
 			Renderer.render(ball, g);
 		}
 
@@ -204,14 +202,12 @@ public class Billiards extends BasicGame {
 			Vector2 point = new Vector2(x, y);
 
 			// all balls should be asleep before we can start another
-			for (PoolBall ball : Billiards.this.gameWorld.getBalls()) {
-				if (!ball.isAsleep()) {
-					return;
-				}
+			if (Billiards.this.gameWorld.hasMovingBalls()) {
+				return;
 			}
 
 			// check if mouse press is on current, asleep ball
-			for (PoolBall ball : Billiards.this.gameWorld.getBalls()) {
+			for (PoolBall ball : Billiards.this.gameWorld.getCurrentBalls()) {
 				if (ball.contains(point)) {
 					double startX = ball.getWorldCenter().x;
 					double startY = ball.getWorldCenter().y;
@@ -226,9 +222,9 @@ public class Billiards extends BasicGame {
 		}
 
 		public void mouseReleased(int button, double x, double y) {
+			predictionWorld.runSimulation();
+
 			// send the ball on its way (if it was on a ball)
-			// TODO
-			// simulate predictionWorld
 			if (draggingFromBall) {
 				double[] dragStart = Billiards.this.ballVelocityLine.getStart();
 				double[] dragEnd = Billiards.this.ballVelocityLine.getEnd();
@@ -255,44 +251,6 @@ public class Billiards extends BasicGame {
 
 		public void mouseMoved(double oldx, double oldy, double newx, double newy) {
 
-		}
-	}
-
-
-
-
-
-	private class GameContactHandler extends ContactAdapter
-								 implements ContactListener {
-		public void sensed(ContactPoint point) {
-			Body body1 = point.getBody1();
-			Body body2 = point.getBody2();
-
-			if (!body1.getFixture(0).isSensor()) {
-				// body1 is a pool ball
-				Billiards.this.gameWorld.getBalls().remove(body1);
-			} else if (!body2.getFixture(0).isSensor()) {
-				// body2 is a pool ball
-				Billiards.this.gameWorld.getBalls().remove(body2);
-			}
-		}
-	}
-
-	private class PredictionContactHandler extends ContactAdapter
-										implements ContactListener {
-		public void sensed(ContactPoint point) {
-			// TODO
-			// get the time of contact
-			// add the ball to gameWorld.futureBalls with contact time
-			// remove the ball from predictionWorld.currentBalls
-			Body body1 = point.getBody1();
-			Body body2 = point.getBody2();
-
-			if (!body1.getFixture(0).isSensor()) {
-				// body1 is a pool ball
-			} else if (!body2.getFixture(0).isSensor()) {
-				// body2 is a pool ball
-			}
 		}
 	}
 

@@ -10,9 +10,8 @@ import org.dyn4j.dynamics.World;
 
 import org.dyn4j.geometry.Vector2;
 
-public class BilliardsWorld extends World {
+public abstract class BilliardsWorld extends World {
 	private ArrayList<PoolBall> currentBalls;
-	private ArrayList<PoolBall> futureBalls;
 	private ArrayList<Pocket> pockets;
 	private ArrayList<Cushion> cushions;
 
@@ -20,7 +19,6 @@ public class BilliardsWorld extends World {
 
 	public BilliardsWorld() {
 		currentBalls = new ArrayList<PoolBall>();
-		futureBalls = new ArrayList<PoolBall>();
 		pockets = new ArrayList<Pocket>();
 		cushions = new ArrayList<Cushion>();
 
@@ -31,7 +29,7 @@ public class BilliardsWorld extends World {
 
 
 
-	public void addBall(PoolBall ball) {
+	public void addCurrentBall(PoolBall ball) {
 		currentBalls.add(ball);
 		this.addBody(ball);
 	}
@@ -48,6 +46,10 @@ public class BilliardsWorld extends World {
 
 
 
+	public ArrayList<PoolBall> getCurrentBalls() {
+		return currentBalls;
+	}
+
 	public ArrayList<Pocket> getPockets() {
 		return pockets;
 	}
@@ -56,7 +58,15 @@ public class BilliardsWorld extends World {
 		return cushions;
 	}
 
-	public ArrayList<PoolBall> getBalls() {
-		return currentBalls;
+
+
+	public boolean hasMovingBalls() {
+		for (PoolBall ball : currentBalls) {
+			if (!ball.isAsleep()) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }
