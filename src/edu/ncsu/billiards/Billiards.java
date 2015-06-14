@@ -222,8 +222,6 @@ public class Billiards extends BasicGame {
 		}
 
 		public void mouseReleased(int button, double x, double y) {
-			predictionWorld.runSimulation();
-
 			// send the ball on its way (if it was on a ball)
 			if (draggingFromBall) {
 				double[] dragStart = Billiards.this.ballVelocityLine.getStart();
@@ -235,6 +233,8 @@ public class Billiards extends BasicGame {
 				);
 
 				currentDraggingBall.applyForce(force);
+
+				predictionWorld.runSimulation();
 			}
 
 			Billiards.this.ballVelocityLine.setStart(0, 0);

@@ -63,10 +63,10 @@ public abstract class BilliardsWorld extends World {
 	public boolean hasMovingBalls() {
 		for (PoolBall ball : currentBalls) {
 			if (!ball.isAsleep()) {
-				return false;
+				return true;
 			}
 		}
 
-		return true;
+		return false;
 	}
 }

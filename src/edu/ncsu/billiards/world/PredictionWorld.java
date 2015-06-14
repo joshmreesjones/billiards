@@ -10,10 +10,12 @@ public class PredictionWorld extends BilliardsWorld {
 	}
 
 	public void runSimulation() {
+		System.out.print("Running simulation...");
 		// update until all bodies in this prediction world are asleep
-		while (hasMovingBalls()) {
-			this.step();
-		}
+		//while (hasMovingBalls()) {
+			//this.step();
+		//}
+		System.out.println("simulation done.");
 	}
 
 	public void sync(GameWorld gameWorld) {
