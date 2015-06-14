@@ -17,7 +17,7 @@
 	</path>
 
 	<!-- Properties -->
-	<property name="main-class" value="edu.ncsu.Billiards" />
+	<property name="main-class" value="edu.ncsu.billiards.Billiards" />
 
 
 
