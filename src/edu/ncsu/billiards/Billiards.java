@@ -5,6 +5,7 @@ import edu.ncsu.billiards.gameobjects.Pocket;
 import edu.ncsu.billiards.gameobjects.PoolBall;
 import edu.ncsu.billiards.gameobjects.VelocityLine;
 
+import edu.ncsu.billiards.world.BilliardsWorld;
 import edu.ncsu.billiards.world.GameWorld;
 import edu.ncsu.billiards.world.PredictionWorld;
 
@@ -74,11 +75,26 @@ public class Billiards extends BasicGame {
 	public void init(GameContainer container) throws SlickException {
 		tableBackground = new Image("res/pool-wide.png");
 
-		// create game objects
+		addGameObjects(gameWorld);
+		addGameObjects(predictionWorld);
+	}
+
+	/**
+	 * Adds game objects to the specified world.
+	 * 
+	 * This method is utilized because the gameWorld and predictionWorld
+	 * should have the same setup as each other. Objects should be logically
+	 * identical, but should not be the same objects in memory, as
+	 * the prediction world will update the Bodies in the world, and we
+	 * don't want those to change in the game world.
+	 * 
+	 * @param world the world to add objects to
+	 */
+	public void addGameObjects(BilliardsWorld world) {
 		PoolBall ball1 = new PoolBall(.9f, .6f, Color.red);
 		PoolBall ball2 = new PoolBall(1.5f, 1f, Color.blue);
-		gameWorld.addCurrentBall(ball1);
-		gameWorld.addCurrentBall(ball2);
+		world.addCurrentBall(ball1);
+		world.addCurrentBall(ball2);
 
 		Cushion topLeft     = new Cushion( .5f  ,  .235f, .785f, .1f  );
 		Cushion topRight    = new Cushion(1.385f,  .235f, .785f, .1f  );
@@ -87,15 +103,15 @@ public class Billiards extends BasicGame {
 		Cushion bottomLeft  = new Cushion( .5f  , 1.135f, .785f, .1f  );
 		Cushion bottomRight = new Cushion(1.385f, 1.135f, .785f, .1f  );
 
-		gameWorld.addCushion(topLeft);
-		gameWorld.addCushion(topRight);
-		gameWorld.addCushion(left);
-		gameWorld.addCushion(right);
-		gameWorld.addCushion(bottomLeft);
-		gameWorld.addCushion(bottomRight);
+		world.addCushion(topLeft);
+		world.addCushion(topRight);
+		world.addCushion(left);
+		world.addCushion(right);
+		world.addCushion(bottomLeft);
+		world.addCushion(bottomRight);
 
 		Pocket testPocket = new Pocket(1, 1);
-		gameWorld.addPocket(testPocket);
+		world.addPocket(testPocket);
 	}
 
 	@Override
@@ -234,6 +250,7 @@ public class Billiards extends BasicGame {
 
 				currentDraggingBall.applyForce(force);
 
+				predictionWorld.sync(Billiards.this.gameWorld);
 				predictionWorld.runSimulation();
 			}
 

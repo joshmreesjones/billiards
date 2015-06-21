@@ -1,5 +1,11 @@
 package edu.ncsu.billiards.world;
 
+import edu.ncsu.billiards.gameobjects.PoolBall;
+
+import java.util.ArrayList;
+
+import org.dyn4j.dynamics.Body;
+
 import org.dyn4j.dynamics.contact.ContactAdapter;
 import org.dyn4j.dynamics.contact.ContactListener;
 import org.dyn4j.dynamics.contact.ContactPoint;
@@ -10,24 +16,71 @@ public class PredictionWorld extends BilliardsWorld {
 	}
 
 	public void runSimulation() {
-		System.out.print("Running simulation...");
 		// update until all bodies in this prediction world are asleep
-		//while (hasMovingBalls()) {
-			//this.step();
-		//}
-		System.out.println("simulation done.");
+		int i = 0;
+		while (super.hasMovingBalls()) {
+			/*
+			System.out.println(this.getAccumulatedTime() + "\t" +
+								this.getStep().getDeltaTime()
+			);
+			*/
+			Body ball = this.getBodies().get(0);
+			//System.out.println("\n");
+			//System.out.println(ball.getWorldCenter());
+			//System.out.println(ball.getAngularVelocity());
+			//System.out.println(ball.getLinearVelocity());
+			//System.out.println(ball.getAccumulatedForce());
+			//System.out.println(ball.getAccumulatedTorque());
+			//System.out.println("\n");
+
+			this.update(1.0 / 60.0);
+
+			i++;
+		}
+
+		System.out.println(i);
 	}
 
+	/**
+	 * Syncs the prediction world with the specified gameWorld.
+	 *
+	 * This method only syncs PoolBalls because cushions, pockets,
+	 * and world settings should already by the same.
+	 * 
+	 * @param gameWorld the world to sync this prediction world to
+	 */
 	public void sync(GameWorld gameWorld) {
-		// balls
-		// pockets
-		// cushions
+		// clear the current balls
+		super.getCurrentBalls().clear();
+
+		// copy balls from gameWorld to this world
+		ArrayList<PoolBall> balls = gameWorld.getCurrentBalls();
+
+		for (PoolBall ball : balls) {
+			PoolBall newBall = new PoolBall((float) ball.getWorldCenter().x,
+			                                (float) ball.getWorldCenter().y,
+			                                        ball.getColor());
+
+			System.out.println(ball.getWorldCenter());
+			System.out.println(ball.getAngularVelocity());
+			System.out.println(ball.getLinearVelocity());
+			System.out.println(ball.getAccumulatedForce());
+			System.out.println(ball.getAccumulatedTorque());
+
+			newBall.setAngularVelocity(ball.getAngularVelocity());
+			newBall.setLinearVelocity(ball.getLinearVelocity());
+
+			newBall.applyForce(ball.getAccumulatedForce());
+			newBall.applyTorque(ball.getAccumulatedTorque());
+
+			super.addCurrentBall(newBall);
+		}
 	}
 
 	private class PredictionContactHandler extends ContactAdapter
 										implements ContactListener {
 		public void sensed(ContactPoint point) {
-			System.out.println("Contact sensed in simulation world");
+			System.out.println("Contact sensed in simulation world.");
 
 			// record the time
 			// find out source pocket
