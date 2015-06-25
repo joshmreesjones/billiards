@@ -10,35 +10,93 @@ import org.dyn4j.dynamics.contact.ContactAdapter;
 import org.dyn4j.dynamics.contact.ContactListener;
 import org.dyn4j.dynamics.contact.ContactPoint;
 
+import org.newdawn.slick.Color;
+
 public class PredictionWorld extends BilliardsWorld {
 	public PredictionWorld() {
 		this.addListener(new PredictionContactHandler());
 	}
 
 	public void runSimulation() {
+		// TODO the latest: there are multiple copies of each
+		// ball in this world instance. The sync() method is
+		// broken and needs to be refactored. See issue #2, which
+		// can be used as part of a solution to the problem (maybe
+		// all of it)
+		System.out.println("Running simulation... ");
+
+		System.out.println("Default body sleep time: " +
+					super.getSettings().getSleepTime());
+
+		System.out.println("Auto-sleeping enabled by default: " +
+					super.getSettings().isAutoSleepingEnabled());
+
+		System.out.println("Sleep angular velocity tolerance: " +
+					super.getSettings().getSleepAngularVelocity());
+
+		System.out.println("Sleep linear velocity tolerance: " +
+					super.getSettings().getSleepLinearVelocity());
+
+		int iteration = 0;
 		// update until all bodies in this prediction world are asleep
-		int i = 0;
 		while (super.hasMovingBalls()) {
-			/*
-			System.out.println(this.getAccumulatedTime() + "\t" +
-								this.getStep().getDeltaTime()
-			);
-			*/
-			Body ball = this.getBodies().get(0);
-			//System.out.println("\n");
-			//System.out.println(ball.getWorldCenter());
-			//System.out.println(ball.getAngularVelocity());
-			//System.out.println(ball.getLinearVelocity());
-			//System.out.println(ball.getAccumulatedForce());
-			//System.out.println(ball.getAccumulatedTorque());
-			//System.out.println("\n");
+			// print some information
+			for (Body body : this.getBodies()) {
+				if (body instanceof PoolBall) {
+					PoolBall ball = (PoolBall) body;
+
+					System.out.println();
+					System.out.println();
+
+					System.out.println("Iteration: " + iteration++);
+
+					System.out.println("Ball ID: " + ball.getId());
+
+					System.out.println("Position: " +
+								ball.getWorldCenter());
+
+					System.out.println("Linear velocity: " +
+								ball.getLinearVelocity());
+
+					System.out.println("Angular velocity: " +
+								ball.getAngularVelocity());
+
+					System.out.println("Accumulated force: " +
+								ball.getAccumulatedForce());
+					
+					System.out.println("Accumulated torque: " +
+								ball.getAccumulatedTorque());
+					
+					Color color = ball.getColor();
+					String colorString = "";
+					if (color.equals(Color.blue)) {
+						colorString = "blue";
+					} else if (color.equals(Color.red)) {
+						colorString = "red";
+					}
+					System.out.println("Color: " + colorString);
+
+					System.out.println("Auto-sleeping enabled: " +
+								ball.isAutoSleepingEnabled());
+
+					System.out.println("Asleep: " +
+								ball.isAsleep());
+
+					System.out.println("World accumulated time: " +
+								super.getAccumulatedTime());
+
+					System.out.println("World update required: " +
+								super.isUpdateRequired());
+
+					System.out.println();
+					System.out.println();
+				}
+			}
 
 			this.update(1.0 / 60.0);
-
-			i++;
 		}
 
-		System.out.println(i);
+		System.out.println("Simulation complete.");
 	}
 
 	/**
@@ -60,12 +118,6 @@ public class PredictionWorld extends BilliardsWorld {
 			PoolBall newBall = new PoolBall((float) ball.getWorldCenter().x,
 			                                (float) ball.getWorldCenter().y,
 			                                        ball.getColor());
-
-			System.out.println(ball.getWorldCenter());
-			System.out.println(ball.getAngularVelocity());
-			System.out.println(ball.getLinearVelocity());
-			System.out.println(ball.getAccumulatedForce());
-			System.out.println(ball.getAccumulatedTorque());
 
 			newBall.setAngularVelocity(ball.getAngularVelocity());
 			newBall.setLinearVelocity(ball.getLinearVelocity());

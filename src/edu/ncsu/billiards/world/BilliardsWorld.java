@@ -60,10 +60,24 @@ public abstract class BilliardsWorld extends World {
 
 
 
+	public static int DEBUG_COUNTER = 10000000;
 	public boolean hasMovingBalls() {
 		for (PoolBall ball : currentBalls) {
 			// if ball is not asleep
 			if (!ball.isAsleep()) {
+
+				if (DEBUG_COUNTER++ <= 1000) {
+					System.out.println();
+					System.out.println(ball.getLinearVelocity()    + "\t" +
+									   ball.getAngularVelocity()   + "\t" +
+									   ball.getAccumulatedForce()  + "\t" +
+									   ball.getAccumulatedTorque() + "\t" +
+									   ball.isAsleep());
+					System.out.println();
+				} else if (DEBUG_COUNTER == 1000000) {
+					System.out.println(ball.isAsleep());
+				}
+
 				// ball is moving
 				return true;
 			}

@@ -249,9 +249,12 @@ public class Billiards extends BasicGame {
 				);
 
 				currentDraggingBall.applyForce(force);
+				System.out.println("Applied force.");
 
 				predictionWorld.sync(Billiards.this.gameWorld);
+				System.out.println("Synced.");
 				predictionWorld.runSimulation();
+				System.out.println("Simulation complete.");
 			}
 
 			Billiards.this.ballVelocityLine.setStart(0, 0);
