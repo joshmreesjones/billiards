@@ -69,11 +69,19 @@ public class Renderer {
 		g.fillOval(x, y, width, height);
 
 		g.setColor(tempColor);
+
+		// we need to render the velocity line as well
+		render(ball.getVelocityLine(), g);
 	}
 
-	public static void render(VelocityLine line, Graphics g) {
+	private static void render(VelocityLine line, Graphics g) {
 		double[] start = line.getStart();
 		double[] end   = line.getEnd();
+
+		if (start[0] == 0 && start[1] == 0 &&
+			  end[0] == 0 &&   end[1] == 0) {
+			return;
+		}
 
 		float x1 = (float) start[0] * SCALE;
 		float y1 = (float) start[1] * SCALE;

@@ -10,6 +10,10 @@ public class Pocket extends Body {
 	//private float RADIUS = 0.10795f;
 	private float RADIUS = .05f;
 
+	private VelocityLine velocityLine;
+
+
+
 	public Pocket(float x, float y) {
 		Circle circleShape = new Circle(RADIUS);
 
@@ -19,6 +23,8 @@ public class Pocket extends Body {
 		this.addFixture(circleFixture);
 		this.translate(x, y);
 	}
+
+
 
 	private Circle getCircle() {
 		return (Circle) this.getFixture(0).getShape();

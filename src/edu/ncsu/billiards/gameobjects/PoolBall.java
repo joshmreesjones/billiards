@@ -10,8 +10,6 @@ import org.dyn4j.geometry.Vector2;
 import org.newdawn.slick.Color;
 
 public class PoolBall extends Body {
-	private Color color;
-
 	// 2.25 inch diameter = .028575 meter radius
 	private static float RADIUS = .028575f; // meters
 	//private static float RADIUS = .05715f;
@@ -26,8 +24,16 @@ public class PoolBall extends Body {
 	private static float ACCELERATION2 = -1.7954202015265668f;
 	private static float ACCELERATION3 = -2.6931303022898500f;
 
+	private Color color;
+
+	private VelocityLine velocityLine;
+
+
+
 	public PoolBall(float x, float y, Color color) {
 		this.color = color;
+
+		this.velocityLine = new VelocityLine();
 
 		Circle ballShape = new Circle(RADIUS);
 		BodyFixture ballFixture = new BodyFixture(ballShape);
@@ -51,18 +57,24 @@ public class PoolBall extends Body {
 	}
 
 	public float getX() {
-		return (float) getCircle().getCenter().x;
+		return (float) this.getCircle().getCenter().x;
 	}
 
 	public float getY() {
-		return (float) getCircle().getCenter().y;
+		return (float) this.getCircle().getCenter().y;
 	}
 
 	public float getRadius() {
-		return (float) getCircle().getRadius();
+		return (float) this.getCircle().getRadius();
 	}
 
+
+
 	public Color getColor() {
-		return color;
+		return this.color;
+	}
+
+	public VelocityLine getVelocityLine() {
+		return this.velocityLine;
 	}
 }

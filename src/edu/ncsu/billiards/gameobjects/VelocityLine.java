@@ -7,6 +7,13 @@ public class VelocityLine {
 	private double endX;
 	private double endY;
 
+	public VelocityLine() {
+		this.startX = 0;
+		this.startY = 0;
+		this.endX = 0;
+		this.endY = 0;
+	}
+
 	public void setStart(double startX, double startY) {
 		this.startX = startX;
 		this.startY = startY;
