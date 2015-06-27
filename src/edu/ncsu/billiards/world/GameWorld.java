@@ -13,10 +13,10 @@ import org.dyn4j.dynamics.contact.ContactPoint;
 public class GameWorld extends BilliardsWorld {
 	private ArrayList<PoolBall> futureBalls;
 
-	public GameWorld() {
+	public GameWorld(ContactListener gameContactHandler) {
 		futureBalls = new ArrayList<PoolBall>();
 
-		this.addListener(new GameContactHandler());
+		this.addListener(gameContactHandler);
 	}
 
 	public void addFutureBall(PoolBall ball) {
@@ -25,23 +25,5 @@ public class GameWorld extends BilliardsWorld {
 
 	public ArrayList<PoolBall> getFutureBalls() {
 		return futureBalls;
-	}
-
-
-
-	private class GameContactHandler extends ContactAdapter
-								 implements ContactListener {
-		public void sensed(ContactPoint point) {
-			Body body1 = point.getBody1();
-			Body body2 = point.getBody2();
-
-			if (!body1.getFixture(0).isSensor()) {
-				// body1 is a pool ball
-				GameWorld.super.removeCurrentBall((PoolBall) body1);
-			} else if (!body2.getFixture(0).isSensor()) {
-				// body2 is a pool ball
-				GameWorld.super.removeCurrentBall((PoolBall) body2);
-			}
-		}
 	}
 }

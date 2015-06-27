@@ -58,8 +58,8 @@ public class Billiards extends BasicGame {
 	public Billiards() {
 		super(GAME_TITLE);
 
-		gameWorld = new GameWorld();
-		predictionWorld = new PredictionWorld();
+		gameWorld = new GameWorld(new GameContactHandler());
+		predictionWorld = new PredictionWorld(new PredictionContactHandler());
 
 		ballVelocityLine = new VelocityLine();
 		//pocketVelocityLines = new ArrayList<VelocityLine>();
@@ -269,6 +269,50 @@ public class Billiards extends BasicGame {
 
 		public void mouseMoved(double oldx, double oldy, double newx, double newy) {
 
+		}
+	}
+
+
+
+
+
+	private class GameContactHandler extends ContactAdapter
+								 implements ContactListener {
+		public void sensed(ContactPoint point) {
+			Body body1 = point.getBody1();
+			Body body2 = point.getBody2();
+
+			if (!body1.getFixture(0).isSensor()) {
+				// body1 is a pool ball
+				gameWorld.removeCurrentBall((PoolBall) body1);
+			} else if (!body2.getFixture(0).isSensor()) {
+				// body2 is a pool ball
+				gameWorld.removeCurrentBall((PoolBall) body2);
+			}
+		}
+	}
+
+
+
+
+
+	private class PredictionContactHandler extends ContactAdapter
+										implements ContactListener {
+		public void sensed(ContactPoint point) {
+			System.out.println("Contact sensed in simulation world.");
+
+			// TODO The latest:
+			// Implement the time travel
+			// behavior in Billiards. Start by re-adding the time
+			// variable, then move on to the comments below.
+
+			// record the time
+			// find out source pocket
+			// find out destination pocket
+			// set the position and velocity of the ball to what the
+			//							destination pocket specifies
+			// add ball to gameWorld's futureBalls
+			// remove from predictionWorld's currentBalls
 		}
 	}
 

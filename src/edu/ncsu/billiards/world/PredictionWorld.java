@@ -13,8 +13,8 @@ import org.dyn4j.dynamics.contact.ContactPoint;
 import org.newdawn.slick.Color;
 
 public class PredictionWorld extends BilliardsWorld {
-	public PredictionWorld() {
-		this.addListener(new PredictionContactHandler());
+	public PredictionWorld(ContactListener predictionContactHandler) {
+		this.addListener(predictionContactHandler);
 	}
 
 	public void runSimulation() {
@@ -54,34 +54,4 @@ public class PredictionWorld extends BilliardsWorld {
 		}
 	}
 
-	private class PredictionContactHandler extends ContactAdapter
-										implements ContactListener {
-		public void sensed(ContactPoint point) {
-			System.out.println("Contact sensed in simulation world.");
-
-			// record the time
-			// find out source pocket
-			// find out destination pocket
-			// set the position and velocity of the ball to what the
-			//							destination pocket specifies
-			// add ball to gameWorld's futureBalls
-			// remove from predictionWorld's currentBalls
-		}
-	}
-
-/*
-	private class PredictionContactHandler extends ContactAdapter
-										implements ContactListener {
-		public void sensed(ContactPoint point) {
-			Body body1 = point.getBody1();
-			Body body2 = point.getBody2();
-
-			if (!body1.getFixture(0).isSensor()) {
-				// body1 is a pool ball
-			} else if (!body2.getFixture(0).isSensor()) {
-				// body2 is a pool ball
-			}
-		}
-	}
-*/
 }
