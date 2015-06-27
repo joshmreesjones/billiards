@@ -10,6 +10,11 @@ public class Pocket extends Body {
 	//private float RADIUS = 0.10795f;
 	private float RADIUS = .05f;
 
+	// the Pocket linked to this Pocket
+	private Pocket link;
+
+
+
 	public Pocket(float x, float y) {
 		Circle circleShape = new Circle(RADIUS);
 
@@ -19,6 +24,18 @@ public class Pocket extends Body {
 		this.addFixture(circleFixture);
 		this.translate(x, y);
 	}
+
+
+
+	public Pocket getLink() {
+		return link;
+	}
+
+	public void setLink(Pocket link) {
+		this.link = link;
+	}
+
+
 
 	private Circle getCircle() {
 		return (Circle) this.getFixture(0).getShape();

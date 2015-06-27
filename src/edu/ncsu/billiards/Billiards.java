@@ -299,12 +299,18 @@ public class Billiards extends BasicGame {
 	private class PredictionContactHandler extends ContactAdapter
 										implements ContactListener {
 		public void sensed(ContactPoint point) {
-			System.out.println("Contact sensed in simulation world.");
+			Body body1 = point.getBody1();
+			Body body2 = point.getBody2();
 
-			// TODO The latest:
-			// Implement the time travel
-			// behavior in Billiards. Start by re-adding the time
-			// variable, then move on to the comments below.
+			if (body1.getFixture(0).isSensor()) {
+				// body1 is the pocket
+				// body2 is the pool ball
+			} else if (body2.getFixture(0).isSensor()) {
+				// body1 is the pool ball
+				// body2 is the pocket
+			}
+
+			double time = predictionWorld.getTime();
 
 			// record the time
 			// find out source pocket

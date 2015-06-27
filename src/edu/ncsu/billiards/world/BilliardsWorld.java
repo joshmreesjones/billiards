@@ -15,15 +15,28 @@ public abstract class BilliardsWorld extends World {
 	private ArrayList<Pocket> pockets;
 	private ArrayList<Cushion> cushions; 
 
+	// the time in milliseconds
+	private double time;
+
 
 	public BilliardsWorld() {
 		currentBalls = new ArrayList<PoolBall>();
 		pockets = new ArrayList<Pocket>();
 		cushions = new ArrayList<Cushion>();
 
+		time = 0;
+
 		this.setGravity(World.ZERO_GRAVITY);
 		this.getSettings().setSleepAngularVelocity(Double.MAX_VALUE);
 		this.getSettings().setRestitutionVelocity(0);
+	}
+
+
+
+	@Override
+	public boolean update(double elapsedTime) {
+		time += elapsedTime;
+		return super.update(elapsedTime);
 	}
 
 
@@ -61,6 +74,16 @@ public abstract class BilliardsWorld extends World {
 
 	public ArrayList<Cushion> getCushions() {
 		return cushions;
+	}
+
+
+
+	public double getTime() {
+		return this.time;
+	}
+
+	public void setTime(double newTime) {
+		this.time = newTime;
 	}
 
 
