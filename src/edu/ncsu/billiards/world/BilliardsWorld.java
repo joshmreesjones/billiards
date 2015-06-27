@@ -13,8 +13,7 @@ import org.dyn4j.geometry.Vector2;
 public abstract class BilliardsWorld extends World {
 	private ArrayList<PoolBall> currentBalls;
 	private ArrayList<Pocket> pockets;
-	private ArrayList<Cushion> cushions;
-
+	private ArrayList<Cushion> cushions; 
 
 
 	public BilliardsWorld() {
@@ -30,18 +29,24 @@ public abstract class BilliardsWorld extends World {
 
 
 	public void addCurrentBall(PoolBall ball) {
+		// add to currentBalls
 		currentBalls.add(ball);
-		this.addBody(ball);
+		// add to world
+		super.addBody(ball);
 	}
 
 	public void addPocket(Pocket pocket) {
+		// add to currentBalls
 		pockets.add(pocket);
-		this.addBody(pocket);
+		// add to world
+		super.addBody(pocket);
 	}
 
 	public void addCushion(Cushion cushion) {
+		// add to currentBalls
 		cushions.add(cushion);
-		this.addBody(cushion);
+		// add to world
+		super.addBody(cushion);
 	}
 
 
@@ -60,24 +65,28 @@ public abstract class BilliardsWorld extends World {
 
 
 
-	public static int DEBUG_COUNTER = 10000000;
+	public void removeCurrentBall(PoolBall ball) {
+		// remove from currentBalls
+		System.out.println("Removed from list: " + getCurrentBalls().remove(ball));
+
+		// remove from world
+		System.out.println("Removed from world: " + super.removeBody(ball));
+	}
+
+	public void clearCurrentBalls() {
+		for (PoolBall ball : getCurrentBalls()) {
+			super.removeBody(ball);
+		}
+
+		getCurrentBalls().clear();
+	}
+
+
+
 	public boolean hasMovingBalls() {
 		for (PoolBall ball : currentBalls) {
 			// if ball is not asleep
 			if (!ball.isAsleep()) {
-
-				if (DEBUG_COUNTER++ <= 1000) {
-					System.out.println();
-					System.out.println(ball.getLinearVelocity()    + "\t" +
-									   ball.getAngularVelocity()   + "\t" +
-									   ball.getAccumulatedForce()  + "\t" +
-									   ball.getAccumulatedTorque() + "\t" +
-									   ball.isAsleep());
-					System.out.println();
-				} else if (DEBUG_COUNTER == 1000000) {
-					System.out.println(ball.isAsleep());
-				}
-
 				// ball is moving
 				return true;
 			}

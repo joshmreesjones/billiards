@@ -93,8 +93,10 @@ public class Billiards extends BasicGame {
 	public void addGameObjects(BilliardsWorld world) {
 		PoolBall ball1 = new PoolBall(.9f, .6f, Color.red);
 		PoolBall ball2 = new PoolBall(1.5f, 1f, Color.blue);
+		PoolBall ball3 = new PoolBall(1.3f, .8f, Color.green);
 		world.addCurrentBall(ball1);
 		world.addCurrentBall(ball2);
+		world.addCurrentBall(ball3);
 
 		Cushion topLeft     = new Cushion( .5f  ,  .235f, .785f, .1f  );
 		Cushion topRight    = new Cushion(1.385f,  .235f, .785f, .1f  );

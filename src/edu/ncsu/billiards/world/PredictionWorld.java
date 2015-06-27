@@ -37,12 +37,20 @@ public class PredictionWorld extends BilliardsWorld {
 		System.out.println("Sleep linear velocity tolerance: " +
 					super.getSettings().getSleepLinearVelocity());
 
+		System.out.println("Number of current balls: " +
+					super.getCurrentBalls().size());
+
+		System.out.println("Number of bodies: " +
+					super.getBodyCount());
+
 		int iteration = 0;
 		// update until all bodies in this prediction world are asleep
+		boolean print = false;
 		while (super.hasMovingBalls()) {
 			// print some information
+			System.out.print(print ? "====================================\n" : "");
 			for (Body body : this.getBodies()) {
-				if (body instanceof PoolBall) {
+				if ((body instanceof PoolBall) && print) {
 					PoolBall ball = (PoolBall) body;
 
 					System.out.println();
@@ -82,6 +90,9 @@ public class PredictionWorld extends BilliardsWorld {
 					System.out.println("Asleep: " +
 								ball.isAsleep());
 
+					System.out.println("Active: " +
+								ball.isActive());
+
 					System.out.println("World accumulated time: " +
 								super.getAccumulatedTime());
 
@@ -109,7 +120,7 @@ public class PredictionWorld extends BilliardsWorld {
 	 */
 	public void sync(GameWorld gameWorld) {
 		// clear the current balls
-		super.getCurrentBalls().clear();
+		super.clearCurrentBalls();
 
 		// copy balls from gameWorld to this world
 		ArrayList<PoolBall> balls = gameWorld.getCurrentBalls();

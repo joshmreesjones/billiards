@@ -35,10 +35,10 @@ public class GameWorld extends BilliardsWorld {
 
 			if (!body1.getFixture(0).isSensor()) {
 				// body1 is a pool ball
-				GameWorld.super.getCurrentBalls().remove(body1);
+				GameWorld.super.removeCurrentBall((PoolBall) body1);
 			} else if (!body2.getFixture(0).isSensor()) {
 				// body2 is a pool ball
-				GameWorld.super.getCurrentBalls().remove(body2);
+				GameWorld.super.removeCurrentBall((PoolBall) body2);
 			}
 		}
 	}
