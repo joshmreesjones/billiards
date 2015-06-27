@@ -67,10 +67,10 @@ public abstract class BilliardsWorld extends World {
 
 	public void removeCurrentBall(PoolBall ball) {
 		// remove from currentBalls
-		System.out.println("Removed from list: " + getCurrentBalls().remove(ball));
+		getCurrentBalls().remove(ball);
 
 		// remove from world
-		System.out.println("Removed from world: " + super.removeBody(ball));
+		super.removeBody(ball);
 	}
 
 	public void clearCurrentBalls() {

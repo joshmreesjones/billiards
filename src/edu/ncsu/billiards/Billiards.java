@@ -122,7 +122,6 @@ public class Billiards extends BasicGame {
 		// check if we need to add in a futureBall
 		// if we do, remove it from gameWorld.futureBalls
 		//            and add it to gameWorld.currentBalls
-		// reset predictionWorld to current gameWorld state
 		gameWorld.update((double) delta / 1000);
 	}
 
@@ -251,12 +250,9 @@ public class Billiards extends BasicGame {
 				);
 
 				currentDraggingBall.applyForce(force);
-				System.out.println("Applied force.");
 
 				predictionWorld.sync(Billiards.this.gameWorld);
-				System.out.println("Synced.");
 				predictionWorld.runSimulation();
-				System.out.println("Simulation complete.");
 			}
 
 			Billiards.this.ballVelocityLine.setStart(0, 0);

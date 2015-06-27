@@ -27,6 +27,8 @@ public class GameWorld extends BilliardsWorld {
 		return futureBalls;
 	}
 
+
+
 	private class GameContactHandler extends ContactAdapter
 								 implements ContactListener {
 		public void sensed(ContactPoint point) {
