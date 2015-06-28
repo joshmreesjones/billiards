@@ -189,12 +189,35 @@ public class Billiards extends BasicGame {
 
 	private class InputHandler {
 		boolean draggingFromBall = false;
-		PoolBall currentDraggingBall = null;
+		PoolBall selectedBall;
 
-		public void mouseDragged(double oldx, double oldy,
-								 double newx, double newy) {
+		boolean draggingFromPocket = false;
+		Pocket selectedPocket;
+
+		public void mouseDragged(double oldX, double oldY,
+								 double newX, double newY) {
 			if (draggingFromBall) {
-				currentDraggingBall.getVelocityLine().setEnd(newx, newy);
+				selectedBall.getVelocityLine().setEnd(newX, newY);
+			}
+
+			if (draggingFromPocket) {
+				// make vector from velocity line start to (newX, newY)
+				VelocityLine line = selectedPocket.getVelocityLine();
+				double[] start = line.getStart();
+				double startX = start[0];
+				double startY = start[1];
+
+				Vector2 mouseVector = new Vector2(newX - startX,
+				                                  newY - startY);
+
+				// get unit vector of mouseVector
+				unitVector = mouseVector.getNormalized();
+
+				// scale the unit vector
+				unitVector.setMagnitude(20);
+
+				// set the velocity line's distance to scaled unit vector
+				line.setEnd(startX + unitVector.x, startY + unitVector.y);
 			}
 		}
 
@@ -206,43 +229,56 @@ public class Billiards extends BasicGame {
 				return;
 			}
 
-			// check if mouse press is on current, asleep ball
+			// check if mouse press is on current ball
 			for (PoolBall ball : Billiards.this.gameWorld.getCurrentBalls()) {
 				if (ball.contains(point)) {
 					draggingFromBall = true;
-					currentDraggingBall = ball;
+					selectedBall = ball;
 
 					double startX = ball.getWorldCenter().x;
 					double startY = ball.getWorldCenter().y;
 
-					currentDraggingBall.getVelocityLine().setStart(startX, startY);
-					currentDraggingBall.getVelocityLine().setEnd(startX, startY);
+					selectedBall.getVelocityLine().setStart(startX, startY);
+					selectedBall.getVelocityLine().setEnd(startX, startY);
+				}
+			}
+
+			// check if mouse press is on pocket
+			for (Pocket pocket : Billiards.this.gameWorld.getPockets()) {
+				if (pocket.contains(point)) {
+					draggingFromPocket = true;
+					selectedPocket = pocket;
+
+					double startX = pocket.getWorldCenter().x;
+					double startY = pocket.getWorldCenter().y;
+
+					selectedPocket.getVelocityLine().setStart(startX, startY);
+					selectedPocket.getVelocityLine().setEnd(startX, startY);
 				}
 			}
 		}
 
 		public void mouseReleased(int button, double x, double y) {
-			
 			// send the ball on its way (if it was on a ball)
 			if (draggingFromBall) {
-				double[] dragStart = currentDraggingBall.getVelocityLine().getStart();
-				double[] dragEnd = currentDraggingBall.getVelocityLine().getEnd();
+				double[] dragStart = selectedBall.getVelocityLine().getStart();
+				double[] dragEnd = selectedBall.getVelocityLine().getEnd();
 
 				Vector2 force = new Vector2(
 					(dragEnd[0] - dragStart[0]) * 200,
 					(dragEnd[1] - dragStart[1]) * 200
 				);
 
-				currentDraggingBall.applyForce(force);
+				selectedBall.applyForce(force);
 
 				predictionWorld.sync(Billiards.this.gameWorld);
 				predictionWorld.runSimulation();
 
-				currentDraggingBall.getVelocityLine().setStart(0, 0);
-				currentDraggingBall.getVelocityLine().setEnd(0, 0);
+				selectedBall.getVelocityLine().setStart(0, 0);
+				selectedBall.getVelocityLine().setEnd(0, 0);
 
 				draggingFromBall = false;
-				currentDraggingBall = null;
+				selectedBall = null;
 			}
 		}
 
