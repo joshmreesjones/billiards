@@ -15,10 +15,10 @@ public class Renderer {
 	// 300 pixels per meter
 	public static final float SCALE = 300;
 
-	public static void render(Cushion cushion, Graphics g) {
-		Color tempColor = g.getColor();
+	public static void render(Cushion cushion, Graphics graphics) {
+		Color tempColor = graphics.getColor();
 
-		g.setColor(Color.orange);
+		graphics.setColor(Color.orange);
 
 		// x and y are the top left corner of the rectangle
 		float x = cushion.getX() * SCALE;
@@ -26,15 +26,15 @@ public class Renderer {
 		float width = cushion.getWidth() * SCALE;
 		float height = cushion.getHeight() * SCALE;
 
-		g.fillRect(x, y, width, height);
+		graphics.fillRect(x, y, width, height);
 
-		g.setColor(tempColor);
+		graphics.setColor(tempColor);
 	}
 
-	public static void render(Pocket pocket, Graphics g) {
-		Color tempColor = g.getColor();
+	public static void render(Pocket pocket, Graphics graphics) {
+		Color tempColor = graphics.getColor();
 
-		g.setColor(Color.black);
+		graphics.setColor(Color.black);
 
 		float radius = pocket.getRadius() * SCALE;
 		float width = radius * 2;
@@ -44,18 +44,20 @@ public class Renderer {
 		float x = centerX - radius;
 		float y = centerY - radius;
 
-		g.fillOval(x, y, width, height);
+		graphics.fillOval(x, y, width, height);
 
-		g.setColor(tempColor);
+		graphics.setColor(tempColor);
+
+		render(pocket.getVelocityLine(), graphics);
 	}
 
-	public static void render(PoolBall ball, Graphics g) {
-		Color tempColor = g.getColor();
+	public static void render(PoolBall ball, Graphics graphics) {
+		Color tempColor = graphics.getColor();
 
 		if (!ball.isAsleep()) {
-			g.setColor(ball.getColor());
+			graphics.setColor(ball.getColor());
 		} else {
-			g.setColor(Color.gray);
+			graphics.setColor(Color.gray);
 		}
 
 		float radius = ball.getRadius() * SCALE;
@@ -66,20 +68,20 @@ public class Renderer {
 		float x = centerX - radius;
 		float y = centerY - radius;
 
-		g.fillOval(x, y, width, height);
+		graphics.fillOval(x, y, width, height);
 
-		g.setColor(tempColor);
+		graphics.setColor(tempColor);
 
 		// we need to render the velocity line as well
-		render(ball.getVelocityLine(), g);
+		render(ball.getVelocityLine(), graphics);
 	}
 
-	private static void render(VelocityLine line, Graphics g) {
+	private static void render(VelocityLine line, Graphics graphics) {
 		double[] start = line.getStart();
 		double[] end   = line.getEnd();
 
-		if (start[0] == 0 && start[1] == 0 &&
-			  end[0] == 0 &&   end[1] == 0) {
+		if (start[0] == end[0] &&
+		    start[1] == end[1]) {
 			return;
 		}
 
@@ -88,6 +90,6 @@ public class Renderer {
 		float x2 = (float)   end[0] * SCALE;
 		float y2 = (float)   end[1] * SCALE;
 
-		g.drawLine(x1, y1, x2, y2);
+		graphics.drawLine(x1, y1, x2, y2);
 	}
 }

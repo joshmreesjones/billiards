@@ -1,5 +1,7 @@
 package edu.ncsu.billiards.gameobjects;
 
+import org.dyn4j.geometry.Vector2;
+
 public class VelocityLine {
 	// using physics units
 	private double startX;
@@ -30,5 +32,9 @@ public class VelocityLine {
 
 	public double[] getEnd() {
 		return new double[]{endX, endY};
+	}
+
+	public Vector2 getUnitDirectionVector() {
+		return (new Vector2(endX - startX, endY - startY)).getNormalized();
 	}
 }

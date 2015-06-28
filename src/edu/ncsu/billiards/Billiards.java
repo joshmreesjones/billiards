@@ -203,21 +203,20 @@ public class Billiards extends BasicGame {
 			if (draggingFromPocket) {
 				// make vector from velocity line start to (newX, newY)
 				VelocityLine line = selectedPocket.getVelocityLine();
+				line.setEnd(newX, newY);
+
+				Vector2 unitDirectionVector = line.getUnitDirectionVector();
+
 				double[] start = line.getStart();
 				double startX = start[0];
 				double startY = start[1];
 
-				Vector2 mouseVector = new Vector2(newX - startX,
-				                                  newY - startY);
-
-				// get unit vector of mouseVector
-				unitVector = mouseVector.getNormalized();
-
 				// scale the unit vector
-				unitVector.setMagnitude(20);
+				unitDirectionVector.setMagnitude(.2);
 
 				// set the velocity line's distance to scaled unit vector
-				line.setEnd(startX + unitVector.x, startY + unitVector.y);
+				line.setEnd(startX + unitDirectionVector.x,
+				            startY + unitDirectionVector.y);
 			}
 		}
 
@@ -280,6 +279,17 @@ public class Billiards extends BasicGame {
 				draggingFromBall = false;
 				selectedBall = null;
 			}
+
+			if (draggingFromPocket) {
+				VelocityLine line = selectedPocket.getVelocityLine();
+				Vector2 unitDirectionVector = line.getUnitDirectionVector();
+				
+				// set the pocket's exit direction
+				selectedPocket.setExitDirection(unitDirectionVector);
+				
+				draggingFromPocket = false;
+				selectedPocket = null;
+			}
 		}
 
 		public void mouseClicked(int button, double x, double y, int clickCount) {
@@ -318,12 +328,18 @@ public class Billiards extends BasicGame {
 	private class PredictionContactHandler extends ContactAdapter
 										implements ContactListener {
 		public void sensed(ContactPoint point) {
-			System.out.println("Contact sensed in simulation world.");
+			Body body1 = point.getBody1();
+			Body body2 = point.getBody2();
 
-			// TODO The latest:
-			// Implement the time travel
-			// behavior in Billiards. Start by re-adding the time
-			// variable, then move on to the comments below.
+			if (body1.getFixture(0).isSensor()) {
+				// body1 is the pocket
+				// body2 is the pool ball
+			} else if (body2.getFixture(0).isSensor()) {
+				// body1 is the pool ball
+				// body2 is the pocket
+			}
+
+			double time = predictionWorld.getTime();
 
 			// record the time
 			// find out source pocket

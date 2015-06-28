@@ -52,6 +52,7 @@ public class PredictionWorld extends BilliardsWorld {
 
 			super.addCurrentBall(newBall);
 		}
-	}
 
+		super.setTime(gameWorld.getTime());
+	}
 }
