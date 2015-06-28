@@ -222,6 +222,7 @@ public class Billiards extends BasicGame {
 		}
 
 		public void mouseReleased(int button, double x, double y) {
+			
 			// send the ball on its way (if it was on a ball)
 			if (draggingFromBall) {
 				double[] dragStart = currentDraggingBall.getVelocityLine().getStart();
@@ -236,13 +237,13 @@ public class Billiards extends BasicGame {
 
 				predictionWorld.sync(Billiards.this.gameWorld);
 				predictionWorld.runSimulation();
+
+				currentDraggingBall.getVelocityLine().setStart(0, 0);
+				currentDraggingBall.getVelocityLine().setEnd(0, 0);
+
+				draggingFromBall = false;
+				currentDraggingBall = null;
 			}
-
-			currentDraggingBall.getVelocityLine().setStart(0, 0);
-			currentDraggingBall.getVelocityLine().setEnd(0, 0);
-
-			draggingFromBall = false;
-			currentDraggingBall = null;
 		}
 
 		public void mouseClicked(int button, double x, double y, int clickCount) {
