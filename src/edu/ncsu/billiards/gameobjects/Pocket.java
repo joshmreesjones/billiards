@@ -12,13 +12,16 @@ public class Pocket extends Body {
 	private float RADIUS = .05f;
 	
 	// the Pocket linked to this Pocket
-	private Pocket link;
+	private Pocket destination;
+
+	// the amount of time to send a ball back from this pocket
+	private double timeDifference;
 
 	// rendered velocity line for exit direction
 	private VelocityLine velocityLine;
 
 	// the exit direction of pool balls
-	private Vector2 exitDirection;
+	private Vector2 unitExitDirection;
 
 
 
@@ -33,17 +36,33 @@ public class Pocket extends Body {
 
 		this.velocityLine = new VelocityLine();
 
-		this.exitDirection = new Vector2(0, 0);
+		this.unitExitDirection = new Vector2(0, 0);
 	}
 
 
 
-	public Pocket getLink() {
-		return link;
+	public Pocket getDestination() {
+		return this.destination;
 	}
 
-	public void setLink(Pocket link) {
-		this.link = link;
+	public void setDestination(Pocket destination) {
+		this.destination = destination;
+	}
+
+	public double getTimeDifference() {
+		return this.timeDifference;
+	}
+
+	public void setTimeDifference(double time) {
+		this.timeDifference = time;
+	}
+
+	public void setUnitExitDirection(Vector2 direction) {
+		this.unitExitDirection = direction.getNormalized();
+	}
+
+	public Vector2 getUnitExitDirection() {
+		return this.unitExitDirection;
 	}
 
 
@@ -68,15 +87,5 @@ public class Pocket extends Body {
 
 	public VelocityLine getVelocityLine() {
 		return this.velocityLine;
-	}
-
-
-
-	public void setExitDirection(Vector2 direction) {
-		this.exitDirection = direction;
-	}
-
-	public Vector2 getExitDirection() {
-		return this.exitDirection;
 	}
 }

@@ -45,7 +45,6 @@ public class Billiards extends BasicGame {
 
 	// rendered objects
 	private Image tableBackground;
-	//private ArrayList<VelocityLine> pocketVelocityLines;
 
 	// input handling
 	private InputHandler inputHandler;
@@ -59,8 +58,6 @@ public class Billiards extends BasicGame {
 
 		gameWorld = new GameWorld(new GameContactHandler());
 		predictionWorld = new PredictionWorld(new PredictionContactHandler());
-
-		//pocketVelocityLines = new ArrayList<VelocityLine>();
 
 		inputHandler = new InputHandler();
 	}
@@ -110,16 +107,28 @@ public class Billiards extends BasicGame {
 		world.addCushion(bottomLeft);
 		world.addCushion(bottomRight);
 
-		Pocket testPocket = new Pocket(1, 1);
-		world.addPocket(testPocket);
+		Pocket pocket1 = new Pocket(1, 1);
+		Pocket pocket2 = new Pocket(1.3f, .7f);
+
+		pocket1.setDestination(pocket2);
+		pocket1.setTimeDifference(-0.2);
+
+		world.addPocket(pocket1);
+		world.addPocket(pocket2);
 	}
 
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
-		// TODO
-		// check if we need to add in a futureBall
-		// if we do, remove it from gameWorld.futureBalls
-		//            and add it to gameWorld.currentBalls
+		//for (PoolBall ball : gameWorld.getFutureBalls()) {
+		//	if (ball.getEntryTime() <= gameWorld.getTime()) {
+		//		// take this ball out of gameWorld's future balls
+		//		gameWorld.removeFutureBall(ball);
+
+		//		// add to gameWorld's currentBalls
+		//		gameWorld.addCurrentBall(ball);
+		//	}
+		//}
+
 		gameWorld.update((double) delta / 1000);
 	}
 
@@ -285,7 +294,7 @@ public class Billiards extends BasicGame {
 				Vector2 unitDirectionVector = line.getUnitDirectionVector();
 				
 				// set the pocket's exit direction
-				selectedPocket.setExitDirection(unitDirectionVector);
+				selectedPocket.setUnitExitDirection(unitDirectionVector);
 				
 				draggingFromPocket = false;
 				selectedPocket = null;
@@ -334,20 +343,40 @@ public class Billiards extends BasicGame {
 			if (body1.getFixture(0).isSensor()) {
 				// body1 is the pocket
 				// body2 is the pool ball
+				handleContact((PoolBall) body2, (Pocket) body1);
 			} else if (body2.getFixture(0).isSensor()) {
 				// body1 is the pool ball
 				// body2 is the pocket
+				handleContact((PoolBall) body1, (Pocket) body2);
 			}
+		}
 
-			double time = predictionWorld.getTime();
+		private void handleContact(PoolBall ball, Pocket pocket) {
+			// translate to (0, 0), the top left corner
+			ball.translateToOrigin();
+
+			Pocket destination = pocket.getDestination();
+			
+			// move ball to pocket
+			ball.translate(destination.getWorldCenter().x,
+			               destination.getWorldCenter().y);
+
+			// set velocity of ball - in direction that pocket
+			// specifies, but with the original magnitude of the ball
+			Vector2 unitExitDirection = destination.getUnitExitDirection();
+			double magnitude = ball.getLinearVelocity().getMagnitude();
+			unitExitDirection.setMagnitude(magnitude);
+
+			ball.setLinearVelocity(unitExitDirection);
 
 			// record the time
-			// find out source pocket
-			// find out destination pocket
-			// set the position and velocity of the ball to what the
-			//							destination pocket specifies
+			ball.setEntryTime(predictionWorld.getTime() - pocket.getTimeDifference());
+
 			// add ball to gameWorld's futureBalls
+			gameWorld.addFutureBall(ball);
+
 			// remove from predictionWorld's currentBalls
+			predictionWorld.removeCurrentBall(ball);
 		}
 	}
 

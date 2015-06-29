@@ -28,6 +28,11 @@ public class PoolBall extends Body {
 
 	private VelocityLine velocityLine;
 
+	// the time at which this PoolBall will enter the world
+	// this is not always applicable to a PoolBall (if it's
+	// alread in the world)
+	private double entryTime;
+
 
 
 	public PoolBall(float x, float y, Color color) {
@@ -76,5 +81,13 @@ public class PoolBall extends Body {
 
 	public VelocityLine getVelocityLine() {
 		return this.velocityLine;
+	}
+
+	public double getEntryTime() {
+		return this.entryTime;
+	}
+
+	public void setEntryTime(double time) {
+		this.entryTime = time;
 	}
 }
