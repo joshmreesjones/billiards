@@ -33,6 +33,8 @@ public class PoolBall extends Body {
 	// alread in the world)
 	private double entryTime;
 
+	private boolean isExiting;
+
 
 
 	public PoolBall(float x, float y, Color color) {
@@ -55,9 +57,11 @@ public class PoolBall extends Body {
 		// configure mass once everything mass depends on
 		// has been configured
 		this.setMass(Mass.Type.NORMAL);
+
+		this.isExiting = false;
 	}
 
-	private Circle getCircle() {
+	public Circle getCircle() {
 		return (Circle) this.getFixture(0).getShape();
 	}
 
@@ -89,5 +93,15 @@ public class PoolBall extends Body {
 
 	public void setEntryTime(double time) {
 		this.entryTime = time;
+	}
+
+
+
+	public boolean isExiting() {
+		return this.isExiting;
+	}
+
+	public void setExiting(boolean isExiting) {
+		this.isExiting = isExiting;
 	}
 }

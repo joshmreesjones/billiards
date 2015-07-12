@@ -67,7 +67,7 @@ public class Pocket extends Body {
 
 
 
-	private Circle getCircle() {
+	public Circle getCircle() {
 		return (Circle) this.getFixture(0).getShape();
 	}
 

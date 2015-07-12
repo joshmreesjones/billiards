@@ -17,6 +17,8 @@ import org.dyn4j.dynamics.World;
 import org.dyn4j.dynamics.contact.ContactAdapter;
 import org.dyn4j.dynamics.contact.ContactListener;
 import org.dyn4j.dynamics.contact.ContactPoint;
+import org.dyn4j.dynamics.contact.PersistedContactPoint;
+import org.dyn4j.dynamics.contact.SolvedContactPoint;
 
 import org.dyn4j.geometry.Circle;
 import org.dyn4j.geometry.Rectangle;
@@ -112,6 +114,9 @@ public class Billiards extends BasicGame {
 
 		pocket1.setDestination(pocket2);
 		pocket1.setTimeDifference(-0.2);
+
+		pocket2.setDestination(pocket1);
+		pocket2.setTimeDifference(-0.2);
 
 		world.addPocket(pocket1);
 		world.addPocket(pocket2);
@@ -322,10 +327,16 @@ public class Billiards extends BasicGame {
 
 			if (!body1.getFixture(0).isSensor()) {
 				// body1 is a pool ball
-				gameWorld.removeCurrentBall((PoolBall) body1);
+				handleContact((PoolBall) body1, (Pocket) body2);
 			} else if (!body2.getFixture(0).isSensor()) {
 				// body2 is a pool ball
-				gameWorld.removeCurrentBall((PoolBall) body2);
+				handleContact((PoolBall) body2, (Pocket) body1);
+			}
+		}
+
+		private void handleContact(PoolBall ball, Pocket pocket) {
+			if (!ball.isExiting()) {
+				gameWorld.removeCurrentBall(ball);
 			}
 		}
 	}
@@ -370,7 +381,7 @@ public class Billiards extends BasicGame {
 			ball.setLinearVelocity(unitExitDirection);
 
 			// record the time
-			ball.setEntryTime(predictionWorld.getTime() - pocket.getTimeDifference());
+			ball.setEntryTime(predictionWorld.getTime() + pocket.getTimeDifference());
 
 			// add ball to gameWorld's futureBalls
 			gameWorld.addFutureBall(ball);

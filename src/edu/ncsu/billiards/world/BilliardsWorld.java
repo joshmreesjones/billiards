@@ -36,6 +36,7 @@ public abstract class BilliardsWorld extends World {
 	@Override
 	public boolean update(double elapsedTime) {
 		time += elapsedTime;
+
 		return super.update(elapsedTime);
 	}
 
@@ -45,21 +46,21 @@ public abstract class BilliardsWorld extends World {
 		// add to currentBalls
 		currentBalls.add(ball);
 		// add to world
-		super.addBody(ball);
+		addBody(ball);
 	}
 
 	public void addPocket(Pocket pocket) {
 		// add to currentBalls
 		pockets.add(pocket);
 		// add to world
-		super.addBody(pocket);
+		addBody(pocket);
 	}
 
 	public void addCushion(Cushion cushion) {
 		// add to currentBalls
 		cushions.add(cushion);
 		// add to world
-		super.addBody(cushion);
+		addBody(cushion);
 	}
 
 
@@ -93,12 +94,12 @@ public abstract class BilliardsWorld extends World {
 		getCurrentBalls().remove(ball);
 
 		// remove from world
-		super.removeBody(ball);
+		removeBody(ball);
 	}
 
 	public void clearCurrentBalls() {
 		for (PoolBall ball : getCurrentBalls()) {
-			super.removeBody(ball);
+			removeBody(ball);
 		}
 
 		getCurrentBalls().clear();

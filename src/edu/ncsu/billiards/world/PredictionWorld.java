@@ -19,7 +19,7 @@ public class PredictionWorld extends BilliardsWorld {
 
 	public void runSimulation() {
 		// update until all bodies in this prediction world are asleep
-		while (super.hasMovingBalls()) {
+		while (hasMovingBalls()) {
 			this.update(1.0 / 60.0);
 		}
 	}
@@ -34,7 +34,7 @@ public class PredictionWorld extends BilliardsWorld {
 	 */
 	public void sync(GameWorld gameWorld) {
 		// clear the current balls
-		super.clearCurrentBalls();
+		clearCurrentBalls();
 
 		// copy balls from gameWorld to this world
 		ArrayList<PoolBall> balls = gameWorld.getCurrentBalls();
@@ -50,9 +50,9 @@ public class PredictionWorld extends BilliardsWorld {
 			newBall.applyForce(ball.getAccumulatedForce());
 			newBall.applyTorque(ball.getAccumulatedTorque());
 
-			super.addCurrentBall(newBall);
+			addCurrentBall(newBall);
 		}
 
-		super.setTime(gameWorld.getTime());
+		setTime(gameWorld.getTime());
 	}
 }
