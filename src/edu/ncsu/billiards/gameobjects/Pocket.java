@@ -25,6 +25,12 @@ public class Pocket extends Body {
 
 
 
+	/**
+	 * Constructs a new Pocket.
+	 *
+	 * @param x the x position in meters of the new pocket
+	 * @param y the y position in meters of the new pocket
+	 */
 	public Pocket(float x, float y) {
 		Circle circleShape = new Circle(RADIUS);
 

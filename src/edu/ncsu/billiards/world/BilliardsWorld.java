@@ -105,6 +105,22 @@ public abstract class BilliardsWorld extends World {
 		getCurrentBalls().clear();
 	}
 
+	public void removePocket(Pocket pocket) {
+		// remove from pockets
+		getPockets().remove(pocket);
+
+		// remove from world
+		removeBody(pocket);
+	}
+
+	public void clearPockets() {
+		for (Pocket pocket : getPockets()) {
+			removeBody(pocket);
+		}
+
+		getPockets().clear();
+	}
+
 
 
 	public boolean hasMovingBalls() {

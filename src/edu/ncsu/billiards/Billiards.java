@@ -133,7 +133,7 @@ public class Billiards extends BasicGame {
 		//		gameWorld.addCurrentBall(ball);
 		//	}
 		//}
-
+		
 		gameWorld.update((double) delta / 1000);
 	}
 
@@ -284,8 +284,8 @@ public class Billiards extends BasicGame {
 
 				selectedBall.applyForce(force);
 
-				predictionWorld.sync(Billiards.this.gameWorld);
-				predictionWorld.runSimulation();
+				//predictionWorld.sync(Billiards.this.gameWorld);
+				predictionWorld.runSimulation(Billiards.this.gameWorld);
 
 				selectedBall.getVelocityLine().setStart(0, 0);
 				selectedBall.getVelocityLine().setEnd(0, 0);

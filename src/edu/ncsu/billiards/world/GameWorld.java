@@ -46,27 +46,28 @@ public class GameWorld extends BilliardsWorld {
 		// Update isExiting flag in all current balls
 		for (PoolBall ball : getCurrentBalls()) {
 			if (ball.isExiting()) {
-				boolean inContact = false;
+				boolean isInContact = false;
 
 				for (Pocket pocket : getPockets()) {
 					if (ball.isInContact(pocket)) {
-						inContact = true;
+						isInContact = true;
 					}
 				}
 
-				if (!inContact) {
+				if (!isInContact) {
 					ball.setExiting(false);
 				}
 			}
 		}
 
-		// check for future balls entering the world
-		// we can't use an enhanced for loop because that messes
-		// up the iterator and throws a ConcurrentModificationException
+		// check for future balls entering the world. We can't
+		// use an enhanced for loop because that messes up the
+		// ArrayList iterator and throws a ConcurrentModificationException
 		for (int i = 0; i < futureBalls.size(); i++) {
 			if (futureBalls.get(i).getEntryTime() <= getTime()) {
 				PoolBall ball = removeFutureBall(i);
 				ball.setExiting(true);
+
 				addCurrentBall(ball);
 
 				i--;

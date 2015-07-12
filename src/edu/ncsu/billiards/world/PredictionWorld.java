@@ -1,5 +1,6 @@
 package edu.ncsu.billiards.world;
 
+import edu.ncsu.billiards.gameobjects.Pocket;
 import edu.ncsu.billiards.gameobjects.PoolBall;
 
 import java.util.ArrayList;
@@ -17,10 +18,34 @@ public class PredictionWorld extends BilliardsWorld {
 		this.addListener(predictionContactHandler);
 	}
 
-	public void runSimulation() {
+	public void runSimulation(GameWorld gameWorld) {
+		// Move all pockets from gameWorld to this prediction world. We cannot
+		// just copy the ball over because a Body can be a member of only one
+		// World at a time. Dyn4j enforces this by throwing an exception if we
+		// try to violate the rule.
+		clearPockets();
+		ArrayList<Pocket> gameWorldPockets = gameWorld.getPockets();
+		while (!gameWorldPockets.isEmpty()) {
+			Pocket pocket = gameWorldPockets.remove(0);
+			gameWorld.removePocket(pocket);
+			addPocket(pocket);
+		}
+
+		sync(gameWorld);
+
 		// update until all bodies in this prediction world are asleep
 		while (hasMovingBalls()) {
 			this.update(1.0 / 60.0);
+		}
+
+		// Move all pockets back from this prediction world to the
+		// game world.
+		gameWorld.clearPockets();
+		ArrayList<Pocket> predictionWorldPockets = getPockets();
+		while (!predictionWorldPockets.isEmpty()) {
+			Pocket pocket = predictionWorldPockets.get(0);
+			removePocket(pocket);
+			gameWorld.addPocket(pocket);
 		}
 	}
 
@@ -32,14 +57,11 @@ public class PredictionWorld extends BilliardsWorld {
 	 * 
 	 * @param gameWorld the world to sync this prediction world to
 	 */
-	public void sync(GameWorld gameWorld) {
-		// clear the current balls
+	private void sync(GameWorld gameWorld) {
 		clearCurrentBalls();
 
 		// copy balls from gameWorld to this world
-		ArrayList<PoolBall> balls = gameWorld.getCurrentBalls();
-
-		for (PoolBall ball : balls) {
+		for (PoolBall ball : gameWorld.getCurrentBalls()) {
 			PoolBall newBall = new PoolBall((float) ball.getWorldCenter().x,
 			                                (float) ball.getWorldCenter().y,
 			                                        ball.getColor());
