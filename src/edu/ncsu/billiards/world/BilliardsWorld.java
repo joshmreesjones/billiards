@@ -8,8 +8,6 @@ import java.util.ArrayList;
 
 import org.dyn4j.dynamics.World;
 
-import org.dyn4j.geometry.Vector2;
-
 public abstract class BilliardsWorld extends World {
 	private ArrayList<PoolBall> currentBalls;
 	private ArrayList<Pocket> pockets;

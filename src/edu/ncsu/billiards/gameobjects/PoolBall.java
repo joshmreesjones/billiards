@@ -5,7 +5,6 @@ import org.dyn4j.dynamics.BodyFixture;
 
 import org.dyn4j.geometry.Circle;
 import org.dyn4j.geometry.Mass;
-import org.dyn4j.geometry.Vector2;
 
 import org.newdawn.slick.Color;
 

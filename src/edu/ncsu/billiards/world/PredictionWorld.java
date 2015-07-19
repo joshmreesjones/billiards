@@ -5,13 +5,7 @@ import edu.ncsu.billiards.gameobjects.PoolBall;
 
 import java.util.ArrayList;
 
-import org.dyn4j.dynamics.Body;
-
-import org.dyn4j.dynamics.contact.ContactAdapter;
 import org.dyn4j.dynamics.contact.ContactListener;
-import org.dyn4j.dynamics.contact.ContactPoint;
-
-import org.newdawn.slick.Color;
 
 public class PredictionWorld extends BilliardsWorld {
 	public PredictionWorld(ContactListener predictionContactHandler) {

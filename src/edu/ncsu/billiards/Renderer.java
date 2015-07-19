@@ -5,9 +5,6 @@ import edu.ncsu.billiards.gameobjects.Pocket;
 import edu.ncsu.billiards.gameobjects.PoolBall;
 import edu.ncsu.billiards.gameobjects.VelocityLine;
 
-import org.dyn4j.geometry.Circle;
-import org.dyn4j.geometry.Vector2;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
