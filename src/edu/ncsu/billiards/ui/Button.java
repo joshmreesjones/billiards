@@ -1,41 +1,30 @@
 package edu.ncsu.billiards.ui;
 
+import org.newdawn.slick.geom.Rectangle;
+
 public class Button {
+	private static final float WIDTH = 100;
+	private static final float HEIGHT = 32;
+
 	private String label;
 
-	private int x;
-	private int y;
+	private Rectangle rectangle;
 
-	private int width;
-	private int height;
 
-	public Button(String label, int x, int y) {
+
+	public Button(String label, float x, float y) {
 		this.label = label;
-		
-		this.x = x;
-		this.y = y;
 
-		width = 100;
-		height = 32;
+		this.rectangle = new Rectangle(x, y, WIDTH, HEIGHT);
 	}
+
+
 
 	public String getLabel() {
 		return label;
 	}
 
-	public int getX() {
-		return x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public int getWidth() {
-		return width;
-	}
-
-	public int getHeight() {
-		return height;
+	public Rectangle getRectangle() {
+		return rectangle;
 	}
 }

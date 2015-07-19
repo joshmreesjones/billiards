@@ -11,6 +11,8 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
+import org.newdawn.slick.geom.Rectangle;
+
 public class Renderer {
 	// 300 pixels per meter
 	public static final float SCALE = 300;
@@ -92,10 +94,12 @@ public class Renderer {
 	}
 
 	public static void render(Button button, Graphics graphics) {
-		float x = (float) button.getX();
-		float y = (float) button.getY();
-		float width  = (float) button.getWidth();
-		float height = (float) button.getHeight();
+		Rectangle rectangle = button.getRectangle();
+
+		float x = rectangle.getX();
+		float y = rectangle.getY();
+		float width  = rectangle.getWidth();
+		float height = rectangle.getHeight();
 
 		String label = button.getLabel();
 

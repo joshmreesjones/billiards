@@ -53,38 +53,25 @@ public class Billiards extends BasicGame {
 
 
 	public void mouseClicked(int button, int x, int y, int clickCount) {
-		gameState.mouseClicked(button,
-					(double) x / Renderer.SCALE,
-					(double) y / Renderer.SCALE,
-					clickCount);
+		gameState.mouseClicked(button, (float) x, (float) y, clickCount);
 	}
 
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-		gameState.mouseDragged(
-		            (double) oldx / Renderer.SCALE,
-		            (double) oldy / Renderer.SCALE,
-		            (double) newx / Renderer.SCALE,
-		            (double) newy / Renderer.SCALE);
+		gameState.mouseDragged((float) oldx, (float) oldy,
+		                       (float) newx, (float) newy);
 	}
 
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-		gameState.mouseMoved(
-		            (double) oldx / Renderer.SCALE,
-		            (double) oldy / Renderer.SCALE,
-		            (double) newx / Renderer.SCALE,
-		            (double) newy / Renderer.SCALE);
+		gameState.mouseMoved((float) oldx, (float) oldy,
+		                     (float) newx, (float) newy);
 	}
 
 	public void mousePressed(int button, int x, int y) {
-		gameState.mousePressed(button,
-		            (double) x / Renderer.SCALE,
-		            (double) y / Renderer.SCALE);
+		gameState.mousePressed(button, (float) x, (float) y);
 	}
 
 	public void mouseReleased(int button, int x, int y) {
-		gameState.mouseReleased(button,
-		            (double) x / Renderer.SCALE,
-		            (double) y / Renderer.SCALE);
+		gameState.mouseReleased(button, (float) x, (float) y);
 	}
 
 

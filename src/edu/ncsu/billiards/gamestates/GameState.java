@@ -34,9 +34,9 @@ public interface GameState {
 
 
 
-	void mouseClicked(int button, double x, double y, int clickCount);
-	void mouseDragged(double oldx, double oldy, double newx, double newy);
-	void mouseMoved(double oldx, double oldy, double newx, double newy);
-	void mousePressed(int button, double x, double y);
-	void mouseReleased(int button, double x, double y);
+	void mouseClicked(int button, float x, float y, int clickCount);
+	void mouseDragged(float oldx, float oldy, float newx, float newy);
+	void mouseMoved(float oldx, float oldy, float newx, float newy);
+	void mousePressed(int button, float x, float y);
+	void mouseReleased(int button, float x, float y);
 }

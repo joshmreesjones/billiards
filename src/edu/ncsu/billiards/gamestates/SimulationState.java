@@ -141,24 +141,37 @@ public class SimulationState implements GameState {
 
 
 
-	public void mouseClicked(int button, double x, double y, int clickCount) {
-		inputHandler.mouseClicked(button, x, y, clickCount);
+	public void mouseClicked(int button, float x, float y, int clickCount) {
+		inputHandler.mouseClicked(button,
+		                          (double) x / Renderer.SCALE,
+		                          (double) y / Renderer.SCALE,
+		                          clickCount);
 	}
 
-	public void mouseDragged(double oldx, double oldy, double newx, double newy) {
-		inputHandler.mouseDragged(oldx, oldy, newx, newy);
+	public void mouseDragged(float oldx, float oldy, float newx, float newy) {
+		inputHandler.mouseDragged((double) oldx / Renderer.SCALE,
+		                          (double) oldy / Renderer.SCALE,
+		                          (double) newx / Renderer.SCALE,
+		                          (double) newy / Renderer.SCALE);
 	}
 
-	public void mouseMoved(double oldx, double oldy, double newx, double newy) {
-		inputHandler.mouseMoved(oldx, oldy, newx, newy);
+	public void mouseMoved(float oldx, float oldy, float newx, float newy) {
+		inputHandler.mouseMoved((double) oldx / Renderer.SCALE,
+		                        (double) oldy / Renderer.SCALE,
+		                        (double) newx / Renderer.SCALE,
+		                        (double) newy / Renderer.SCALE);
 	}
 
-	public void mousePressed(int button, double x, double y) {
-		inputHandler.mousePressed(button, x, y);
+	public void mousePressed(int button, float x, float y) {
+		inputHandler.mousePressed(button,
+		                          (double) x / Renderer.SCALE,
+		                          (double) y / Renderer.SCALE);
 	}
 
-	public void mouseReleased(int button, double x, double y) {
-		inputHandler.mouseReleased(button, x, y);
+	public void mouseReleased(int button, float x, float y) {
+		inputHandler.mouseReleased(button,
+		                           (double) x / Renderer.SCALE,
+		                           (double) y / Renderer.SCALE);
 	}
 
 

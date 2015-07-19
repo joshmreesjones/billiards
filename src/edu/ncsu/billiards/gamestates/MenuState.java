@@ -16,6 +16,9 @@ public class MenuState implements GameState {
 
 	private Billiards stateMachine;
 
+	private InputHandler inputHandler;
+
+	private Button playButton;
 	private Button exitButton;
 
 
@@ -25,6 +28,9 @@ public class MenuState implements GameState {
 	public MenuState() throws SlickException {
 		menuBackground = new Image("res/menu-bg.png");
 
+		inputHandler = new InputHandler();
+
+		playButton = new Button("Play", 300, 250);
 		exitButton = new Button("Exit", 300, 300);
 	}
 
@@ -41,8 +47,7 @@ public class MenuState implements GameState {
 
 		Renderer.render("Time Travel Pool", 100, 100, graphics);
 
-		Renderer.render("Click to start.", 100, 200, graphics);
-
+		Renderer.render(playButton, graphics);
 		Renderer.render(exitButton, graphics);
 
 		// render buttons
@@ -60,23 +65,47 @@ public class MenuState implements GameState {
 
 
 
-	public void mouseClicked(int button, double x, double y, int clickCount) {
-		stateMachine.changeState(new SimulationState());
+	public void mouseClicked(int button, float x, float y, int clickCount) {
+		inputHandler.mouseClicked(button, x, y, clickCount);
 	}
 
-	public void mouseDragged(double oldx, double oldy, double newx, double newy) {
-
+	public void mouseDragged(float oldx, float oldy, float newx, float newy) {
+		inputHandler.mouseDragged(oldx, oldy, newx, newy);
 	}
 
-	public void mouseMoved(double oldx, double oldy, double newx, double newy) {
-
+	public void mouseMoved(float oldx, float oldy, float newx, float newy) {
+		inputHandler.mouseMoved(oldx, oldy, newx, newy);
 	}
 
-	public void mousePressed(int button, double x, double y) {
-
+	public void mousePressed(int button, float x, float y) {
+		inputHandler.mousePressed(button, x, y);
 	}
 
-	public void mouseReleased(int button, double x, double y) {
+	public void mouseReleased(int button, float x, float y) {
+		inputHandler.mouseReleased(button, x, y);
+	}
 
+	private class InputHandler {
+		public void mouseDragged(float oldX, float oldY,
+		                         float newX, float newY) {
+		}
+
+		public void mousePressed(int button, float x, float y) {
+		}
+
+		public void mouseReleased(int button, float x, float y) {
+		}
+
+		public void mouseClicked(int button, float x, float y, int clickCount) {
+			System.out.println(x + " " + y);
+			if (playButton.getRectangle().contains(x, y)) {
+				stateMachine.changeState(new SimulationState());
+			} else if (exitButton.getRectangle().contains(x, y)) {
+				System.exit(0);
+			}
+		}
+
+		public void mouseMoved(float oldx, float oldy, float newx, float newy) {
+		}
 	}
 }
