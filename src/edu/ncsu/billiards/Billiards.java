@@ -1,6 +1,7 @@
 package edu.ncsu.billiards;
 
 import edu.ncsu.billiards.gamestates.GameState;
+import edu.ncsu.billiards.gamestates.MenuState;
 import edu.ncsu.billiards.gamestates.SimulationState;
 
 import org.newdawn.slick.AppGameContainer;
@@ -27,15 +28,9 @@ public class Billiards extends BasicGame {
 
 
 
-	public void changeState(GameState newState) {
-		gameState = newState;
-	}
-
-
-
 	@Override
 	public void init(GameContainer container) throws SlickException {
-		gameState = new SimulationState();
+		changeState(new MenuState());
 	}
 
 	@Override
@@ -50,11 +45,18 @@ public class Billiards extends BasicGame {
 
 
 
+	public void changeState(GameState newState) {
+		gameState = newState;
+		gameState.enter(this);
+	}
+
+
+
 	public void mouseClicked(int button, int x, int y, int clickCount) {
 		gameState.mouseClicked(button,
-		            (double) x / Renderer.SCALE,
-		            (double) y / Renderer.SCALE,
-		            clickCount);
+					(double) x / Renderer.SCALE,
+					(double) y / Renderer.SCALE,
+					clickCount);
 	}
 
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
@@ -90,6 +92,7 @@ public class Billiards extends BasicGame {
 	public static void main(String[] args) {
 		try {
 			AppGameContainer app = new AppGameContainer(new Billiards());
+			app.setShowFPS(false);
 			app.setDisplayMode(WINDOW_WIDTH, WINDOW_HEIGHT, false);
 			app.start();
 		} catch (SlickException ex) {

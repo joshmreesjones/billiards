@@ -5,16 +5,17 @@ import edu.ncsu.billiards.gameobjects.Pocket;
 import edu.ncsu.billiards.gameobjects.PoolBall;
 import edu.ncsu.billiards.gameobjects.VelocityLine;
 
+import edu.ncsu.billiards.ui.Button;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 
 public class Renderer {
 	// 300 pixels per meter
 	public static final float SCALE = 300;
 
 	public static void render(Cushion cushion, Graphics graphics) {
-		Color tempColor = graphics.getColor();
-
 		graphics.setColor(Color.orange);
 
 		// x and y are the top left corner of the rectangle
@@ -24,13 +25,9 @@ public class Renderer {
 		float height = cushion.getHeight() * SCALE;
 
 		graphics.fillRect(x, y, width, height);
-
-		graphics.setColor(tempColor);
 	}
 
 	public static void render(Pocket pocket, Graphics graphics) {
-		Color tempColor = graphics.getColor();
-
 		graphics.setColor(Color.black);
 
 		float radius = pocket.getRadius() * SCALE;
@@ -43,14 +40,10 @@ public class Renderer {
 
 		graphics.fillOval(x, y, width, height);
 
-		graphics.setColor(tempColor);
-
 		render(pocket.getVelocityLine(), graphics);
 	}
 
 	public static void render(PoolBall ball, Graphics graphics) {
-		Color tempColor = graphics.getColor();
-
 		if (!ball.isAsleep()) {
 			graphics.setColor(ball.getColor());
 		} else {
@@ -67,13 +60,13 @@ public class Renderer {
 
 		graphics.fillOval(x, y, width, height);
 
-		graphics.setColor(tempColor);
-
 		// we need to render the velocity line as well
 		render(ball.getVelocityLine(), graphics);
 	}
 
 	private static void render(VelocityLine line, Graphics graphics) {
+		graphics.setColor(Color.white);
+
 		double[] start = line.getStart();
 		double[] end   = line.getEnd();
 
@@ -88,5 +81,32 @@ public class Renderer {
 		float y2 = (float)   end[1] * SCALE;
 
 		graphics.drawLine(x1, y1, x2, y2);
+	}
+
+	public static void render(Image image, float x, float y, Graphics graphics) {
+		graphics.drawImage(image, x, y);
+	}
+
+	public static void render(String text, float x, float y, Graphics graphics) {
+		graphics.drawString(text, x, y);
+	}
+
+	public static void render(Button button, Graphics graphics) {
+		float x = (float) button.getX();
+		float y = (float) button.getY();
+		float width  = (float) button.getWidth();
+		float height = (float) button.getHeight();
+
+		String label = button.getLabel();
+
+		int fontWidth = graphics.getFont().getWidth(label);
+		int fontHeight = graphics.getFont().getHeight(label);
+		float xOffset = (width - fontWidth) / 2;
+		float yOffset = (height - fontHeight) / 2;
+
+		graphics.setColor(Color.green);
+		graphics.fillRect(x, y, width, height);
+		graphics.setColor(Color.white);
+		graphics.drawString(label, x + xOffset, y + yOffset);
 	}
 }

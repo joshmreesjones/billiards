@@ -1,5 +1,6 @@
 package edu.ncsu.billiards.gamestates;
 
+import edu.ncsu.billiards.Billiards;
 import edu.ncsu.billiards.Renderer;
 
 import edu.ncsu.billiards.gamestates.GameState;
@@ -36,17 +37,24 @@ public class SimulationState implements GameState {
 
 	private InputHandler inputHandler;
 
+	private Billiards stateMachine;
 
 
 
 
-	public SimulationState() throws SlickException {
+
+	public SimulationState() {
 		gameWorld = new GameWorld(new GameContactHandler());
 		predictionWorld = new PredictionWorld(new PredictionContactHandler());
 
 		inputHandler = new InputHandler();
 
-		tableBackground = new Image("res/table-bg.png");
+		try {
+			tableBackground = new Image("res/table-bg.png");
+		} catch (SlickException ex) {
+			System.out.println("Error loading background image.");
+			System.exit(1);
+		}
 
 		addGameObjects(gameWorld);
 		addGameObjects(predictionWorld);
@@ -99,11 +107,14 @@ public class SimulationState implements GameState {
 	}
 
 	public void update(double delta) {
-		gameWorld.update(delta);
+		// only update if we need to
+		if (gameWorld.hasMovingBalls()) {
+			gameWorld.update(delta);
+		}
 	}
 
 	public void render(Graphics g) {
-		g.drawImage(tableBackground, 0, 0);
+		Renderer.render(tableBackground, 0, 0, g);
 
 		for (Pocket pocket : gameWorld.getPockets()) {
 			Renderer.render(pocket, g);
@@ -116,6 +127,14 @@ public class SimulationState implements GameState {
 		for (PoolBall ball : gameWorld.getCurrentBalls()) {
 			Renderer.render(ball, g);
 		}
+	}
+
+
+
+
+
+	public void enter(Billiards stateMachine) {
+		this.stateMachine = stateMachine;
 	}
 
 
