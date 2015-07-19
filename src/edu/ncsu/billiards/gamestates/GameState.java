@@ -24,13 +24,13 @@ public interface GameState {
 
 
 	/**
-	 * Enters this game state with the specified state machine if the game
-	 * state needs to call back to the state machine (to change states, for
-	 * example).
+	 * Enters this game state with the specified game if the game state
+	 * needs to call back to the game to change states, get window
+	 * dimensions, etc.
 	 *
-	 * @param stateMachine the state machine to call back to
+	 * @param game the game object used to switch states
 	 */
-	void enter(Billiards stateMachine);
+	void enter(Billiards game);
 
 
 

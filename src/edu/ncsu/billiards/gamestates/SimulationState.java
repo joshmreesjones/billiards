@@ -37,7 +37,7 @@ public class SimulationState implements GameState {
 
 	private InputHandler inputHandler;
 
-	private Billiards stateMachine;
+	private Billiards game;
 
 
 
@@ -133,8 +133,8 @@ public class SimulationState implements GameState {
 
 
 
-	public void enter(Billiards stateMachine) {
-		this.stateMachine = stateMachine;
+	public void enter(Billiards game) {
+		this.game = game;
 	}
 
 

@@ -7,6 +7,8 @@ import edu.ncsu.billiards.gamestates.SimulationState;
 
 import edu.ncsu.billiards.ui.Button;
 
+import java.util.ArrayList;
+
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -14,24 +16,67 @@ import org.newdawn.slick.SlickException;
 public class MenuState implements GameState {
 	private Image menuBackground;
 
-	private Billiards stateMachine;
+	private int windowWidth;
+	private int windowHeight;
+
+	private Billiards game;
 
 	private InputHandler inputHandler;
 
-	private Button playButton;
+	private Button noCollisionButton;
+	private Button glancingBlowButton;
+	private Button paradoxButton;
 	private Button exitButton;
 
+	private ArrayList<Button> buttons;
 
 
 
 
-	public MenuState() throws SlickException {
+
+	public MenuState(int windowWidth, int windowHeight) throws SlickException {
 		menuBackground = new Image("res/menu-bg.png");
+
+		this.windowWidth = windowWidth;
+		this.windowHeight = windowHeight;
 
 		inputHandler = new InputHandler();
 
-		playButton = new Button("Play", 300, 250);
-		exitButton = new Button("Exit", 300, 300);
+		setupButtons();
+	}
+
+	private void setupButtons() {
+		noCollisionButton = new Button("No collision");
+		glancingBlowButton = new Button("Glancing blow");
+		paradoxButton = new Button("Paradox");
+		exitButton = new Button("Exit");
+
+		buttons = new ArrayList<Button>();
+
+		buttons.add(noCollisionButton);
+		buttons.add(glancingBlowButton);
+		buttons.add(paradoxButton);
+		buttons.add(exitButton);
+
+		// 20 pixels of vertical space between buttons
+		int margin = 20;
+
+		// height of all buttons plus margin
+		int totalButtonHeight = margin * (buttons.size() - 1);
+		for (Button button : buttons) {
+			totalButtonHeight = totalButtonHeight + button.getHeight();
+		}
+
+		int verticalOffset = (windowHeight - totalButtonHeight) / 2;
+
+		for (int i = 0; i < buttons.size(); i++) {
+			Button button = buttons.get(i);
+			
+			button.setX((windowWidth - button.getWidth()) / 2);
+			button.setY(verticalOffset);
+
+			verticalOffset = verticalOffset + button.getHeight() + margin;
+		}
 	}
 
 
@@ -47,18 +92,17 @@ public class MenuState implements GameState {
 
 		Renderer.render("Time Travel Pool", 100, 100, graphics);
 
-		Renderer.render(playButton, graphics);
-		Renderer.render(exitButton, graphics);
-
-		// render buttons
+		for (Button button : buttons) {
+			Renderer.render(button, graphics);
+		}
 	}
 
 
 
 
 
-	public void enter(Billiards stateMachine) {
-		this.stateMachine = stateMachine;
+	public void enter(Billiards game) {
+		this.game = game;
 	}
 
 
@@ -97,10 +141,10 @@ public class MenuState implements GameState {
 		}
 
 		public void mouseClicked(int button, float x, float y, int clickCount) {
-			System.out.println(x + " " + y);
-			if (playButton.getRectangle().contains(x, y)) {
-				stateMachine.changeState(new SimulationState());
-			} else if (exitButton.getRectangle().contains(x, y)) {
+			//if (playButton.getHitBox().contains(x, y)) {
+				//game.changeState(new SimulationState());
+			//} else
+			if (exitButton.getHitBox().contains(x, y)) {
 				System.exit(0);
 			}
 		}

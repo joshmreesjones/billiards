@@ -90,16 +90,15 @@ public class Renderer {
 	}
 
 	public static void render(String text, float x, float y, Graphics graphics) {
+		graphics.setColor(Color.white);
 		graphics.drawString(text, x, y);
 	}
 
 	public static void render(Button button, Graphics graphics) {
-		Rectangle rectangle = button.getRectangle();
-
-		float x = rectangle.getX();
-		float y = rectangle.getY();
-		float width  = rectangle.getWidth();
-		float height = rectangle.getHeight();
+		float x = (float) button.getX();
+		float y = (float) button.getY();
+		float width  = (float) button.getWidth();
+		float height = (float) button.getHeight();
 
 		String label = button.getLabel();
 
@@ -110,7 +109,7 @@ public class Renderer {
 
 		graphics.setColor(Color.green);
 		graphics.fillRect(x, y, width, height);
-		graphics.setColor(Color.white);
+		graphics.setColor(Color.black);
 		graphics.drawString(label, x + xOffset, y + yOffset);
 	}
 }

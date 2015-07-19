@@ -30,7 +30,7 @@ public class Billiards extends BasicGame {
 
 	@Override
 	public void init(GameContainer container) throws SlickException {
-		changeState(new MenuState());
+		changeState(new MenuState(WINDOW_WIDTH, WINDOW_HEIGHT));
 	}
 
 	@Override
