@@ -2,7 +2,6 @@ package edu.ncsu.billiards;
 
 import edu.ncsu.billiards.gamestates.GameState;
 import edu.ncsu.billiards.gamestates.MenuState;
-import edu.ncsu.billiards.gamestates.SimulationState;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;

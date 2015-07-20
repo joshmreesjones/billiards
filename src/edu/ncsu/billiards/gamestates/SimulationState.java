@@ -3,16 +3,18 @@ package edu.ncsu.billiards.gamestates;
 import edu.ncsu.billiards.Billiards;
 import edu.ncsu.billiards.Renderer;
 
-import edu.ncsu.billiards.gamestates.GameState;
-
-import edu.ncsu.billiards.world.BilliardsWorld;
-import edu.ncsu.billiards.world.GameWorld;
-import edu.ncsu.billiards.world.PredictionWorld;
-
 import edu.ncsu.billiards.gameobjects.Cushion;
 import edu.ncsu.billiards.gameobjects.Pocket;
 import edu.ncsu.billiards.gameobjects.PoolBall;
 import edu.ncsu.billiards.gameobjects.VelocityLine;
+
+import edu.ncsu.billiards.gamestates.GameState;
+
+import edu.ncsu.billiards.setups.Setup;
+
+import edu.ncsu.billiards.world.BilliardsWorld;
+import edu.ncsu.billiards.world.GameWorld;
+import edu.ncsu.billiards.world.PredictionWorld;
 
 import org.dyn4j.dynamics.Body;
 
@@ -43,7 +45,7 @@ public class SimulationState implements GameState {
 
 
 
-	public SimulationState() {
+	public SimulationState(Setup setup) {
 		gameWorld = new GameWorld(new GameContactHandler());
 		predictionWorld = new PredictionWorld(new PredictionContactHandler());
 
@@ -56,8 +58,8 @@ public class SimulationState implements GameState {
 			System.exit(1);
 		}
 
-		addGameObjects(gameWorld);
-		addGameObjects(predictionWorld);
+		setUpGameObjects(setup, gameWorld);
+		setUpGameObjects(setup, predictionWorld);
 	}
 
 	/**
@@ -71,7 +73,20 @@ public class SimulationState implements GameState {
 	 * 
 	 * @param world the world to add objects to
 	 */
-	public void addGameObjects(BilliardsWorld world) {
+	public void setUpGameObjects(Setup setup, BilliardsWorld world) {
+		for (Cushion cushion : setup.getCushions()) {
+			world.addCushion(cushion);
+		}
+
+		for (Pocket pocket : setup.getPockets()) {
+			world.addPocket(pocket);
+		}
+
+		for (PoolBall ball : setup.getBalls()) {
+			world.addCurrentBall(ball);
+		}
+
+		/*
 		PoolBall ball1 = new PoolBall(.9f, .6f, Color.red);
 		PoolBall ball2 = new PoolBall(1.5f, 1f, Color.blue);
 		PoolBall ball3 = new PoolBall(1.3f, .8f, Color.green);
@@ -104,6 +119,7 @@ public class SimulationState implements GameState {
 
 		world.addPocket(pocket1);
 		world.addPocket(pocket2);
+		*/
 	}
 
 	public void update(double delta) {

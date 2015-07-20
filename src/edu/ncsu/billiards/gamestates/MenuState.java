@@ -5,6 +5,8 @@ import edu.ncsu.billiards.Renderer;
 
 import edu.ncsu.billiards.gamestates.SimulationState;
 
+import edu.ncsu.billiards.setups.ParadoxSetup;
+
 import edu.ncsu.billiards.ui.Button;
 
 import java.util.ArrayList;
@@ -141,10 +143,9 @@ public class MenuState implements GameState {
 		}
 
 		public void mouseClicked(int button, float x, float y, int clickCount) {
-			//if (playButton.getHitBox().contains(x, y)) {
-				//game.changeState(new SimulationState());
-			//} else
-			if (exitButton.getHitBox().contains(x, y)) {
+			if (paradoxButton.getHitBox().contains(x, y)) {
+				game.changeState(new SimulationState(new ParadoxSetup()));
+			} else if (exitButton.getHitBox().contains(x, y)) {
 				System.exit(0);
 			}
 		}
