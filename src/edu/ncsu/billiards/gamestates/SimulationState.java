@@ -71,55 +71,21 @@ public class SimulationState implements GameState {
 	 * the prediction world will update the Bodies in the world, and we
 	 * don't want those to change in the game world.
 	 * 
+	 * @param setup the setup used to populate the world with game objects
 	 * @param world the world to add objects to
 	 */
 	public void setUpGameObjects(Setup setup, BilliardsWorld world) {
-		for (Cushion cushion : setup.getCushions()) {
+		for (Cushion cushion : setup.generateCushions()) {
 			world.addCushion(cushion);
 		}
 
-		for (Pocket pocket : setup.getPockets()) {
+		for (Pocket pocket : setup.generatePockets()) {
 			world.addPocket(pocket);
 		}
 
-		for (PoolBall ball : setup.getBalls()) {
+		for (PoolBall ball : setup.generateBalls()) {
 			world.addCurrentBall(ball);
 		}
-
-		/*
-		PoolBall ball1 = new PoolBall(.9f, .6f, Color.red);
-		PoolBall ball2 = new PoolBall(1.5f, 1f, Color.blue);
-		PoolBall ball3 = new PoolBall(1.3f, .8f, Color.green);
-		world.addCurrentBall(ball1);
-		world.addCurrentBall(ball2);
-		world.addCurrentBall(ball3);
-
-		Cushion topLeft     = new Cushion( .5f  ,  .235f, .785f, .1f  );
-		Cushion topRight    = new Cushion(1.385f,  .235f, .785f, .1f  );
-		Cushion left        = new Cushion( .335f,  .4f  , .1f  , .666f);
-		Cushion right       = new Cushion(2.235f,  .4f  , .1f  , .666f);
-		Cushion bottomLeft  = new Cushion( .5f  , 1.135f, .785f, .1f  );
-		Cushion bottomRight = new Cushion(1.385f, 1.135f, .785f, .1f  );
-
-		world.addCushion(topLeft);
-		world.addCushion(topRight);
-		world.addCushion(left);
-		world.addCushion(right);
-		world.addCushion(bottomLeft);
-		world.addCushion(bottomRight);
-
-		Pocket pocket1 = new Pocket(1, 1);
-		Pocket pocket2 = new Pocket(1.3f, .7f);
-
-		pocket1.setDestination(pocket2);
-		pocket1.setTimeDifference(-0.2);
-
-		pocket2.setDestination(pocket1);
-		pocket2.setTimeDifference(-0.2);
-
-		world.addPocket(pocket1);
-		world.addPocket(pocket2);
-		*/
 	}
 
 	public void update(double delta) {
