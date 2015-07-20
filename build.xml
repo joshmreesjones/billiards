@@ -34,7 +34,7 @@
 
 
 	<!-- Compiles from src/ to bin/ -->
-	<target name="compile" description="compiles from src to build dirs">
+	<target name="compile" depends="clean" description="compiles from src to build dirs">
 		<mkdir dir="${build.dir}" />
 		<javac srcdir="${src.dir}" destdir="${build.dir}"
 				classpathref="classpathref" includeantruntime="false" />
