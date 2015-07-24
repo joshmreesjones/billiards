@@ -9,26 +9,6 @@ import java.util.ArrayList;
 import org.newdawn.slick.Color;
 
 public class ParadoxSetup extends Setup {
-	public ArrayList<Cushion> generateCushions() {
-		ArrayList<Cushion> cushions = new ArrayList<Cushion>();
-
-		Cushion topLeft     = new Cushion( .5f  ,  .235f, .785f, .1f  );
-		Cushion topRight    = new Cushion(1.385f,  .235f, .785f, .1f  );
-		Cushion left        = new Cushion( .335f,  .4f  , .1f  , .666f);
-		Cushion right       = new Cushion(2.235f,  .4f  , .1f  , .666f);
-		Cushion bottomLeft  = new Cushion( .5f  , 1.135f, .785f, .1f  );
-		Cushion bottomRight = new Cushion(1.385f, 1.135f, .785f, .1f  );
-
-		cushions.add(topLeft);
-		cushions.add(topRight);
-		cushions.add(left);
-		cushions.add(right);
-		cushions.add(bottomLeft);
-		cushions.add(bottomRight);
-
-		return cushions;
-	}
-
 	public ArrayList<Pocket> generatePockets() {
 		ArrayList<Pocket> pockets = new ArrayList<Pocket>();
 

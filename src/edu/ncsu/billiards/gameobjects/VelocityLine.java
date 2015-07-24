@@ -34,7 +34,7 @@ public class VelocityLine {
 		return new double[]{endX, endY};
 	}
 
-	public Vector2 getUnitDirectionVector() {
-		return (new Vector2(endX - startX, endY - startY)).getNormalized();
+	public Vector2 getDirectionVector() {
+		return new Vector2(endX - startX, endY - startY);
 	}
 }

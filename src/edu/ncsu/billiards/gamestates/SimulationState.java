@@ -178,18 +178,18 @@ public class SimulationState implements GameState {
 				VelocityLine line = selectedPocket.getVelocityLine();
 				line.setEnd(newX, newY);
 
-				Vector2 unitDirectionVector = line.getUnitDirectionVector();
+				Vector2 directionVector = line.getDirectionVector();
 
 				double[] start = line.getStart();
 				double startX = start[0];
 				double startY = start[1];
 
 				// scale the unit vector
-				unitDirectionVector.setMagnitude(.2);
+				directionVector.setMagnitude(.2);
 
 				// set the velocity line's distance to scaled unit vector
-				line.setEnd(startX + unitDirectionVector.x,
-				            startY + unitDirectionVector.y);
+				line.setEnd(startX + directionVector.x,
+				            startY + directionVector.y);
 			}
 		}
 
@@ -243,7 +243,6 @@ public class SimulationState implements GameState {
 
 				selectedBall.applyForce(force);
 
-				//predictionWorld.sync(SimulationState.this.gameWorld);
 				predictionWorld.runSimulation(SimulationState.this.gameWorld);
 
 				selectedBall.getVelocityLine().setStart(0, 0);
@@ -255,10 +254,10 @@ public class SimulationState implements GameState {
 
 			if (draggingFromPocket) {
 				VelocityLine line = selectedPocket.getVelocityLine();
-				Vector2 unitDirectionVector = line.getUnitDirectionVector();
+				Vector2 directionVector = line.getDirectionVector();
 				
 				// set the pocket's exit direction
-				selectedPocket.setUnitExitDirection(unitDirectionVector);
+				selectedPocket.setExitDirection(directionVector);
 				
 				draggingFromPocket = false;
 				selectedPocket = null;

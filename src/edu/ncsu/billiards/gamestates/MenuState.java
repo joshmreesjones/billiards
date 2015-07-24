@@ -5,6 +5,8 @@ import edu.ncsu.billiards.Renderer;
 
 import edu.ncsu.billiards.gamestates.SimulationState;
 
+import edu.ncsu.billiards.setups.GlancingBlowSetup;
+import edu.ncsu.billiards.setups.NoCollisionSetup;
 import edu.ncsu.billiards.setups.ParadoxSetup;
 
 import edu.ncsu.billiards.ui.Button;
@@ -143,8 +145,15 @@ public class MenuState implements GameState {
 		}
 
 		public void mouseClicked(int button, float x, float y, int clickCount) {
-			if (paradoxButton.getHitBox().contains(x, y)) {
+			if (noCollisionButton.getHitBox().contains(x, y)) {
+				game.changeState(new SimulationState(new NoCollisionSetup()));
+
+			} else if (glancingBlowButton.getHitBox().contains(x, y)) {
+				game.changeState(new SimulationState(new GlancingBlowSetup()));
+
+			} else if (paradoxButton.getHitBox().contains(x, y)) {
 				game.changeState(new SimulationState(new ParadoxSetup()));
+
 			} else if (exitButton.getHitBox().contains(x, y)) {
 				System.exit(0);
 			}

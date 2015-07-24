@@ -14,8 +14,8 @@ public class Billiards extends BasicGame {
 	private static final String GAME_TITLE = "Billiards";
 
 	// dimensions in pixels
-	private static final int WINDOW_WIDTH  = 800;
-	private static final int WINDOW_HEIGHT = 440;
+	private static final int WINDOW_WIDTH  = 872;
+	private static final int WINDOW_HEIGHT = 472;
 
 	private GameState gameState;
 

@@ -14,8 +14,9 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
 
 public class Renderer {
-	// 300 pixels per meter
-	public static final float SCALE = 300;
+	// Pixels per meter
+	// 8 feet is 2.4 meters. 800 pixels / 2.4 meters is 328 pixels per meter.
+	public static final float SCALE = 328;
 
 	public static void render(Cushion cushion, Graphics graphics) {
 		graphics.setColor(Color.orange);

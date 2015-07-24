@@ -63,7 +63,7 @@ public class Pocket extends Body {
 		this.timeDifference = time;
 	}
 
-	public void setUnitExitDirection(Vector2 direction) {
+	public void setExitDirection(Vector2 direction) {
 		this.unitExitDirection = direction.getNormalized();
 	}
 
