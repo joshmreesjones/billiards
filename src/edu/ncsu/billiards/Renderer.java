@@ -7,6 +7,8 @@ import edu.ncsu.billiards.gameobjects.VelocityLine;
 
 import edu.ncsu.billiards.ui.Button;
 
+import org.dyn4j.geometry.Vector2;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -33,7 +35,7 @@ public class Renderer {
 	public static void render(Pocket pocket, Graphics graphics) {
 		graphics.setColor(Color.black);
 
-		float radius = pocket.getRadius() * SCALE;
+		float radius = (float) pocket.getRadius() * SCALE;
 		float width = radius * 2;
 		float height = radius * 2;
 		float centerX = (float) pocket.getWorldCenter().x * SCALE;

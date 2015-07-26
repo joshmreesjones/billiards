@@ -17,11 +17,8 @@ public class Pocket extends Body {
 	// the amount of time to send a ball back from this pocket
 	private double timeDifference;
 
-	// rendered velocity line for exit direction
-	private VelocityLine velocityLine;
-
 	// the exit direction of pool balls
-	private Vector2 unitExitDirection;
+	private Vector2 exitDirection;
 
 
 
@@ -31,7 +28,7 @@ public class Pocket extends Body {
 	 * @param x the x position in meters of the new pocket
 	 * @param y the y position in meters of the new pocket
 	 */
-	public Pocket(float x, float y) {
+	public Pocket(float x, float y, Vector2 exitDirection) {
 		Circle circleShape = new Circle(RADIUS);
 
 		BodyFixture circleFixture = new BodyFixture(circleShape);
@@ -40,9 +37,7 @@ public class Pocket extends Body {
 		this.addFixture(circleFixture);
 		this.translate(x, y);
 
-		this.velocityLine = new VelocityLine();
-
-		this.unitExitDirection = new Vector2(0, 0);
+		this.exitDirection = exitDirection;
 	}
 
 
@@ -55,6 +50,8 @@ public class Pocket extends Body {
 		this.destination = destination;
 	}
 
+
+
 	public double getTimeDifference() {
 		return this.timeDifference;
 	}
@@ -63,35 +60,35 @@ public class Pocket extends Body {
 		this.timeDifference = time;
 	}
 
+
+
 	public void setExitDirection(Vector2 direction) {
-		this.unitExitDirection = direction.getNormalized();
+		this.exitDirection = direction;
 	}
 
-	public Vector2 getUnitExitDirection() {
-		return this.unitExitDirection;
+	public Vector2 getExitDirection() {
+		return this.exitDirection;
 	}
 
 
 
-	public Circle getCircle() {
-		return (Circle) this.getFixture(0).getShape();
-	}
-
-	public float getX() {
-		return (float) getCircle().getCenter().x;
-	}
-
-	public float getY() {
-		return (float) getCircle().getCenter().y;
-	}
-
-	public float getRadius() {
-		return (float) getCircle().getRadius();
+	public double getRadius() {
+		return RADIUS;
 	}
 
 
 
 	public VelocityLine getVelocityLine() {
-		return this.velocityLine;
+		VelocityLine line = new VelocityLine();
+
+		double startX = getWorldCenter().x;
+		double startY = getWorldCenter().y;
+		double endX = startX + getExitDirection().setMagnitude(.2).x;
+		double endY = startY + getExitDirection().setMagnitude(.2).y;
+
+		line.setStart(startX, startY);
+		line.setEnd(endX, endY);
+
+		return line;
 	}
 }

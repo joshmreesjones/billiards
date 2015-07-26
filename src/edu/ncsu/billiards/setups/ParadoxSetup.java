@@ -6,14 +6,16 @@ import edu.ncsu.billiards.gameobjects.PoolBall;
 
 import java.util.ArrayList;
 
+import org.dyn4j.geometry.Vector2;
+
 import org.newdawn.slick.Color;
 
 public class ParadoxSetup extends Setup {
 	public ArrayList<Pocket> generatePockets() {
 		ArrayList<Pocket> pockets = new ArrayList<Pocket>();
 
-		Pocket pocket1 = new Pocket(1, 1);
-		Pocket pocket2 = new Pocket(1.3f, .7f);
+		Pocket pocket1 = new Pocket(1, 1, new Vector2(0, 1));
+		Pocket pocket2 = new Pocket(1.3f, .7f, new Vector2(1, 0));
 
 		pocket1.setDestination(pocket2);
 		pocket1.setTimeDifference(-0.2);

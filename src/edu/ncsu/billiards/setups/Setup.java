@@ -6,6 +6,22 @@ import edu.ncsu.billiards.gameobjects.PoolBall;
 
 import java.util.ArrayList;
 
+/**
+ * A class used to generate various game objects in certain configurations.
+ *
+ * Assuming window dimensions:
+ *     - Width:  872 pixels
+ *     - Height: 472 pixels
+ *
+ * and a pixels/meter scale of:
+ *     - 328 pixels/meter
+ *
+ * We obtain these values:
+ *     - distance between window edge and pool table: .111 meters
+ *     - width of cushions: .106 meters
+ *     - total window width: 2.659 meters
+ *     - total window height: 1.439 meters
+ */
 public abstract class Setup {
 	public final ArrayList<Cushion> generateCushions() {
 		ArrayList<Cushion> cushions = new ArrayList<Cushion>();

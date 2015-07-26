@@ -174,32 +174,22 @@ public class SimulationState implements GameState {
 			}
 
 			if (draggingFromPocket) {
-				// make vector from velocity line start to (newX, newY)
-				VelocityLine line = selectedPocket.getVelocityLine();
-				line.setEnd(newX, newY);
+				double startX = selectedPocket.getWorldCenter().x;
+				double startY = selectedPocket.getWorldCenter().y;
+				double x = newX - startX;
+				double y = newY - startY;
 
-				Vector2 directionVector = line.getDirectionVector();
-
-				double[] start = line.getStart();
-				double startX = start[0];
-				double startY = start[1];
-
-				// scale the unit vector
-				directionVector.setMagnitude(.2);
-
-				// set the velocity line's distance to scaled unit vector
-				line.setEnd(startX + directionVector.x,
-				            startY + directionVector.y);
+				selectedPocket.setExitDirection(new Vector2(x, y));
 			}
 		}
 
 		public void mousePressed(int button, double x, double y) {
-			Vector2 point = new Vector2(x, y);
-
-			// all balls should be asleep before we can start another
+			// all balls should be asleep before we can interact with the world
 			if (SimulationState.this.gameWorld.hasMovingBalls()) {
 				return;
 			}
+
+			Vector2 point = new Vector2(x, y);
 
 			// check if mouse press is on current ball
 			for (PoolBall ball : SimulationState.this.gameWorld.getCurrentBalls()) {
@@ -220,12 +210,6 @@ public class SimulationState implements GameState {
 				if (pocket.contains(point)) {
 					draggingFromPocket = true;
 					selectedPocket = pocket;
-
-					double startX = pocket.getWorldCenter().x;
-					double startY = pocket.getWorldCenter().y;
-
-					selectedPocket.getVelocityLine().setStart(startX, startY);
-					selectedPocket.getVelocityLine().setEnd(startX, startY);
 				}
 			}
 		}
@@ -253,12 +237,6 @@ public class SimulationState implements GameState {
 			}
 
 			if (draggingFromPocket) {
-				VelocityLine line = selectedPocket.getVelocityLine();
-				Vector2 directionVector = line.getDirectionVector();
-				
-				// set the pocket's exit direction
-				selectedPocket.setExitDirection(directionVector);
-				
 				draggingFromPocket = false;
 				selectedPocket = null;
 			}
@@ -332,11 +310,11 @@ public class SimulationState implements GameState {
 
 			// set velocity of ball - in direction that pocket
 			// specifies, but with the original magnitude of the ball
-			Vector2 unitExitDirection = destination.getUnitExitDirection();
+			Vector2 exitDirection = destination.getExitDirection();
 			double magnitude = ball.getLinearVelocity().getMagnitude();
-			unitExitDirection.setMagnitude(magnitude);
+			exitDirection.setMagnitude(magnitude);
 
-			ball.setLinearVelocity(unitExitDirection);
+			ball.setLinearVelocity(exitDirection);
 
 			// record the time
 			ball.setEntryTime(predictionWorld.getTime() + pocket.getTimeDifference());
