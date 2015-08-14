@@ -49,9 +49,7 @@ public class GameWorld extends BilliardsWorld {
 					}
 				}
 
-				if (!isInContact) {
-					ball.setExiting(false);
-				}
+				ball.setExiting(isInContact);
 			}
 		}
 

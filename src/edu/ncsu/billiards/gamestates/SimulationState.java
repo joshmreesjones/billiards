@@ -103,7 +103,7 @@ public class SimulationState implements GameState {
 		}
 
 		for (Cushion cushion : gameWorld.getCushions()) {
-			Renderer.render(cushion, g);
+			//Renderer.render(cushion, g);
 		}
 
 		for (PoolBall ball : gameWorld.getCurrentBalls()) {

@@ -21,6 +21,7 @@ import java.util.ArrayList;
  *     - width of cushions: .106 meters
  *     - total window width: 2.659 meters
  *     - total window height: 1.439 meters
+ *     - coordinates of normal cue ball start: (.738, .72)
  */
 public abstract class Setup {
 	public final ArrayList<Cushion> generateCushions() {

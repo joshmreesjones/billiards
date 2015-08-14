@@ -10,18 +10,35 @@ import org.dyn4j.geometry.Vector2;
 
 import org.newdawn.slick.Color;
 
+/**
+ * A setup which should result in a paradox.
+ *
+ * Assuming window dimensions:
+ *     - Width:  872 pixels
+ *     - Height: 472 pixels
+ *
+ * and a pixels/meter scale of:
+ *     - 328 pixels/meter
+ *
+ * We obtain these values:
+ *     - distance between window edge and pool table: .111 meters
+ *     - width of cushions: .106 meters
+ *     - total window width: 2.659 meters
+ *     - total window height: 1.439 meters
+ *     - coordinates of normal cue ball start: (.738, .72)
+ */
 public class ParadoxSetup extends Setup {
 	public ArrayList<Pocket> generatePockets() {
 		ArrayList<Pocket> pockets = new ArrayList<Pocket>();
 
-		Pocket pocket1 = new Pocket(1, 1, new Vector2(0, 1));
-		Pocket pocket2 = new Pocket(1.3f, .7f, new Vector2(1, 0));
+		Pocket pocket1 = new Pocket(2, .72f, new Vector2(-1, 0));
+		Pocket pocket2 = new Pocket(1.6f, .9f, new Vector2(0, -1));
 
 		pocket1.setDestination(pocket2);
-		pocket1.setTimeDifference(-0.2);
+		pocket1.setTimeDifference(-0.45);
 
 		pocket2.setDestination(pocket1);
-		pocket2.setTimeDifference(-0.2);
+		pocket2.setTimeDifference(-0.45);
 
 		pockets.add(pocket1);
 		pockets.add(pocket2);
@@ -32,13 +49,9 @@ public class ParadoxSetup extends Setup {
 	public ArrayList<PoolBall> generateBalls() {
 		ArrayList<PoolBall> balls = new ArrayList<PoolBall>();
 
-		PoolBall ball1 = new PoolBall( .9f, .6f, Color.red);
-		PoolBall ball2 = new PoolBall(1.5f,  1f, Color.blue);
-		PoolBall ball3 = new PoolBall(1.3f, .8f, Color.green);
+		PoolBall ball = new PoolBall(.738f, .72f, Color.white);
 
-		balls.add(ball1);
-		balls.add(ball2);
-		balls.add(ball3);
+		balls.add(ball);
 
 		return balls;
 	}
