@@ -31,14 +31,14 @@ public class GlancingBlowSetup extends Setup {
 	public ArrayList<Pocket> generatePockets() {
 		ArrayList<Pocket> pockets = new ArrayList<Pocket>();
 
-		Pocket pocket1 = new Pocket(2, .417f, new Vector2(-1, 0));
-		Pocket pocket2 = new Pocket(1.8f, .567f, new Vector2(0, -1));
+		Pocket pocket1 = new Pocket(2, .317f, new Vector2(-1, 0));
+		Pocket pocket2 = new Pocket(2, .417f, new Vector2(-1, -.2));
 
 		pocket1.setDestination(pocket2);
-		pocket1.setTimeDifference(-0.4);
+		pocket1.setTimeDifference(-0.5);
 
 		pocket2.setDestination(pocket1);
-		pocket2.setTimeDifference(-0.4);
+		pocket2.setTimeDifference(-0.5);
 
 		pockets.add(pocket1);
 		pockets.add(pocket2);
@@ -49,7 +49,7 @@ public class GlancingBlowSetup extends Setup {
 	public ArrayList<PoolBall> generateBalls() {
 		ArrayList<PoolBall> balls = new ArrayList<PoolBall>();
 
-		PoolBall ball = new PoolBall(.738f, .417f, Color.white);
+		PoolBall ball = new PoolBall(.738f, .317f, Color.white);
 
 		balls.add(ball);
 
