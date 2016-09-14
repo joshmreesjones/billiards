@@ -42,5 +42,3 @@ The `lib/` directory was hand-assembled. Instructions to come later.
 Screenshots
 -----------
 Coming soon&#8482;!
-
-sadfadsfasdf sdf sdaf asdf sadfas
